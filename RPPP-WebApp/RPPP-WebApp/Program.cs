@@ -1,11 +1,17 @@
 using NLog.Web;
 using NLog;
 using RPPP_WebApp;
+using Microsoft.EntityFrameworkCore;
+using RPPP_WebApp.Models;
 
 //NOTE: Add dependencies/services in StartupExtensions.cs and keep this file as-is
 
 var builder = WebApplication.CreateBuilder(args);
 var logger = LogManager.Setup().GetCurrentClassLogger();
+
+
+builder.Services.AddDbContext<RPPP05Context>(
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 try
 {
