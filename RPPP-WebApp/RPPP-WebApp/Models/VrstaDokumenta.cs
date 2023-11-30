@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models
 {
-    public partial class VrstaDokumentum
+    public partial class VrstaDokumenta
     {
-        public VrstaDokumentum()
+        public VrstaDokumenta()
         {
-            Dokuments = new HashSet<Dokument>();
+            Dokument = new HashSet<Dokument>();
         }
 
         public int IdVrstaDok { get; set; }
         public string NazivVrstaDok { get; set; }
 
-        public virtual ICollection<Dokument> Dokuments { get; set; }
+        public virtual ICollection<Dokument> Dokument { get; set; }
     }
 }

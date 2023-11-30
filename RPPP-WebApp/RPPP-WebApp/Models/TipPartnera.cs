@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
     {
         public TipPartnera()
         {
-            Partners = new HashSet<Partner>();
+            Partner = new HashSet<Partner>();
         }
 
         public int IdTipPartnera { get; set; }
         public string TipPartnera1 { get; set; }
 
-        public virtual ICollection<Partner> Partners { get; set; }
+        public virtual ICollection<Partner> Partner { get; set; }
     }
 }

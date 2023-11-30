@@ -9,7 +9,7 @@ namespace RPPP_WebApp.Models
     {
         public Uloga()
         {
-            Imas = new HashSet<Ima>();
+            Ima = new HashSet<Ima>();
         }
 
         public int IdUloga { get; set; }
@@ -17,6 +17,6 @@ namespace RPPP_WebApp.Models
         public int IdProjekt { get; set; }
 
         public virtual Projekt IdProjektNavigation { get; set; }
-        public virtual ICollection<Ima> Imas { get; set; }
+        public virtual ICollection<Ima> Ima { get; set; }
     }
 }

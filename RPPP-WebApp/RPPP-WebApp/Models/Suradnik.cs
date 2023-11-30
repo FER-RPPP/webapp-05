@@ -9,7 +9,7 @@ namespace RPPP_WebApp.Models
     {
         public Suradnik()
         {
-            IdPosaos = new HashSet<Posao>();
+            IdPosao = new HashSet<Posao>();
         }
 
         public string Oib { get; set; }
@@ -25,6 +25,6 @@ namespace RPPP_WebApp.Models
         public virtual Kvalifikacija IdKvalifikacijaNavigation { get; set; }
         public virtual Partner IdPartnerNavigation { get; set; }
 
-        public virtual ICollection<Posao> IdPosaos { get; set; }
+        public virtual ICollection<Posao> IdPosao { get; set; }
     }
 }

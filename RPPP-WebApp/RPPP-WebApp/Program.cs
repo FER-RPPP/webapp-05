@@ -20,6 +20,7 @@ try
 
   var app = builder.ConfigureServices().ConfigurePipeline();
   app.Run();
+    app.UseStaticFiles();
 }
 catch (Exception exception)
 {

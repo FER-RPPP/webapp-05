@@ -18,25 +18,25 @@ namespace RPPP_WebApp.Models
         {
         }
 
-        public virtual DbSet<Dokument> Dokuments { get; set; }
-        public virtual DbSet<Ima> Imas { get; set; }
-        public virtual DbSet<Kvalifikacija> Kvalifikacijas { get; set; }
-        public virtual DbSet<Partner> Partners { get; set; }
-        public virtual DbSet<Posao> Posaos { get; set; }
-        public virtual DbSet<Projekt> Projekts { get; set; }
-        public virtual DbSet<ProjektnaKartica> ProjektnaKarticas { get; set; }
-        public virtual DbSet<StatusZadatka> StatusZadatkas { get; set; }
-        public virtual DbSet<Suradnik> Suradniks { get; set; }
-        public virtual DbSet<TipPartnera> TipPartneras { get; set; }
-        public virtual DbSet<TipProjektum> TipProjekta { get; set; }
-        public virtual DbSet<Transakcija> Transakcijas { get; set; }
-        public virtual DbSet<Uloga> Ulogas { get; set; }
-        public virtual DbSet<VrstaDokumentum> VrstaDokumenta { get; set; }
-        public virtual DbSet<VrstaPosla> VrstaPoslas { get; set; }
-        public virtual DbSet<VrstaTransakcije> VrstaTransakcijes { get; set; }
-        public virtual DbSet<VrstaZahtjeva> VrstaZahtjevas { get; set; }
-        public virtual DbSet<Zadatak> Zadataks { get; set; }
-        public virtual DbSet<Zahtjev> Zahtjevs { get; set; }
+        public virtual DbSet<Dokument> Dokument { get; set; }
+        public virtual DbSet<Ima> Ima { get; set; }
+        public virtual DbSet<Kvalifikacija> Kvalifikacija { get; set; }
+        public virtual DbSet<Partner> Partner { get; set; }
+        public virtual DbSet<Posao> Posao { get; set; }
+        public virtual DbSet<Projekt> Projekt { get; set; }
+        public virtual DbSet<ProjektnaKartica> ProjektnaKartica { get; set; }
+        public virtual DbSet<StatusZadatka> StatusZadatka { get; set; }
+        public virtual DbSet<Suradnik> Suradnik { get; set; }
+        public virtual DbSet<TipPartnera> TipPartnera { get; set; }
+        public virtual DbSet<TipProjekta> TipProjekta { get; set; }
+        public virtual DbSet<Transakcija> Transakcija { get; set; }
+        public virtual DbSet<Uloga> Uloga { get; set; }
+        public virtual DbSet<VrstaDokumenta> VrstaDokumenta { get; set; }
+        public virtual DbSet<VrstaPosla> VrstaPosla { get; set; }
+        public virtual DbSet<VrstaTransakcije> VrstaTransakcije { get; set; }
+        public virtual DbSet<VrstaZahtjeva> VrstaZahtjeva { get; set; }
+        public virtual DbSet<Zadatak> Zadatak { get; set; }
+        public virtual DbSet<Zahtjev> Zahtjev { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,8 +44,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdDokument)
                     .HasName("PK__Dokument__420542B52EAF90A1");
-
-                entity.ToTable("Dokument");
 
                 entity.Property(e => e.IdProjekt).HasColumnName("idProjekt");
 
@@ -66,13 +64,13 @@ namespace RPPP_WebApp.Models
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.IdProjektNavigation)
-                    .WithMany(p => p.Dokuments)
+                    .WithMany(p => p.Dokument)
                     .HasForeignKey(d => d.IdProjekt)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Dokument__idProj__5F492382");
 
                 entity.HasOne(d => d.IdVrstaDokNavigation)
-                    .WithMany(p => p.Dokuments)
+                    .WithMany(p => p.Dokument)
                     .HasForeignKey(d => d.IdVrstaDok)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Dokument__idVrst__603D47BB");
@@ -83,14 +81,12 @@ namespace RPPP_WebApp.Models
                 entity.HasKey(e => new { e.Oib, e.IdUloga })
                     .HasName("PK__Ima__53D3E463D4BDAF44");
 
-                entity.ToTable("Ima");
-
                 entity.Property(e => e.Oib).HasColumnName("OIB");
 
                 entity.Property(e => e.IdUloga).HasColumnName("idUloga");
 
                 entity.HasOne(d => d.IdUlogaNavigation)
-                    .WithMany(p => p.Imas)
+                    .WithMany(p => p.Ima)
                     .HasForeignKey(d => d.IdUloga)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Ima__idUloga__725BF7F6");
@@ -116,8 +112,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdPartner)
                     .HasName("PK__Partner__4D67B84FDB563146");
-
-                entity.ToTable("Partner");
 
                 entity.HasIndex(e => e.EmailPartner, "UQ__Partner__3F193BFD7FBE925E")
                     .IsUnique();
@@ -165,7 +159,7 @@ namespace RPPP_WebApp.Models
                     .IsFixedLength();
 
                 entity.HasOne(d => d.IdTipPartneraNavigation)
-                    .WithMany(p => p.Partners)
+                    .WithMany(p => p.Partner)
                     .HasForeignKey(d => d.IdTipPartnera)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Partner__idTipPa__4E1E9780");
@@ -176,10 +170,8 @@ namespace RPPP_WebApp.Models
                 entity.HasKey(e => e.IdPosao)
                     .HasName("PK__Posao__C7661B95CA43F656");
 
-                entity.ToTable("Posao");
-
                 entity.HasOne(d => d.IdVrstaPosaoNavigation)
-                    .WithMany(p => p.Posaos)
+                    .WithMany(p => p.Posao)
                     .HasForeignKey(d => d.IdVrstaPosao)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Posao__IdVrstaPo__3DE82FB7");
@@ -189,8 +181,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdProjekt)
                     .HasName("PK__Projekt__8FCCB4566ED920F8");
-
-                entity.ToTable("Projekt");
 
                 entity.Property(e => e.IdProjekt).HasColumnName("idProjekt");
 
@@ -217,13 +207,13 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("vrPocetak");
 
                 entity.HasOne(d => d.IdTipNavigation)
-                    .WithMany(p => p.Projekts)
+                    .WithMany(p => p.Projekt)
                     .HasForeignKey(d => d.IdTip)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Projekt__idTip__44952D46");
 
-                entity.HasMany(d => d.IdPartners)
-                    .WithMany(p => p.IdProjekts)
+                entity.HasMany(d => d.IdPartner)
+                    .WithMany(p => p.IdProjekt)
                     .UsingEntity<Dictionary<string, object>>(
                         "Narucio",
                         l => l.HasOne<Partner>().WithMany().HasForeignKey("IdPartner").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Narucio__idPartn__5C6CB6D7"),
@@ -266,7 +256,7 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("vrijemeOtvaranja");
 
                 entity.HasOne(d => d.IdProjektNavigation)
-                    .WithMany(p => p.ProjektnaKarticas)
+                    .WithMany(p => p.ProjektnaKartica)
                     .HasForeignKey(d => d.IdProjekt)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Projektna__idPro__50FB042B");
@@ -276,8 +266,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdStatus)
                     .HasName("PK__StatusZa__01936F74A8CD31F4");
-
-                entity.ToTable("StatusZadatka");
 
                 entity.Property(e => e.IdStatus).HasColumnName("idStatus");
 
@@ -291,8 +279,6 @@ namespace RPPP_WebApp.Models
             modelBuilder.Entity<Suradnik>(entity =>
             {
                 entity.HasKey(e => e.Oib);
-
-                entity.ToTable("Suradnik");
 
                 entity.HasIndex(e => e.Mail, "UQ__Suradnik__7A212904543F6C26")
                     .IsUnique();
@@ -348,19 +334,19 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("stranka");
 
                 entity.HasOne(d => d.IdKvalifikacijaNavigation)
-                    .WithMany(p => p.Suradniks)
+                    .WithMany(p => p.Suradnik)
                     .HasForeignKey(d => d.IdKvalifikacija)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Suradnik__idKval__65F62111");
 
                 entity.HasOne(d => d.IdPartnerNavigation)
-                    .WithMany(p => p.Suradniks)
+                    .WithMany(p => p.Suradnik)
                     .HasForeignKey(d => d.IdPartner)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Suradnik__idPart__66EA454A");
 
-                entity.HasMany(d => d.IdPosaos)
-                    .WithMany(p => p.Oibs)
+                entity.HasMany(d => d.IdPosao)
+                    .WithMany(p => p.Oib)
                     .UsingEntity<Dictionary<string, object>>(
                         "Radi",
                         l => l.HasOne<Posao>().WithMany().HasForeignKey("IdPosao").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Radi_Posao"),
@@ -380,8 +366,6 @@ namespace RPPP_WebApp.Models
                 entity.HasKey(e => e.IdTipPartnera)
                     .HasName("PK__TipPartn__01BFB86166F4FE38");
 
-                entity.ToTable("TipPartnera");
-
                 entity.Property(e => e.IdTipPartnera).HasColumnName("idTipPartnera");
 
                 entity.Property(e => e.TipPartnera1)
@@ -391,7 +375,7 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("tipPartnera");
             });
 
-            modelBuilder.Entity<TipProjektum>(entity =>
+            modelBuilder.Entity<TipProjekta>(entity =>
             {
                 entity.HasKey(e => e.IdTip)
                     .HasName("PK__TipProje__020FACBFD230405F");
@@ -409,8 +393,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.PrimateljIban)
                     .HasName("PK__Transakc__64FB3C8E2F4EEF36");
-
-                entity.ToTable("Transakcija");
 
                 entity.Property(e => e.PrimateljIban)
                     .HasMaxLength(21)
@@ -442,13 +424,13 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("vrsta");
 
                 entity.HasOne(d => d.IdTransakcijeNavigation)
-                    .WithMany(p => p.Transakcijas)
+                    .WithMany(p => p.Transakcija)
                     .HasForeignKey(d => d.IdTransakcije)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Transakci__idTra__6ABAD62E");
 
                 entity.HasOne(d => d.SubjektIbanNavigation)
-                    .WithMany(p => p.Transakcijas)
+                    .WithMany(p => p.Transakcija)
                     .HasForeignKey(d => d.SubjektIban)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Transakci__subje__69C6B1F5");
@@ -472,13 +454,13 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("nazivUloge");
 
                 entity.HasOne(d => d.IdProjektNavigation)
-                    .WithMany(p => p.Ulogas)
+                    .WithMany(p => p.Uloga)
                     .HasForeignKey(d => d.IdProjekt)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__uloga__idProjekt__589C25F3");
             });
 
-            modelBuilder.Entity<VrstaDokumentum>(entity =>
+            modelBuilder.Entity<VrstaDokumenta>(entity =>
             {
                 entity.HasKey(e => e.IdVrstaDok)
                     .HasName("PK__VrstaDok__D328B413502FC7CC");
@@ -497,8 +479,6 @@ namespace RPPP_WebApp.Models
                 entity.HasKey(e => e.IdVrstaPosao)
                     .HasName("PK__VrstaPos__BFA760BCC0389F06");
 
-                entity.ToTable("VrstaPosla");
-
                 entity.Property(e => e.NazivPosao)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -510,8 +490,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdTransakcije)
                     .HasName("PK__VrstaTra__33A5BCE2EA084E63");
-
-                entity.ToTable("VrstaTransakcije");
 
                 entity.Property(e => e.IdTransakcije).HasColumnName("idTransakcije");
 
@@ -527,8 +505,6 @@ namespace RPPP_WebApp.Models
                 entity.HasKey(e => e.IdVrsta)
                     .HasName("PK__VrstaZah__306017AD96E18C88");
 
-                entity.ToTable("VrstaZahtjeva");
-
                 entity.Property(e => e.IdVrsta).HasColumnName("idVrsta");
 
                 entity.Property(e => e.NazivVrsta)
@@ -542,8 +518,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdZadatak)
                     .HasName("PK__Zadatak__2FCCCF8E17604AA5");
-
-                entity.ToTable("Zadatak");
 
                 entity.HasIndex(e => e.IdZadatak, "UQ__Zadatak__05C20C63C613B77D")
                     .IsUnique();
@@ -578,13 +552,13 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("vrsta");
 
                 entity.HasOne(d => d.IdStatusNavigation)
-                    .WithMany(p => p.Zadataks)
+                    .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.IdStatus)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Zadatak__idStatu__55BFB948");
 
                 entity.HasOne(d => d.IdZahtjevNavigation)
-                    .WithMany(p => p.Zadataks)
+                    .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.IdZahtjev)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Zadatak__idZahtj__54CB950F");
@@ -594,8 +568,6 @@ namespace RPPP_WebApp.Models
             {
                 entity.HasKey(e => e.IdZahtjev)
                     .HasName("PK__Zahtjev__DD398F69DAB9BA74");
-
-                entity.ToTable("Zahtjev");
 
                 entity.Property(e => e.IdZahtjev).HasColumnName("idZahtjev");
 
@@ -628,13 +600,13 @@ namespace RPPP_WebApp.Models
                     .HasColumnName("vrPocetak");
 
                 entity.HasOne(d => d.IdProjektNavigation)
-                    .WithMany(p => p.Zahtjevs)
+                    .WithMany(p => p.Zahtjev)
                     .HasForeignKey(d => d.IdProjekt)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Zahtjev__idProje__4865BE2A");
 
                 entity.HasOne(d => d.IdVrstaNavigation)
-                    .WithMany(p => p.Zahtjevs)
+                    .WithMany(p => p.Zahtjev)
                     .HasForeignKey(d => d.IdVrsta)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Zahtjev__idVrsta__477199F1");

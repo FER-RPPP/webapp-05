@@ -9,7 +9,7 @@ namespace RPPP_WebApp.Models
     {
         public ProjektnaKartica()
         {
-            Transakcijas = new HashSet<Transakcija>();
+            Transakcija = new HashSet<Transakcija>();
         }
 
         public double Saldo { get; set; }
@@ -19,6 +19,6 @@ namespace RPPP_WebApp.Models
         public int IdProjekt { get; set; }
 
         public virtual Projekt IdProjektNavigation { get; set; }
-        public virtual ICollection<Transakcija> Transakcijas { get; set; }
+        public virtual ICollection<Transakcija> Transakcija { get; set; }
     }
 }

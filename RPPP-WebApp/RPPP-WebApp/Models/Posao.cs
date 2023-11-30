@@ -9,7 +9,7 @@ namespace RPPP_WebApp.Models
     {
         public Posao()
         {
-            Oibs = new HashSet<Suradnik>();
+            Oib = new HashSet<Suradnik>();
         }
 
         public int IdPosao { get; set; }
@@ -17,6 +17,6 @@ namespace RPPP_WebApp.Models
 
         public virtual VrstaPosla IdVrstaPosaoNavigation { get; set; }
 
-        public virtual ICollection<Suradnik> Oibs { get; set; }
+        public virtual ICollection<Suradnik> Oib { get; set; }
     }
 }

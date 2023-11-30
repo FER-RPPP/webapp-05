@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
     {
         public VrstaPosla()
         {
-            Posaos = new HashSet<Posao>();
+            Posao = new HashSet<Posao>();
         }
 
         public int IdVrstaPosao { get; set; }
         public string NazivPosao { get; set; }
 
-        public virtual ICollection<Posao> Posaos { get; set; }
+        public virtual ICollection<Posao> Posao { get; set; }
     }
 }

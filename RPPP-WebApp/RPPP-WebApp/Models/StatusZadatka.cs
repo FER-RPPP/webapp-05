@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
     {
         public StatusZadatka()
         {
-            Zadataks = new HashSet<Zadatak>();
+            Zadatak = new HashSet<Zadatak>();
         }
 
         public int IdStatus { get; set; }
         public string NazivStatus { get; set; }
 
-        public virtual ICollection<Zadatak> Zadataks { get; set; }
+        public virtual ICollection<Zadatak> Zadatak { get; set; }
     }
 }

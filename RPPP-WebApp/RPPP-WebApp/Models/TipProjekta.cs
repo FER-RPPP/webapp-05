@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models
 {
-    public partial class TipProjektum
+    public partial class TipProjekta
     {
-        public TipProjektum()
+        public TipProjekta()
         {
-            Projekts = new HashSet<Projekt>();
+            Projekt = new HashSet<Projekt>();
         }
 
         public int IdTip { get; set; }
         public string NazivTip { get; set; }
 
-        public virtual ICollection<Projekt> Projekts { get; set; }
+        public virtual ICollection<Projekt> Projekt { get; set; }
     }
 }

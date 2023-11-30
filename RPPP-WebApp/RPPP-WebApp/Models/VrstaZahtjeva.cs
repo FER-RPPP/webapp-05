@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
     {
         public VrstaZahtjeva()
         {
-            Zahtjevs = new HashSet<Zahtjev>();
+            Zahtjev = new HashSet<Zahtjev>();
         }
 
         public int IdVrsta { get; set; }
         public string NazivVrsta { get; set; }
 
-        public virtual ICollection<Zahtjev> Zahtjevs { get; set; }
+        public virtual ICollection<Zahtjev> Zahtjev { get; set; }
     }
 }

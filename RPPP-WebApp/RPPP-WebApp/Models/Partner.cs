@@ -9,8 +9,8 @@ namespace RPPP_WebApp.Models
     {
         public Partner()
         {
-            Suradniks = new HashSet<Suradnik>();
-            IdProjekts = new HashSet<Projekt>();
+            Suradnik = new HashSet<Suradnik>();
+            IdProjekt = new HashSet<Projekt>();
         }
 
         public int IdPartner { get; set; }
@@ -22,8 +22,8 @@ namespace RPPP_WebApp.Models
         public int IdTipPartnera { get; set; }
 
         public virtual TipPartnera IdTipPartneraNavigation { get; set; }
-        public virtual ICollection<Suradnik> Suradniks { get; set; }
+        public virtual ICollection<Suradnik> Suradnik { get; set; }
 
-        public virtual ICollection<Projekt> IdProjekts { get; set; }
+        public virtual ICollection<Projekt> IdProjekt { get; set; }
     }
 }

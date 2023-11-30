@@ -9,7 +9,7 @@ namespace RPPP_WebApp.Models
     {
         public Zahtjev()
         {
-            Zadataks = new HashSet<Zadatak>();
+            Zadatak = new HashSet<Zadatak>();
         }
 
         public string Opis { get; set; }
@@ -23,6 +23,6 @@ namespace RPPP_WebApp.Models
 
         public virtual Projekt IdProjektNavigation { get; set; }
         public virtual VrstaZahtjeva IdVrstaNavigation { get; set; }
-        public virtual ICollection<Zadatak> Zadataks { get; set; }
+        public virtual ICollection<Zadatak> Zadatak { get; set; }
     }
 }

@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
     {
         public Kvalifikacija()
         {
-            Suradniks = new HashSet<Suradnik>();
+            Suradnik = new HashSet<Suradnik>();
         }
 
         public int IdKvalifikacija { get; set; }
         public string NazivKvalifikacija { get; set; }
 
-        public virtual ICollection<Suradnik> Suradniks { get; set; }
+        public virtual ICollection<Suradnik> Suradnik { get; set; }
     }
 }

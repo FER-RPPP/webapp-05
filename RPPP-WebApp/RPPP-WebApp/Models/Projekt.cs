@@ -9,11 +9,11 @@ namespace RPPP_WebApp.Models
     {
         public Projekt()
         {
-            Dokuments = new HashSet<Dokument>();
-            ProjektnaKarticas = new HashSet<ProjektnaKartica>();
-            Ulogas = new HashSet<Uloga>();
-            Zahtjevs = new HashSet<Zahtjev>();
-            IdPartners = new HashSet<Partner>();
+            Dokument = new HashSet<Dokument>();
+            ProjektnaKartica = new HashSet<ProjektnaKartica>();
+            Uloga = new HashSet<Uloga>();
+            Zahtjev = new HashSet<Zahtjev>();
+            IdPartner = new HashSet<Partner>();
         }
 
         public int IdProjekt { get; set; }
@@ -23,12 +23,12 @@ namespace RPPP_WebApp.Models
         public string Naziv { get; set; }
         public int IdTip { get; set; }
 
-        public virtual TipProjektum IdTipNavigation { get; set; }
-        public virtual ICollection<Dokument> Dokuments { get; set; }
-        public virtual ICollection<ProjektnaKartica> ProjektnaKarticas { get; set; }
-        public virtual ICollection<Uloga> Ulogas { get; set; }
-        public virtual ICollection<Zahtjev> Zahtjevs { get; set; }
+        public virtual TipProjekta IdTipNavigation { get; set; }
+        public virtual ICollection<Dokument> Dokument { get; set; }
+        public virtual ICollection<ProjektnaKartica> ProjektnaKartica { get; set; }
+        public virtual ICollection<Uloga> Uloga { get; set; }
+        public virtual ICollection<Zahtjev> Zahtjev { get; set; }
 
-        public virtual ICollection<Partner> IdPartners { get; set; }
+        public virtual ICollection<Partner> IdPartner { get; set; }
     }
 }

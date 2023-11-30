@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
     {
         public VrstaTransakcije()
         {
-            Transakcijas = new HashSet<Transakcija>();
+            Transakcija = new HashSet<Transakcija>();
         }
 
         public int IdTransakcije { get; set; }
         public string NazivTransakcije { get; set; }
 
-        public virtual ICollection<Transakcija> Transakcijas { get; set; }
+        public virtual ICollection<Transakcija> Transakcija { get; set; }
     }
 }

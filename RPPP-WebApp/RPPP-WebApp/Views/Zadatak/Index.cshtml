@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+ @* @model IEnumerable<Zadatak> *@
+ <h2>Popis Zadataka</h2>
+
+<a asp-action="Create">Unos novog Zadatka</a>
+
+
+
+<table class="table table-sm table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                <a  >
+                    Oznaka zadatka
+                </a>
+            </th>
+            <th>
+                <a >
+                    vrsta zadatka
+                </a>
+            </th>
+            <th>
+                <a >
+                    oib nositelja
+                </a>
+            </th>
+            <th>
+                <a >
+                    vrijeme pocetka
+                </a>
+            </th>
+            <th>
+                <a >
+                    vrijeme kraja
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @* <tbody>
+        @foreach (var zadatci in Model)
+        {
+            <tr>
+                <td class="text-center">@zadatci.IdZadatak</td>
+                <td class="text-left">@zadatci.OibNositelj</td>
+                <td class="text-center">@zadatci.VrPoc</td>
+                <td class="text-center">@zadatci.VrKrajOcekivano</td>
+                <td class="btn-group">
+                    <a asp-action="Edit"
+                       
+                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i></a>
+
+                    
+                </td>
+            </tr>
+        }
+    </tbody> *@
+    
+</table>
