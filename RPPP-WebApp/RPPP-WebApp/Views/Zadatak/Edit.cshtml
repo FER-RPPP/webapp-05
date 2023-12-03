@@ -3,3 +3,57 @@
 *@
 @{
 }
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RPPP_WebApp.Models.Zadatak
+
+@{
+    ViewBag.Title = "Ažuriranje zadatka";
+}
+
+<form asp-route-id="@Model.IdZadatak"
+      method="post">
+    <div asp-validation-summary="All"></div>
+    @*Ne koristi se, jer se ne rekonstruira cijela država, već se samo koristi id koji je već u parametrima route*@
+    @*<input type="hidden" asp-for="OznDrzave" />*@
+    <div class="form-group">
+        <label asp-for="Vrsta"></label>
+        <div><span asp-validation-for="Vrsta" class="text-danger"></span></div>
+        <input asp-for="Vrsta" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Oibnositelj"></label>
+        <div><span asp-validation-for="Oibnositelj" class="text-danger"></span></div>
+        <textarea asp-for="Oibnositelj" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="VrPoc"></label>
+        <div><span asp-validation-for="VrPoc" class="text-danger"></span></div>
+        <textarea asp-for="VrPoc" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="VrKraj"></label>
+        <div><span asp-validation-for="VrKraj" class="text-danger"></span></div>
+        <textarea asp-for="VrKraj" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="VrKrajOcekivano"></label>
+        <div><span asp-validation-for="VrKrajOcekivano" class="text-danger"></span></div>
+        <input asp-for="VrKrajOcekivano" class="form-control" />
+    </div>
+
+
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Spremi</button>
+        <a asp-action="Index"
+           class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    @*     <partial name="IncludeValidation" />
+ *@
+}

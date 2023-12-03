@@ -21,4 +21,8 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

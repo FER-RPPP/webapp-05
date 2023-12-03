@@ -9,9 +9,9 @@ namespace RPPP_WebApp.Models
 {
     public partial class RPPP05Context : DbContext
     {
-        public RPPP05Context()
-        {
-        }
+        //public RPPP05Context()
+        //{
+        //}
 
         public RPPP05Context(DbContextOptions<RPPP05Context> options)
             : base(options)
