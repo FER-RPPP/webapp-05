@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.CodeAnalysis.Differencing;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
-using RPPP_WebApp.Models;
-using System;
-using System.Linq;
+
 using System.Text.Json;
-using System.Threading.Tasks;
+using RPPP_WebApp.Models;
 
 
 namespace RPPP_WebApp.Controllers
@@ -23,30 +18,98 @@ namespace RPPP_WebApp.Controllers
             this.ctx = ctx;
             this.logger = logger;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
+
+            int pagesize = 100;
+            var query = ctx.Zadatak
+                     .AsNoTracking();
+
+            int count = query.Count();
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+
+            if (page < 1 || page > pagingInfo.TotalPages)
+            {
+                //return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
+                return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
+            }
+
+
+
+
             var zadatci = ctx.Zadatak
                       .AsNoTracking()
+                      .Skip((page - 1) * pagesize)
+                      .Take(pagesize)
                       .OrderBy(d => d.IdZadatak)
                       .ToList();
+            var statusi = ctx.Zadatak.AsNoTracking()
+                         .Skip((page - 1) * pagesize)
+                         .Take(pagesize)
+                         .Select(m =>  m.IdStatusNavigation.NazivStatus)
+                         .ToList();
 
             var model = new ZadatakViewModel
             {
                 zadatci = zadatci,
+                nazivStatusa = statusi,
+                PagingInfo = pagingInfo,
             };
-            return View("Index", model);
+            return View( model);
       
         }
 
-        [HttpGet]
-        public IActionResult Create()
+        private async Task PrepareDropDownLists()
         {
+            var hr = await ctx.StatusZadatka
+                              .Where(d => d.IdStatus == 1)
+                              .Select(d => new { d.NazivStatus, d.IdStatus })
+                              .FirstOrDefaultAsync();
+            var zadatci = await ctx.StatusZadatka
+                                  .Where(d => d.IdStatus != 1)
+                                  .OrderBy(d => d.NazivStatus)
+                                  .Select(d => new { d.NazivStatus, d.IdStatus })
+                                  .ToListAsync();
+            if (hr != null)
+            {
+                zadatci.Insert(0, hr);
+            }
+            ViewBag.ZadatciStatusi = new SelectList(zadatci, nameof(hr.IdStatus), nameof(hr.NazivStatus));
+
+            var hrv = await ctx.Zahtjev
+                                  .Where(d => d.IdZahtjev == 1)
+                                  .Select(d => new { d.Opis, d.IdZahtjev })
+                                  .FirstOrDefaultAsync();
+            var projekti = await ctx.Zahtjev
+                                  .Where(d => d.IdZahtjev != 1)
+                                  .OrderBy(d => d.Opis)
+                                  .Select(d => new { d.Opis, d.IdZahtjev })
+                                  .ToListAsync();
+            if (hrv != null)
+            {
+                projekti.Insert(0, hrv);
+            }
+            ViewBag.ZahtjeviPopis = new SelectList(projekti, nameof(hrv.IdZahtjev), nameof(hrv.Opis));
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateAsync()
+        {
+            await PrepareDropDownLists();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Zadatak zadatak)
+        public async Task<IActionResult> Create(Zadatak zadatak)
         {
             logger.LogTrace(JsonSerializer.Serialize(zadatak));
             if (ModelState.IsValid)
@@ -55,28 +118,32 @@ namespace RPPP_WebApp.Controllers
                 {
                     ctx.Add(zadatak);
                     ctx.SaveChanges();
-                    //logger.LogInformation(new EventId(1000), $"Zadatak {zadatak.IdZadatak} dodana.");
+                    logger.LogInformation(new EventId(1000), $"Zadatak {zadatak.IdZadatak} dodan.");
 
-                    //TempData[Constants.Message] = $"Država {drzava.NazDrzave} dodana.";
-                    //TempData[Constants.ErrorOccurred] = false;
+                    TempData[Constants.Message] = $"Zadatak {zadatak.IdZadatak} dodan.";
+                    TempData[Constants.ErrorOccurred] = false;
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
                 {
-                    //logger.LogError("Pogreška prilikom dodavanje nove države: {0}", exc.CompleteExceptionMessage());
-                    //ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    logger.LogError("Pogreška prilikom dodavanje novog zadatka: {0}", exc.Message);
+                    ModelState.AddModelError(string.Empty, exc.Message);
+                    await PrepareDropDownLists();
+
                     return View(zadatak);
                 }
             }
             else
             {
+                await PrepareDropDownLists();
+
                 return View(zadatak);
             }
         }
 
 
         [HttpGet]
-        public IActionResult Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task <IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
             var zadatak = ctx.Zadatak.AsNoTracking().Where(d => d.IdZadatak==id).SingleOrDefault();
             if (zadatak == null)
@@ -86,16 +153,17 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                //ViewBag.Page = page;
-                //ViewBag.Sort = sort;
-                //ViewBag.Ascending = ascending;
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                await PrepareDropDownLists();
                 return View(zadatak);
             }
         }
 
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
         {
             //za različite mogućnosti ažuriranja pogledati
             //attach, update, samo id, ...
@@ -112,7 +180,7 @@ namespace RPPP_WebApp.Controllers
                 }
 
                 if (await TryUpdateModelAsync<Zadatak>(zadatak, "",
-                    d => d.Oibnositelj, d => d.Vrsta, d => d.VrPoc, d => d.VrKraj, d => d.VrKrajOcekivano
+                    d => d.Oibnositelj, d => d.IdStatus, d => d.VrPoc, d => d.VrKraj, d => d.VrKrajOcekivano, d=> d.Vrsta
                 ))
                 {
                     ViewBag.Page = page;
@@ -121,26 +189,26 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        ////TempData[Constants.Message] = "Država ažurirana.";
-                        ////TempData[Constants.ErrorOccurred] = false;
+                        TempData[Constants.Message] = "Zadatak " + id + " ažuriran.";
+                        TempData[Constants.ErrorOccurred] = false;
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
                     {
-                        //ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                        ModelState.AddModelError(string.Empty, exc.Message);
                         return View(zadatak);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Podatke o državi nije moguće povezati s forme");
+                    ModelState.AddModelError(string.Empty, "Podatke o zadatku nije moguće povezati s forme");
                     return View(zadatak);
                 }
             }
             catch (Exception exc)
             {
-                //TempData[Constants.Message] = exc.CompleteExceptionMessage();
-                //TempData[Constants.ErrorOccurred] = true;
+                TempData[Constants.Message] = exc.Message;
+                TempData[Constants.ErrorOccurred] = true;
                 return RedirectToAction(nameof(Edit), id);
             }
         }

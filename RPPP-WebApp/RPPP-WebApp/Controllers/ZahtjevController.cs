@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -27,17 +28,57 @@ namespace RPPP_WebApp.Controllers
                       .AsNoTracking()
                       .OrderBy(d => d.IdZahtjev)
                       .ToList();
+            var vrste =  ctx.Zahtjev.AsNoTracking()
+                         .Select(m => m.IdVrstaNavigation.NazivVrsta)
+                         .ToList();
 
             var model = new ZahtjevViewModel
             {
                 zadatci = zahtjevi,
+                nazivVrste = vrste
             };
             return View("Index", model);
         }
 
-        [HttpGet]
-        public IActionResult Create()
+        private async Task PrepareDropDownLists()
         {
+            var hr = await ctx.VrstaZahtjeva
+                              .Where(d => d.IdVrsta == 1)
+                              .Select(d => new { d.NazivVrsta, d.IdVrsta })
+                              .FirstOrDefaultAsync();
+            var zahtjevi = await ctx.VrstaZahtjeva
+                                  .Where(d => d.IdVrsta != 1)
+                                  .OrderBy(d => d.NazivVrsta)
+                                  .Select(d => new { d.NazivVrsta, d.IdVrsta })
+                                  .ToListAsync();
+            if (hr != null)
+            {
+                zahtjevi.Insert(0, hr);
+            }
+            ViewBag.ZahtjeviVrste = new SelectList(zahtjevi, nameof(hr.IdVrsta), nameof(hr.NazivVrsta));
+            
+            var hrv = await ctx.Projekt
+                                  .Where(d => d.IdProjekt == 1)
+                                  .Select(d => new { d.Naziv, d.IdProjekt })
+                                  .FirstOrDefaultAsync();
+            var projekti = await ctx.Projekt
+                                  .Where(d => d.IdProjekt != 1)
+                                  .OrderBy(d => d.Naziv)
+                                  .Select(d => new { d.Naziv, d.IdProjekt })
+                                  .ToListAsync();
+            if (hrv != null)
+            {
+                projekti.Insert(0, hrv);
+            }
+            ViewBag.ProjektiPopis = new SelectList(projekti, nameof(hrv.IdProjekt), nameof(hrv.Naziv));
+
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult>  Create()
+        {
+            await PrepareDropDownLists();
             return View();
         }
 
@@ -52,16 +93,17 @@ namespace RPPP_WebApp.Controllers
                 {
                     ctx.Add(zahtjev);
                     ctx.SaveChanges();
-                    //logger.LogInformation(new EventId(1000), $"Zadatak {zadatak.IdZadatak} dodana.");
+                    logger.LogInformation(new EventId(1000), $"Zahtjev {zahtjev.IdZahtjev} dodan.");
 
-                    //TempData[Constants.Message] = $"Država {drzava.NazDrzave} dodana.";
-                    //TempData[Constants.ErrorOccurred] = false;
+                    TempData[Constants.Message] = $"Zahtjev {zahtjev.IdZahtjev} dodan.";
+                    TempData[Constants.ErrorOccurred] = false;
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
                 {
-                    //logger.LogError("Pogreška prilikom dodavanje nove države: {0}", exc.CompleteExceptionMessage());
-                    //ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    logger.LogError("Pogreška prilikom dodavanja novog zahtjeva: {0}", exc.Message);
+                    ModelState.AddModelError(string.Empty, exc.Message);
                     return View(zahtjev);
                 }
             }
@@ -73,7 +115,7 @@ namespace RPPP_WebApp.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
             var zahtjev = ctx.Zahtjev.AsNoTracking().Where(d => d.IdZahtjev == id).SingleOrDefault();
             if (zahtjev == null)
@@ -83,16 +125,18 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                //ViewBag.Page = page;
-                //ViewBag.Sort = sort;
-                //ViewBag.Ascending = ascending;
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                await PrepareDropDownLists();
+
                 return View(zahtjev);
             }
         }
 
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis ="opis")
         {
             //za različite mogućnosti ažuriranja pogledati
             //attach, update, samo id, ...
@@ -109,7 +153,7 @@ namespace RPPP_WebApp.Controllers
                 }
 
                 if (await TryUpdateModelAsync<Zahtjev>(zahtjev, "",
-                    d => d.Opis, d => d.Prioritet, d => d.VrPocetak, d => d.VrKraj, d => d.VrKrajOcekivano
+                    d => d.Opis, d => d.Prioritet, d => d.VrPocetak, d => d.VrKraj, d => d.VrKrajOcekivano, d => d.IdProjekt, d => d.IdVrsta
                 ))
                 {
                     ViewBag.Page = page;
@@ -118,26 +162,26 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        ////TempData[Constants.Message] = "Država ažurirana.";
-                        ////TempData[Constants.ErrorOccurred] = false;
+                        TempData[Constants.Message] = "Zahtjev " + id + "ažuriran.";
+                        TempData[Constants.ErrorOccurred] = false;
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
                     {
-                        //ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                        ModelState.AddModelError(string.Empty, exc.Message);
                         return View(zahtjev);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Podatke o državi nije moguće povezati s forme");
+                    ModelState.AddModelError(string.Empty, "Podatke o zahtjevu nije moguće povezati s forme");
                     return View(zahtjev);
                 }
             }
             catch (Exception exc)
             {
-                //TempData[Constants.Message] = exc.CompleteExceptionMessage();
-                //TempData[Constants.ErrorOccurred] = true;
+                TempData[Constants.Message] = exc.Message;
+                TempData[Constants.ErrorOccurred] = true;
                 return RedirectToAction(nameof(Edit), id);
             }
         }

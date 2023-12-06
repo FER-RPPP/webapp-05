@@ -28,18 +28,33 @@
     <div class="form-group">
         <label asp-for="VrPocetak"></label>
         <div><span asp-validation-for="VrPocetak" class="text-danger"></span></div>
-        <textarea asp-for="VrPocetak" class="form-control"></textarea>
+        <input asp-for="VrPocetak" class="form-control"></input>
     </div>
     <div class="form-group">
         <label asp-for="VrKraj"></label>
         <div><span asp-validation-for="VrKraj" class="text-danger"></span></div>
-        <textarea asp-for="VrKraj" class="form-control"></textarea>
+        <input asp-for="VrKraj" class="form-control"></input>
     </div>
     <div class="form-group">
         <label asp-for="VrKrajOcekivano"></label>
         <div><span asp-validation-for="VrKrajOcekivano" class="text-danger"></span></div>
         <input asp-for="VrKrajOcekivano" class="form-control" />
     </div>
+    <div class="mb-3">
+        <label asp-for="IdProjekt" class="form-label">Projekt kojem zahtjev pripada</label>
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.ProjektiPopis">
+            <option disabled selected value="">Odaberite id projekta</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdVrsta" class="form-label">Vrsta zahtjeva</label>
+        <select class="form-control" asp-for="IdVrsta" asp-items="ViewBag.ZahtjeviVrste">
+            <option disabled selected value="">Odaberite vrstu</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdVrsta" class="text-danger"></span></div>
+    </div>
+
     <div class="text-center">
         <button class="btn btn-primary" type="submit">Spremi</button>
         <a asp-action="Index"

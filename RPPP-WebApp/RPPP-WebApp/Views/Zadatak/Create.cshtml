@@ -22,7 +22,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="Oibnositelj" class="form-label">OIB nositelja zadatka</label>
-        <input maxlength="3" asp-for="Oibnositelj" class="form-control" />
+        <input  asp-for="Oibnositelj" class="form-control" />
         <div class="form-text"><span asp-validation-for="Oibnositelj" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
@@ -42,7 +42,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="IdStatus" class="form-label">Status zadatka</label>
-        <select class="form-control" asp-for="IdStatus" asp-items="ViewBag.NazivStatus">
+        <select class="form-control" asp-for="IdStatus" asp-items="ViewBag.ZadatciStatusi">
             <option disabled selected value="">Odaberite status</option>
         </select>
         <div class="form-text"><span asp-validation-for="IdStatus" class="text-danger"></span></div>

@@ -36,13 +36,15 @@
         <div class="form-text"><span asp-validation-for="VrKrajOcekivano" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
-        <label asp-for="IdProjekt" class="form-label">Očekivano vrijeme kraja</label>
-        <input maxlength="3" asp-for="IdProjekt" class="form-control" />
+        <label asp-for="IdProjekt" class="form-label">Projekt kojem zahtjev pripada</label>
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.ProjektiPopis">
+            <option disabled selected value="">Odaberite id projekta</option>
+        </select>
         <div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
         <label asp-for="IdVrsta" class="form-label">Vrsta zahtjeva</label>
-        <select class="form-control" asp-for="IdVrsta" asp-items="ViewBag.NazivVrsta">
+        <select class="form-control" asp-for="IdVrsta" asp-items="ViewBag.ZahtjeviVrste">
             <option disabled selected value="">Odaberite vrstu</option>
         </select>
         <div class="form-text"><span asp-validation-for="IdVrsta" class="text-danger"></span></div>
