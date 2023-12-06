@@ -22,22 +22,50 @@ namespace RPPP_WebApp.Controllers
             this.ctx = ctx;
             this.logger = logger;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
+            int pagesize = 10;
+            var query = ctx.Zahtjev
+                     .AsNoTracking();
+
+            int count = query.Count();
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+
+            if (page < 1 || page > pagingInfo.TotalPages)
+            {
+                return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
+                //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
+            }
+
+            //query = query.ApplySort(sort, ascending);
+
+
             var zahtjevi = ctx.Zahtjev
                       .AsNoTracking()
+                      .Skip((page - 1) * pagesize)
+                      .Take(pagesize)
                       .OrderBy(d => d.IdZahtjev)
                       .ToList();
             var vrste =  ctx.Zahtjev.AsNoTracking()
+                         .Skip((page - 1) * pagesize)
+                         .Take(pagesize)
                          .Select(m => m.IdVrstaNavigation.NazivVrsta)
                          .ToList();
 
             var model = new ZahtjevViewModel
             {
                 zadatci = zahtjevi,
-                nazivVrste = vrste
+                nazivVrste = vrste,
+                PagingInfo = pagingInfo,
             };
-            return View("Index", model);
+            return View(model);
         }
 
         private async Task PrepareDropDownLists()
@@ -84,7 +112,7 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Zahtjev zahtjev)
+        public async Task<IActionResult> Create(Zahtjev zahtjev)
         {
             logger.LogTrace(JsonSerializer.Serialize(zahtjev));
             if (ModelState.IsValid)
@@ -104,11 +132,13 @@ namespace RPPP_WebApp.Controllers
                 {
                     logger.LogError("Pogreška prilikom dodavanja novog zahtjeva: {0}", exc.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
+                    await PrepareDropDownLists();
                     return View(zahtjev);
                 }
             }
             else
             {
+                await PrepareDropDownLists();
                 return View(zahtjev);
             }
         }
@@ -162,7 +192,7 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData[Constants.Message] = "Zahtjev " + id + "ažuriran.";
+                        TempData[Constants.Message] = "Zahtjev " + id + " ažuriran.";
                         TempData[Constants.ErrorOccurred] = false;
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }

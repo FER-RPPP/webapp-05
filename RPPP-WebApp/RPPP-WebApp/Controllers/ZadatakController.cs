@@ -21,7 +21,7 @@ namespace RPPP_WebApp.Controllers
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
 
-            int pagesize = 100;
+            int pagesize = 10;
             var query = ctx.Zadatak
                      .AsNoTracking();
 
@@ -37,11 +37,11 @@ namespace RPPP_WebApp.Controllers
 
             if (page < 1 || page > pagingInfo.TotalPages)
             {
-                //return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
-                return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
+                return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
+                //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-
+            //query = query.ApplySort(sort, ascending);
 
 
             var zadatci = ctx.Zadatak
