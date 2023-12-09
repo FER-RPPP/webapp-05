@@ -4,10 +4,14 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RPPP_WebApp.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Drawing.Printing;
 
 
 namespace RPPP_WebApp.Controllers
@@ -215,5 +219,175 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Edit), id);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int IdZahtjev, int page = 1, int sort = 1, bool ascending = true)
+        {
+            var zahtjev = ctx.Zahtjev.Find(IdZahtjev);
+            if (zahtjev != null)
+            {
+                try
+                {
+                    int id = zahtjev.IdZahtjev;
+                    ctx.Remove(zahtjev);
+                    ctx.SaveChanges();
+                    logger.LogInformation($"Zahtjev {id} uspješno obrisana");
+                    TempData[Constants.Message] = $"Zahtjev {id} uspješno obrisana";
+                    TempData[Constants.ErrorOccurred] = false;
+                }
+                catch (Exception exc)
+                {
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja zahtjeva: " + exc.Message;
+                    TempData[Constants.ErrorOccurred] = true;
+                    logger.LogError("Pogreška prilikom brisanja zahtjeva: " + exc.Message);
+                }
+            }
+            else
+            {
+                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", IdZahtjev);
+                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + IdZahtjev;
+                TempData[Constants.ErrorOccurred] = true;
+            }
+            return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
+        }
+
+        public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
+        {
+
+            if(id == 0)
+            {
+                id = (await ctx.Zahtjev.FirstOrDefaultAsync()).IdZahtjev;
+
+            }
+
+            var zahtjev = await ctx.Zahtjev
+                                    .Where(d => d.IdZahtjev == id)
+                                    .Select(d => new Zahtjev
+                                    {
+                                        IdZahtjev = d.IdZahtjev,
+                                        Opis = d.Opis,
+                                        Prioritet = d.Prioritet,
+                                        VrKraj = d.VrKraj,
+                                        VrPocetak = d.VrPocetak,
+                                        VrKrajOcekivano = d.VrKrajOcekivano,
+                                        IdProjekt = d.IdProjekt,
+                                        IdVrsta = d.IdVrsta
+                                    })
+                                    .FirstOrDefaultAsync();
+            int pagesize = 10;
+            var query = ctx.Zahtjev
+                     .AsNoTracking();
+
+            int count = query.Count();
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+
+            if (zahtjev == null)
+            {
+                return NotFound($"Zahtjev {id} ne postoji");
+            }
+            else
+            {
+                 string NazVrste = await ctx.VrstaZahtjeva
+                                                .Where(p => p.IdVrsta == zahtjev.IdVrsta)
+                                                .Select(p => p.NazivVrsta)
+                                                .FirstOrDefaultAsync();
+
+                List<Zahtjev> svizahtjevi = (await ctx.Zahtjev.ToListAsync());
+                int index = svizahtjevi.FindIndex(p => p.IdZahtjev == zahtjev.IdZahtjev);
+
+                int idprethodnog = -1;
+                int idsljedeceg = -1;
+
+                if (index != 0) {
+                    idprethodnog = svizahtjevi[index - 1].IdZahtjev;
+                }
+                if(index != svizahtjevi.Count -1) {
+                    idsljedeceg = svizahtjevi[index + 1].IdZahtjev;
+                 }
+
+
+                //učitavanje zadataka
+                var zadatci = await ctx.Zadatak
+                                      .Where(s => s.IdZahtjev == zahtjev.IdZahtjev)
+                                      .OrderBy(s => s.IdZadatak)
+                                      .Select(s => new Zadatak
+                                      {
+                                          IdZadatak = s.IdZadatak,
+                                          VrKraj = s.VrKraj,
+                                          VrKrajOcekivano = s.VrKrajOcekivano,
+                                          VrPoc = s.VrPoc,
+                                          Oibnositelj = s.Oibnositelj,
+                                          IdStatus = s.IdStatus,
+                                          IdZahtjev = s.IdZahtjev,
+                                          Vrsta = s.Vrsta
+                                      })
+                                      .ToListAsync();
+                
+                var statusi = ctx.Zadatak.AsNoTracking()
+                         .Where(d => d.IdZahtjev == id)
+                         .Select(m => m.IdStatusNavigation.NazivStatus)
+                         .ToList();
+
+                var model = new ZadatakViewModel
+                {
+                    zadatci = zadatci,
+                    nazivStatusa = statusi,
+                    PagingInfo = pagingInfo,
+                };
+
+
+                var CIJELAPREDAJA = new ZahtjevZadatakViewModel
+                {
+                    zahtjev = zahtjev,
+                    NazVrsta = NazVrste,
+                    IdPrethZahtjev = idprethodnog,
+                    IdSljedZahtjev = idsljedeceg,
+                    zadatci = model
+                
+                };
+
+                //await SetPreviousAndNext(position.Value, filter, sort, ascending);
+
+
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                
+
+                return View(viewName, CIJELAPREDAJA);
+            }
+        }
+        //private async Task SetPreviousAndNext(int position, string filter, int sort, bool ascending)
+        //{
+        //    var query = ctx.vw_Dokumenti.AsQueryable();
+
+        //    DokumentFilter df = new DokumentFilter();
+        //    if (!string.IsNullOrWhiteSpace(filter))
+        //    {
+        //        df = DokumentFilter.FromString(filter);
+        //        if (!df.IsEmpty())
+        //        {
+        //            query = df.Apply(query);
+        //        }
+        //    }
+
+        //    query = query.ApplySort(sort, ascending);
+        //    if (position > 0)
+        //    {
+        //        ViewBag.Previous = await query.Skip(position - 1).Select(d => d.IdDokumenta).FirstAsync();
+        //    }
+        //    if (position < await query.CountAsync() - 1)
+        //    {
+        //        ViewBag.Next = await query.Skip(position + 1).Select(d => d.IdDokumenta).FirstAsync();
+        //    }
+        //}
     }
 }

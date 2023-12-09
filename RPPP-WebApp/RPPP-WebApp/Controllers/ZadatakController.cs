@@ -85,18 +85,18 @@ namespace RPPP_WebApp.Controllers
 
             var hrv = await ctx.Zahtjev
                                   .Where(d => d.IdZahtjev == 1)
-                                  .Select(d => new { d.Opis, d.IdZahtjev })
+                                  .Select(d =>  d.Opis + " (id: "  + d.IdZahtjev +")" )
                                   .FirstOrDefaultAsync();
-            var projekti = await ctx.Zahtjev
+            var zahtjevi = await ctx.Zahtjev
                                   .Where(d => d.IdZahtjev != 1)
                                   .OrderBy(d => d.Opis)
-                                  .Select(d => new { d.Opis, d.IdZahtjev })
+                                  .Select(d =>  d.Opis + " (id: " + d.IdZahtjev +")" )
                                   .ToListAsync();
             if (hrv != null)
             {
-                projekti.Insert(0, hrv);
+                zahtjevi.Insert(0, hrv);
             }
-            ViewBag.ZahtjeviPopis = new SelectList(projekti, nameof(hrv.IdZahtjev), nameof(hrv.Opis));
+            ViewBag.ZahtjeviPopis = new SelectList(zahtjevi, nameof(hrv));
 
         }
 
@@ -211,6 +211,39 @@ namespace RPPP_WebApp.Controllers
                 TempData[Constants.ErrorOccurred] = true;
                 return RedirectToAction(nameof(Edit), id);
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int IdZadatak, int page = 1, int sort = 1, bool ascending = true)
+        {
+            ViewBag.OnajKojiBrisem = IdZadatak;
+            var zadatak = ctx.Zadatak.Find(IdZadatak);
+            if (zadatak != null)
+            {
+                try
+                {
+                    int id = zadatak.IdZadatak;
+                    ctx.Remove(zadatak);
+                    ctx.SaveChanges();
+                    logger.LogInformation($"Zadatak {id} uspješno obrisan");
+                    TempData[Constants.Message] = $"Zadatak {id} uspješno obrisan";
+                    TempData[Constants.ErrorOccurred] = false;
+                }
+                catch (Exception exc)
+                {
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja zadatka: " + exc.Message;
+                    TempData[Constants.ErrorOccurred] = true;
+                    logger.LogError("Pogreška prilikom brisanja zadatka: " + exc.Message);
+                }
+            }
+            else
+            {
+                logger.LogWarning("Ne postoji zadatak s oznakom: {0} ", IdZadatak);
+                TempData[Constants.Message] = "Ne postoji zadatak s oznakom: " + IdZadatak;
+                TempData[Constants.ErrorOccurred] = true;
+            }
+            return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
     }
 

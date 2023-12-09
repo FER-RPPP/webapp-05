@@ -65,6 +65,12 @@
                 <td class="text-center">@Model.nazivVrste[counter++]</td>
 
                 <td class="btn-group">
+                    <a asp-action="Show"
+                       asp-route-id="@zadatci.IdZahtjev"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Detalji</a>
                     <a asp-action="Edit"
                        asp-route-id="@zadatci.IdZahtjev"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
