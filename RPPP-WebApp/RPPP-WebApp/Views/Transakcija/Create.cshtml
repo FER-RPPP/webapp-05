@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RPPP_WebApp.Models.Transakcija
+
+
+<h2>Unos novog zahtjeva</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="mb-3">
+        <label asp-for="Opis" class="form-label"></label>
+        <input asp-for="Opis" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Opis" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PrimateljIban" class="form-label"></label>
+        <input asp-for="PrimateljIban" class="form-control" />
+        <div class="form-text"><span asp-validation-for="PrimateljIban" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Vrsta" class="form-label"></label>
+        <input asp-for="Vrsta" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Vrsta" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SubjektIban" class="form-label"></label>
+        <input asp-for="SubjektIban" class="form-control" />
+        <div class="form-text"><span asp-validation-for="SubjektIban" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="IdTransakcije" class="form-label"></label>
+        <input asp-for="IdTransakcije" class="form-control" />
+        <div class="form-text"><span asp-validation-for="IdTransakcije" class="text-danger"></span></div>
+    </div>
+    
+    
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    @* <partial name="IncludeValidation" /> *@
+}

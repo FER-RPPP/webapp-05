@@ -8,13 +8,13 @@
 *@
 @{
 }
-@model RPPP_WebApp.Models.Zadatak
+@model RPPP_WebApp.Models.Transakcija
 
 @{
     ViewBag.Title = "Ažuriranje zadatka";
 }
 
-<form asp-route-id="@Model.IdZadatak"
+<form asp-route-id="@Model.PrimateljIban"
       asp-route-page="@ViewBag.Page"
       asp-route-sort="@ViewBag.Sort"
       asp-route-ascending="@ViewBag.Ascending"
@@ -22,37 +22,32 @@
     <div asp-validation-summary="All"></div>
     @*Ne koristi se, jer se ne rekonstruira cijela država, već se samo koristi id koji je već u parametrima route*@
     @*<input type="hidden" asp-for="OznDrzave" />*@
+
+    <div class="form-group">
+        <label asp-for="Opis"></label>
+        <div><span asp-validation-for="Opis" class="text-danger"></span></div>
+        <input asp-for="Opis" class="form-control" />
+    </div>
+
     <div class="form-group">
         <label asp-for="Vrsta"></label>
         <div><span asp-validation-for="Vrsta" class="text-danger"></span></div>
         <input asp-for="Vrsta" class="form-control" />
     </div>
+
     <div class="form-group">
-        <label asp-for="Oibnositelj"></label>
-        <div><span asp-validation-for="Oibnositelj" class="text-danger"></span></div>
-        <input asp-for="Oibnositelj" class="form-control">
+        <label asp-for="SubjektIban"></label>
+        <div><span asp-validation-for="SubjektIban" class="text-danger"></span></div>
+        <input asp-for="SubjektIban" class="form-control" />
     </div>
-    <div class="form-group">
-        <label asp-for="VrPoc"></label>
-        <div><span asp-validation-for="VrPoc" class="text-danger"></span></div>
-        <input asp-for="VrPoc" class="form-control">
-    </div>
-    <div class="form-group">
-        <label asp-for="VrKraj"></label>
-        <div><span asp-validation-for="VrKraj" class="text-danger"></span></div>
-        <input asp-for="VrKraj" class="form-control">
-    </div>
-    <div class="form-group">
-        <label asp-for="VrKrajOcekivano"></label>
-        <div><span asp-validation-for="VrKrajOcekivano" class="text-danger"></span></div>
-        <input asp-for="VrKrajOcekivano" class="form-control" />
-    </div>
+
+    @*Potencijalno treba maknuti*@
     <div class="mb-3">
-        <label asp-for="IdStatus" class="form-label">Status zadatka</label>
-        <select class="form-control" asp-for="IdStatus" asp-items="ViewBag.ZadatciStatusi">
+        <label asp-for="IdTransakcije" class="form-label">Status zadatka</label>
+        <select class="form-control" asp-for="IdTransakcije" asp-items="ViewBag.ZadatciStatusi">
             <option disabled selected value="">Odaberite status</option>
         </select>
-        <div class="form-text"><span asp-validation-for="IdStatus" class="text-danger"></span></div>
+        <div class="form-text"><span asp-validation-for="IdTransakcije" class="text-danger"></span></div>
     </div>
 
 
