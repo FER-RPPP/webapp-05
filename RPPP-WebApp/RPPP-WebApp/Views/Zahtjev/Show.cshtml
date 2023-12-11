@@ -63,14 +63,14 @@
     } *@
 
     <div class="row justify-content-sm-center">
-        <div class="col-sm-2">
+        <div class="text-center">
             Vrijeme početka: @Model.zahtjev.VrPocetak.ToString("d.M.yyyy.")
         </div>
-        <div class="col-sm-2">
-            Vrijeme ocekivanog kraja: @Model.zahtjev.VrKrajOcekivano.ToString("d.M.yyyy.")
+        <div class="text-center">
+            Vrijeme očekivanog kraja: @Model.zahtjev.VrKrajOcekivano.ToString("d.M.yyyy.")
         </div>
         @if (Model.zahtjev.VrKraj.HasValue){
-        <div class="col-sm-2">
+            <div class="text-center">
             Vrijeme stvarnog kraja: @Model.zahtjev.VrKraj
         </div>
         }
@@ -88,7 +88,7 @@
             <input type="hidden" name="IdDokumenta" value="@Model.IdDokumenta" />
             <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
         </form> *@
-        <div class="col-sm-1 text-left">
+        <div class="col-sm-1 text-center">
             <a class="btn btn-sm btn-primary cancel"
                asp-action="Index"
                asp-route-page="@ViewBag.Page"
@@ -105,7 +105,7 @@
             <thead>
                 <tr>
                     @{
-                        string[] nazivi = { "Artikl", "Količina", "Rabat", "Jedinična cijena", "Iznos" };
+                        string[] nazivi = { "ID zadatka", "OIB Nositelja", "Vrsta zadatka", "Status zadatka", "Vrijeme početka", "Vrijeme kraja", "Vrijeme očekivanog kraja" };
                         for (int i = 0; i < nazivi.Length; i++)
                         {
                             <th class="text-center">
@@ -122,28 +122,29 @@
                 }
                 @foreach (var zadatak in Model.zadatci.zadatci)
                 {
-                    <tr>
-                        <td class="text-left col-sm-4">
+                    <tr class="text-center">
+                        <td class="text-center col-sm-1">
                             @zadatak.IdZadatak
                         </td>
-                        <td class="text-right col-sm-1">
+                        <td class="text-center col-sm-2">
                             @zadatak.Oibnositelj
                         </td>
                         <td class="text-center col-sm-1">
-                            @zadatak.VrPoc.ToString("d.M.yyyy.")
-                        </td>
-                        <td class="text-right col-sm-2">
-                            @zadatak.VrKraj
-                        </td>
-                        <td class="text-right col-sm-2">
-                            @zadatak.VrKrajOcekivano.ToString("d.M.yyyy.")
-                        </td>
-                        <td class="text-right col-sm-2">
                             @zadatak.Vrsta
                         </td>
-                        <td class="text-center">
+                        <td class="text-center col-sm-2">
                             @Model.zadatci.nazivStatusa[counter++]
                         </td>
+                        <td class="text-center col-sm-2">
+                            @zadatak.VrPoc.ToString("d.M.yyyy.")
+                        </td>
+                        <td class="text-center col-sm-2">
+                            @zadatak.VrKraj
+                        </td>
+                        <td class="text-center col-sm-2">
+                            @zadatak.VrKrajOcekivano.ToString("d.M.yyyy.")
+                        </td>
+                        
                     </tr>
                 }
             </tbody>

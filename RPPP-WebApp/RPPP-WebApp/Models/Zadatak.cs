@@ -9,12 +9,12 @@ namespace RPPP_WebApp.Models
 {
     public partial class Zadatak
     {
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Datum")]
         [DateGreaterThan(nameof(VrPoc), ErrorMessage = "Vrijeme kraja mora biti nakon vremena početka")]
         public DateTime? VrKraj { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Datum")]
         [Required(ErrorMessage = "Potrebno je odabrati datum ")]
         public DateTime VrPoc { get; set; }
@@ -28,7 +28,7 @@ namespace RPPP_WebApp.Models
         [Required(ErrorMessage = "Potrebno je unijeti vrstu")]
         [Display(Name = "Vrsta")]
         public string Vrsta { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Datum")]
         [Required(ErrorMessage = "Potrebno je odabrati datum ")]
         [DateGreaterThan(nameof(VrPoc), ErrorMessage = "Očekivano vrijeme kraja mora biti nakon vremena početka")]

@@ -92,7 +92,7 @@ namespace RPPP_WebApp.Controllers
                                   .FirstOrDefaultAsync();
             var zahtjevi = await ctx.Zahtjev
                                   .Where(d => d.IdZahtjev != 1)
-                                  .OrderBy(d => d.Opis)
+                                  .OrderBy(d => d.IdZahtjev)
                                   .Select(d =>  new { v= d.Opis + " (id: " + d.IdZahtjev + ")", d.IdZahtjev } )
                                   .ToListAsync();
             if (hrv != null)
@@ -129,7 +129,8 @@ namespace RPPP_WebApp.Controllers
                 }
                 catch (Exception exc)
                 {
-                    logger.LogError("Pogreška prilikom dodavanje novog zadatka: {0}", exc.Message);
+                    Console.WriteLine("Pogreška prilikom dodavanje novog zadatka: {0}" +  exc.InnerException.Message);
+                    logger.LogError("Pogreška prilikom dodavanje novog zadatka: {0}" + exc.InnerException.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
                     await PrepareDropDownLists();
 
