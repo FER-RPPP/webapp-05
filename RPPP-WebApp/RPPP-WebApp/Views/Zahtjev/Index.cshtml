@@ -16,13 +16,13 @@
 <table class="table table-sm table-striped table-hover" id="tabledrzave">
     <thead>
         <tr>
-            <th>
+            <th class="text-center">
                 <a  asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)" >
                     Oznaka zahtjeva
                 </a>
             </th>
-            <th>
-                <a  asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)" >
+            <th class="text-center">
+                <a class="text-center" asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
                     Prioritet
                 </a>
             </th>
@@ -46,7 +46,11 @@
                     Vrsta zahtjeva
                 </a>
             </th>
-            <th></th>
+            <th>
+                <a class="text-right">
+                    Popis zadataka
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -58,11 +62,12 @@
             
             <tr>
                 <td class="text-center">@zadatci.IdZahtjev</td>
-                <td class="text-left">@zadatci.Prioritet</td>
-                <td class="text-left">@zadatci.Opis</td>
+                <td class="text-center">@zadatci.Prioritet</td>
+                <td class="text-center">@zadatci.Opis</td>
                 <td class="text-center">@zadatci.VrPocetak</td>
                 <td class="text-center">@zadatci.VrKraj</td>
-                <td class="text-center">@Model.nazivVrste[counter++]</td>
+                <td class="text-center">@Model.nazivVrste[counter]</td>
+                <td class="text-center">@Model.popisZadataka[counter++]</td>
 
                 <td class="btn-group">
                     <a asp-action="Show"

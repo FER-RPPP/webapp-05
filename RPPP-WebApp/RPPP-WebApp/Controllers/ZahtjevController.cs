@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Drawing.Printing;
-
+using RPPP_WebApp.Extensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -20,15 +20,19 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<ZahtjevController> logger;
+        private readonly AppSettings appSettings;
 
-        public ZahtjevController(RPPP05Context ctx, ILogger<ZahtjevController> logger)
+
+        public ZahtjevController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZahtjevController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
+
         }
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Zahtjev
                      .AsNoTracking();
 
@@ -48,26 +52,38 @@ namespace RPPP_WebApp.Controllers
                 //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-            //query = query.ApplySort(sort, ascending);
+            query = query.ApplySort(sort, ascending);
 
 
-            var zahtjevi = ctx.Zahtjev
-                      .AsNoTracking()
+            var zahtjevi = query
                       .Skip((page - 1) * pagesize)
                       .Take(pagesize)
-                      .OrderBy(d => d.IdZahtjev)
                       .ToList();
-            var vrste =  ctx.Zahtjev.AsNoTracking()
+            var vrste =  query
                          .Skip((page - 1) * pagesize)
                          .Take(pagesize)
                          .Select(m => m.IdVrstaNavigation.NazivVrsta)
                          .ToList();
+            //var listazadataka = new List<String>();
+            //foreach(var zahtjev in zahtjevi)
+            //{
+            //    listazadataka.Add(ctx.Zadatak.Where(z => z.IdZahtjev == zahtjev.IdZahtjev)
+            //                                .Select(z => z.IdZadatak)
+            //                                .ToList().ToString);
+            //}
+            var listazadataka = zahtjevi
+                        .Select(zahtjev => string.Join(",", ctx.Zadatak
+                        .Where(z => z.IdZahtjev == zahtjev.IdZahtjev)
+                        .Select(z => z.IdZadatak)))
+                        .ToList();
+
 
             var model = new ZahtjevViewModel
             {
                 zadatci = zahtjevi,
                 nazivVrste = vrste,
                 PagingInfo = pagingInfo,
+                popisZadataka = listazadataka
             };
             return View(model);
         }
@@ -300,7 +316,7 @@ namespace RPPP_WebApp.Controllers
                                                 .Select(p => p.NazivVrsta)
                                                 .FirstOrDefaultAsync();
 
-                List<Zahtjev> svizahtjevi = (await ctx.Zahtjev.ToListAsync());
+                List<Zahtjev> svizahtjevi = (await ctx.Zahtjev.ApplySort(sort, ascending).ToListAsync());
                 int index = svizahtjevi.FindIndex(p => p.IdZahtjev == zahtjev.IdZahtjev);
 
                 int idprethodnog = -1;

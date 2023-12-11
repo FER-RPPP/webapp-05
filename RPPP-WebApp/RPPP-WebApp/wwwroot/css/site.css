@@ -12,3 +12,8 @@
 .input-validation-error{
     border-color:red;
 }
+
+.boksic{
+    display:flex;
+    justify-content:space-between
+}

@@ -20,8 +20,20 @@
         </div>
         <div class="col-sm-8">
             <h4>
-                @Model.zahtjev.IdZahtjev/@Model.zahtjev.Prioritet/@Model.NazVrsta/@Model.zahtjev.VrPocetak.ToString("d.M.yyyy.")
+                ID: @Model.zahtjev.IdZahtjev 
             </h4>
+            
+            <h5 class="boksic">
+                <div>
+                    Prioritet:  @Model.zahtjev.Prioritet
+                </div> 
+                <div>
+                    Vrsta:  @Model.NazVrsta
+                </div>
+                <div> 
+                    Opis: @Model.zahtjev.Opis
+                </div>
+            </h5>
         </div>
         <div class="col-sm-2">
             @if (Model.IdSljedZahtjev != -1)
@@ -38,7 +50,7 @@
     </div>
 
 
-    @if (Model.IdPrethZahtjev != -1)
+  @*   @if (Model.IdPrethZahtjev != -1)
     {
         <div class="row justify-content-sm-center">
             <div class="col-sm-2">
@@ -48,15 +60,20 @@
                 <a asp-action="Show" asp-route-id="@Model.IdPrethZahtjev" target="_blank">@Model.IdPrethZahtjev</a>
             </div>
         </div>
-    }
+    } *@
 
     <div class="row justify-content-sm-center">
         <div class="col-sm-2">
-            opis: @Model.zahtjev.Opis
+            Vrijeme početka: @Model.zahtjev.VrPocetak.ToString("d.M.yyyy.")
         </div>
         <div class="col-sm-2">
             Vrijeme ocekivanog kraja: @Model.zahtjev.VrKrajOcekivano.ToString("d.M.yyyy.")
         </div>
+        @if (Model.zahtjev.VrKraj.HasValue){
+        <div class="col-sm-2">
+            Vrijeme stvarnog kraja: @Model.zahtjev.VrKraj
+        </div>
+        }
         @* <div class="col-sm-1 text-right">
             <a asp-action="Edit"
                asp-route-id="@Model.IdDokumenta"
