@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MVC;
 using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
+using System.Text.Json;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -70,56 +70,82 @@ namespace RPPP_WebApp.Controllers
         }
 
         // GET: ProjektnaKartica/Create
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
 
 
-
-
-
-
-
-
-
-
         // POST: ProjektnaKartica/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(ProjektnaKartica proj_kartica)
         {
-            try
+            logger.LogTrace(JsonSerializer.Serialize(proj_kartica));
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    ctx.Add(proj_kartica);
+                    ctx.SaveChanges();
+                    logger.LogInformation(new EventId(1000), $"Projektna kartica za projekt {proj_kartica.IdProjekt} dodana.");
+
+                    TempData[Constants.Message] = $"Projektna kartica za projekt {proj_kartica.IdProjekt} dodana.";
+                    TempData[Constants.ErrorOccurred] = false;
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception exc)
+                {
+                    logger.LogError("Pogreška prilikom dodavanje nove projektne kartice: {0}", exc.Message);
+                    ModelState.AddModelError(string.Empty, exc.Message);
+                    return View(proj_kartica);
+                }
             }
-            catch
+            else
             {
-                return View();
+                return View(proj_kartica);
             }
         }
 
+        /*ZBOG NEKOG RAZLOGA ID JE JEDNAK PROJEKTID-u A NE IBANU SUBJEKTA*/
         // GET: ProjektnaKartica/Edit/5
-         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis ="opis")
+        [HttpGet]
+        public IActionResult Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
-            //za različite mogućnosti ažuriranja pogledati
-            //attach, update, samo id, ...
-            //https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud#update-the-edit-page
+            var kartica = ctx.ProjektnaKartica.AsNoTracking().Where(d => d.SubjektIban == id).SingleOrDefault();
+            if (kartica == null)
+            {
+                logger.LogWarning("Ne postoji projektna kartica za IBAN: {0} ", id);
+                return NotFound("Ne postoji projektna kartica za IBAN:  " + id);
+            }
+            else
+            {
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                return View(kartica);
+            }
+        }
+
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(string id, int page = 1, int sort = 1, bool ascending = true)
+        {
 
             try
             {
-                Zahtjev zahtjev = await ctx.Zahtjev
-                                  .Where(d => d.IdZahtjev == id)
+                ProjektnaKartica kartica = await ctx.ProjektnaKartica
+                                  .Where(d => d.SubjektIban == id)
                                   .FirstOrDefaultAsync();
-                if (zahtjev == null)
+                if (kartica == null)
                 {
-                    return NotFound("Neispravan id zahtjeva: " + id);
+                    return NotFound("Neispravan IBAN: " + id);
                 }
 
-                if (await TryUpdateModelAsync<Zahtjev>(zahtjev, "",
-                    d => d.Opis, d => d.Prioritet, d => d.VrPocetak, d => d.VrKraj, d => d.VrKrajOcekivano, d => d.IdProjekt, d => d.IdVrsta
+                if (await TryUpdateModelAsync<ProjektnaKartica>(kartica, "",
+                    d => d.Saldo, d => d.Valuta
                 ))
                 {
                     ViewBag.Page = page;
@@ -128,20 +154,20 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData[Constants.Message] = "Zahtjev " + id + " ažuriran.";
+                        TempData[Constants.Message] = "Projektna kartica ažurirana.";
                         TempData[Constants.ErrorOccurred] = false;
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
                     {
                         ModelState.AddModelError(string.Empty, exc.Message);
-                        return View(zahtjev);
+                        return View(kartica);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Podatke o zahtjevu nije moguće povezati s forme");
-                    return View(zahtjev);
+                    ModelState.AddModelError(string.Empty, "Podatke o projektnoj kartici nije moguće povezati s forme");
+                    return View(kartica);
                 }
             }
             catch (Exception exc)
@@ -154,38 +180,34 @@ namespace RPPP_WebApp.Controllers
 
 
         // GET: ProjektnaKartica/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdZahtjev, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(string subjektIBAN, int page = 1, int sort = 1, bool ascending = true)
         {
-            var zahtjev = ctx.Zahtjev.Find(IdZahtjev);
-            if (zahtjev != null)
+            var kartica = ctx.ProjektnaKartica.Find(subjektIBAN);
+            
+            if (kartica != null)
             {
                 try
                 {
-                    int id = zahtjev.IdZahtjev;
-                    ctx.Remove(zahtjev);
+                    string naziv = kartica.SubjektIban;
+                    ctx.Remove(kartica);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Zahtjev {id} uspješno obrisana");
-                    TempData[Constants.Message] = $"Zahtjev {id} uspješno obrisana";
+                    logger.LogInformation($"Projektna kartica projekta {naziv} uspješno obrisana");
+                    TempData[Constants.Message] = $"Projektna kartica projekta {naziv} uspješno obrisana";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
                 {
-                    TempData[Constants.Message] = "Pogreška prilikom brisanja zahtjeva: " + exc.Message;
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja projektne kartice: " + exc.Message;
                     TempData[Constants.ErrorOccurred] = true;
-                    logger.LogError("Pogreška prilikom brisanja zahtjeva: " + exc.Message);
+                    logger.LogError("Pogreška prilikom brisanja projektne kartice: " + exc.Message);
                 }
             }
             else
             {
-                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", IdZahtjev);
-                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + IdZahtjev;
+                logger.LogWarning("Ne postoji projektna kartica IBAN: {0} ", kartica);
+                TempData[Constants.Message] = "Ne postoji projektna kartica za IBAN: " + kartica;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });

@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MVC;
+using RPPP_WebApp;
 using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
+using System.Text.Json;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -76,50 +77,75 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-
-
-
-
-
-
-
-
         // POST: Transakcija/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(Transakcija transakcija)
         {
-            try
+            logger.LogTrace(JsonSerializer.Serialize(transakcija));
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    ctx.Add(transakcija);
+                    ctx.SaveChanges();
+                    logger.LogInformation(new EventId(1000), $"Transakcija {transakcija.IdTransakcije} dodana.");
+
+                    TempData[Constants.Message] = $"Transakcija {transakcija.IdTransakcije} dodana.";
+                    TempData[Constants.ErrorOccurred] = false;
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception exc)
+                {
+                    logger.LogError("Pogreška prilikom dodavanje nove transakcije: {0}", exc.Message);
+                    ModelState.AddModelError(string.Empty, exc.Message);
+                    return View(transakcija);
+                }
             }
-            catch
+            else
             {
-                return View();
+                return View(transakcija);
             }
         }
 
-        // GET: Transakcija/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
+        /*ZBOG NEKOG RAZLOGA ID JE JEDNAK PROJEKTID-u A NE IBANU SUBJEKTA*/
+        // GET: ProjektnaKartica/Edit/5
+        [HttpGet]
+        public IActionResult Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
-            //za različite mogućnosti ažuriranja pogledati
-            //attach, update, samo id, ...
-            //https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud#update-the-edit-page
+            var transakcija = ctx.Transakcija.AsNoTracking().Where(d => d.PrimateljIban == id).SingleOrDefault();
+            if (transakcija == null)
+            {
+                logger.LogWarning("Ne postoji transakcija za IBAN: {0} ", id);
+                return NotFound("Ne postoji transakcija za IBAN:  " + id);
+            }
+            else
+            {
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+                return View(transakcija);
+            }
+        }
+
+
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(string id, int page = 1, int sort = 1, bool ascending = true)
+        {
 
             try
             {
-                Zahtjev zahtjev = await ctx.Zahtjev
-                                  .Where(d => d.IdZahtjev == id)
+                Transakcija transakcija = await ctx.Transakcija
+                                  .Where(d => d.PrimateljIban == id)
                                   .FirstOrDefaultAsync();
-                if (zahtjev == null)
+                if (transakcija == null)
                 {
-                    return NotFound("Neispravan id zahtjeva: " + id);
+                    return NotFound("Neispravan IBAN: " + id);
                 }
 
-                if (await TryUpdateModelAsync<Zahtjev>(zahtjev, "",
-                    d => d.Opis, d => d.Prioritet, d => d.VrPocetak, d => d.VrKraj, d => d.VrKrajOcekivano, d => d.IdProjekt, d => d.IdVrsta
+                if (await TryUpdateModelAsync<Transakcija>(transakcija, "",
+                    d => d.opis, d => d.Vrsta,d => d.IdTransakcije
                 ))
                 {
                     ViewBag.Page = page;
@@ -128,20 +154,20 @@ namespace RPPP_WebApp.Controllers
                     try
                     {
                         await ctx.SaveChangesAsync();
-                        TempData[Constants.Message] = "Zahtjev " + id + " ažuriran.";
+                        TempData[Constants.Message] = "Transakcija ažurirana.";
                         TempData[Constants.ErrorOccurred] = false;
                         return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
                     }
                     catch (Exception exc)
                     {
                         ModelState.AddModelError(string.Empty, exc.Message);
-                        return View(zahtjev);
+                        return View(transakcija);
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Podatke o zahtjevu nije moguće povezati s forme");
-                    return View(zahtjev);
+                    ModelState.AddModelError(string.Empty, "Podatke o transakciji nije moguće povezati s forme");
+                    return View(transakcija);
                 }
             }
             catch (Exception exc)
@@ -153,39 +179,35 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-        // GET: Transakcija/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
+        // GET: ProjektnaKartica/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdZahtjev, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(string primateljIBAN, int page = 1, int sort = 1, bool ascending = true)
         {
-            var zahtjev = ctx.Zahtjev.Find(IdZahtjev);
-            if (zahtjev != null)
+            var transakcija = ctx.Transakcija.Find(primateljIBAN);
+
+            if (transakcija != null)
             {
                 try
                 {
-                    int id = zahtjev.IdZahtjev;
-                    ctx.Remove(zahtjev);
+                    string naziv = transakcija.PrimateljIban;
+                    ctx.Remove(transakcija);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Zahtjev {id} uspješno obrisana");
-                    TempData[Constants.Message] = $"Zahtjev {id} uspješno obrisana";
+                    logger.LogInformation($"Transakcija {naziv} uspješno obrisana");
+                    TempData[Constants.Message] = $"Transakcija {naziv} uspješno obrisana";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
                 {
-                    TempData[Constants.Message] = "Pogreška prilikom brisanja zahtjeva: " + exc.Message;
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja transakcije: " + exc.Message;
                     TempData[Constants.ErrorOccurred] = true;
-                    logger.LogError("Pogreška prilikom brisanja zahtjeva: " + exc.Message);
+                    logger.LogError("Pogreška prilikom brisanja transakcije: " + exc.Message);
                 }
             }
             else
             {
-                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", IdZahtjev);
-                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + IdZahtjev;
+                logger.LogWarning("Ne postoji transakcija IBAN: {0} ", transakcija);
+                TempData[Constants.Message] = "Ne postoji transakcija za IBAN: " + transakcija;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });

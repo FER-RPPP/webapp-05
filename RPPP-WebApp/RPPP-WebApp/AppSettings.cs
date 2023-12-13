@@ -1,4 +1,4 @@
-﻿namespace MVC
+﻿namespace RPPP_WebApp
 {
     public class AppSettings
     {
