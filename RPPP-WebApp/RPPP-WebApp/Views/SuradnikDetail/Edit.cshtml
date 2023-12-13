@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RPPP_WebApp.Models.Suradnik
+
+@{
+    ViewBag.Title = "Ažuriranje suradnika";
+}
+
+<form asp-route-id="@Model.IdSuradnik"
+      asp-route-page="@ViewBag.Page"
+      asp-route-sort="@ViewBag.Sort"
+      asp-route-ascending="@ViewBag.Ascending"
+      method="post">
+    <div asp-validation-summary="All"></div>
+    @*Ne koristi se, jer se ne rekonstruira cijela država, već se samo koristi id koji je već u parametrima route*@
+    @*<input type="hidden" asp-for="OznDrzave" />*@
+    <div class="form-group">
+        <label asp-for="Ime"></label>
+        <div><span asp-validation-for="Ime" class="text-danger"></span></div>
+        <input asp-for="Ime" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Prezime"></label>
+        <div><span asp-validation-for="Prezime" class="text-danger"></span></div>
+        <input asp-for="Prezime" class="form-control">
+    </div>
+    <div class="form-group">
+        <label asp-for="Mail"></label>
+        <div><span asp-validation-for="Mail" class="text-danger"></span></div>
+        <input asp-for="Mail" class="form-control">
+    </div>
+    <div class="form-group">
+        <label asp-for="Oib"></label>
+        <div><span asp-validation-for="Oib" class="text-danger"></span></div>
+        <input asp-for="Oib" class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label asp-for="Mobitel"></label>
+        <div><span asp-validation-for="Mobitel" class="text-danger"></span></div>
+        <input asp-for="Mobitel" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Stranka"></label>
+        <div><span asp-validation-for="Stranka" class="text-danger"></span></div>
+        <input asp-for="Stranka" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdKvalifikacija" class="form-label">Status zadatka</label>
+        <select class="form-control" asp-for="IdKvalifikacija" asp-items="ViewBag.SuradniciKvalifikacije">
+            <option disabled selected value="">Odaberite kvalifikaciju</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdKvalifikacija" class="text-danger"></span></div>
+    </div>
+
+
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Spremi</button>
+        <a asp-action="Index"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+           class="btn btn-secondary">Odustani</a>
+    </div>
+</form>

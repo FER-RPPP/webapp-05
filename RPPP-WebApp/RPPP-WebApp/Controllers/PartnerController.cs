@@ -85,7 +85,7 @@ namespace RPPP_WebApp.Controllers
             {
                 partneri.Insert(0, hr);
             }
-            ViewBag.ZahtjeviVrste = new SelectList(partneri, nameof(hr.IdTipPartnera), nameof(hr.TipPartnera1));
+            ViewBag.PartneriVrste = new SelectList(partneri, nameof(hr.IdTipPartnera), nameof(hr.TipPartnera1));
 
             var hrv = await ctx.Projekt
                                   .Where(d => d.IdProjekt == 1)
@@ -334,21 +334,21 @@ namespace RPPP_WebApp.Controllers
                          .Select(m => m.IdKvalifikacijaNavigation.NazivKvalifikacija)
                          .ToList();
 
-                var model = new SuradnikViewModel
+                var model = new SuradnikDetailViewModel
                 {
-                    zadatci = zadatci,
-                    nazivStatusa = statusi,
+                    suradnici = suradnici,
+                    nazivKvalifikacije = kvalifikacije,
                     PagingInfo = pagingInfo,
                 };
 
 
-                var CIJELAPREDAJA = new ZahtjevZadatakViewModel
+                var CIJELAPREDAJA = new PartnerSuradnikViewModel
                 {
-                    zahtjev = zahtjev,
-                    NazVrsta = NazVrste,
-                    IdPrethZahtjev = idprethodnog,
-                    IdSljedZahtjev = idsljedeceg,
-                    zadatci = model
+                    partner = partner,
+                    TipPartnera = NazVrste,
+                    IdPrethPartner = idprethodnog,
+                    IdSljedPartner = idsljedeceg,
+                    suradnici = model
 
                 };
 

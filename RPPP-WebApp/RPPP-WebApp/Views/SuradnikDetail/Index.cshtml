@@ -1,0 +1,110 @@
+﻿@model RPPP_WebApp.Controllers.SuradnikDetailViewModel
+
+ <h2>Popis Suradnika</h2>
+
+<a asp-action="Create">Unos novog Suradnika</a>
+
+ <pager page-info="@Model.PagingInfo"  page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table table-sm table-striped table-hover" id="tabledrzave">
+    <thead>
+        <tr>
+            <th>
+                <a  asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    Oznaka suradnika
+                </a>
+            </th>
+            <th>
+                <a  asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Ime
+                </a>
+            </th>
+            <th>
+                <a  asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Prezime
+                </a>
+            </th>
+            <th>
+                <a asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    OIB
+                </a>
+            </th>
+            <th>
+                <a  asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
+                    Broj mobitela
+                </a>
+            </th>
+            <th>
+                <a  asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    Kvalifikacija
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+     <tbody>
+        @{
+            int counter = 0;
+        }
+        @foreach (var suradnici in Model.suradnici)
+        {
+            <tr>
+                <td class="text-center">@suradnici.IdSuradnik</td>
+                <td class="text-left">@suradnici.Ime</td>
+                <td class="text-center">@suradnici.Prezime</td>
+                <td class="text-center">@suradnici.Oib</td>
+                <td class="text-center">@suradnici.Mobitel</td>
+                <td class="text-center">@Model.nazivKvalifikacije[counter++]</td>
+
+                <td class="btn-group">
+                    <a asp-action="Edit"
+                       asp-route-id="@suradnici.IdSuradnik"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+                    <form asp-action="Delete" method="post"
+                          asp-route-page="@Model.PagingInfo.CurrentPage"
+                          asp-route-sort="@Model.PagingInfo.Sort"
+                          asp-route-ascending="@Model.PagingInfo.Ascending">
+                        <input type="hidden" name="IdSuradnik" value="@suradnici.IdSuradnik" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">Obriši</button>
+                    </form>
+                    
+                </td>
+            </tr>
+        }
+    </tbody> 
+    
+</table>
+
+@* @section scripts{
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tabledrzave').DataTable({
+                language: {
+                    search: "Pretraga",
+                    info: "_START_ - _END_ (ukupno _TOTAL_)",
+                    lengthMenu: "Prikaži _MENU_ zapisa",
+                    paginate: {
+                        first: "Prva",
+                        previous: "Prethodna",
+                        next: "Sljedeća",
+                        last: "Zadnja"
+                    },
+                    emptyTable: "Nema podataka za prikaz",
+                    info: "_START_ - _END_ od ukupno _TOTAL_ zapisa",
+                    infoEmpty: "Nema podataka za prikaz",
+                    infoFiltered: "(filtrirano od ukupno _MAX_ zapisa)",
+                }
+            });
+        });
+    </script>
+} *@
+ @section scripts {
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+} 

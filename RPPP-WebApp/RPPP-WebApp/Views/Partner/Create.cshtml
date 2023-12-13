@@ -1,0 +1,54 @@
+﻿@model RPPP_WebApp.Models.Partner
+
+<h2>Unos novog partnera</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="mb-3">
+        <label asp-for="Oib" class="form-label"></label>
+        <input minlength="11" maxlength="11" asp-for="Oib" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Oib" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="AdresaPartner" class="form-label">Adresa</label>
+        <input asp-for="AdresaPartner" class="form-control" />
+        <div class="form-text"><span asp-validation-for="AdresaPartner" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Ibanpartner" class="form-label">IBAN</label>
+        <input minlength="21" maxlength="21" asp-for="Ibanpartner" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Ibanpartner" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EmailPartner" class="form-label">Email</label>
+        <input asp-for="EmailPartner" class="form-control" />
+        <div class="form-text"><span asp-validation-for="EmailPartner" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NazivPartner" class="form-label">Naziv</label>
+        <input asp-for="NazivPartner" class="form-control" />
+        <div class="form-text"><span asp-validation-for="NazivPartner" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdProjekt" class="form-label">Projekt kojem zahtjev pripada</label>
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.ProjektiPopis">
+            <option disabled selected value="">Odaberite id projekta</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdTipPartnera" class="form-label">Tip partnera</label>
+        <select class="form-control" asp-for="IdTipPartnera" asp-items="ViewBag.PartneriVrste">
+            <option disabled selected value="">Odaberite vrstu</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdTipPartnera" class="text-danger"></span></div>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+@section scripts {
+    @* <partial name="IncludeValidation" /> *@
+}
+
