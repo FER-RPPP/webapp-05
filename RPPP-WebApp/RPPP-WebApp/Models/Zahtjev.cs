@@ -15,9 +15,11 @@ namespace RPPP_WebApp.Models
         }
         [Display(Name = "Opis zahtjeva")]
         [Required(ErrorMessage = "Potrebno je napisati opis zahtjeva")]
+        [StringLength(100, ErrorMessage = "Opis ima maksimalno 100 znakova.")]
         public string Opis { get; set; }
         [Required(ErrorMessage = "Potrebno je unijeti prioritet")]
         [Display(Name = "Prioritet")]
+        [StringLength(20, ErrorMessage = "Prioritet ima maksimalno 20 znakova.")]
         public string Prioritet { get; set; }
 
         public int IdZahtjev { get; set; }
