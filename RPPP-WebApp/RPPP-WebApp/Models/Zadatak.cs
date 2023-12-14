@@ -27,6 +27,7 @@ namespace RPPP_WebApp.Models
         public int IdZadatak { get; set; }
         [Required(ErrorMessage = "Potrebno je unijeti vrstu")]
         [Display(Name = "Vrsta")]
+        [StringLength(20, ErrorMessage = "Vrsta ima maksimalno 20 znakova.")]
         public string Vrsta { get; set; }
         [DataType(DataType.DateTime)]
         [Display(Name = "Datum")]

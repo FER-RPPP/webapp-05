@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Drawing.Printing;
 using RPPP_WebApp.Extensions.Selectors;
+using RPPP_WebApp.ViewModels;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -238,18 +239,23 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdZahtjev, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)
         {
-            var zahtjev = ctx.Zahtjev.Find(IdZahtjev);
+            var zahtjev = ctx.Zahtjev.Find(id);
+            var zadatci = ctx.Zadatak.Where(z => z.IdZahtjev == id).ToList();
             if (zahtjev != null)
             {
                 try
                 {
-                    int id = zahtjev.IdZahtjev;
+                    foreach (var item in zadatci)
+                    {
+                        ctx.Remove(item);
+                    }
+                    int idz = zahtjev.IdZahtjev;
                     ctx.Remove(zahtjev);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Zahtjev {id} uspješno obrisana");
-                    TempData[Constants.Message] = $"Zahtjev {id} uspješno obrisana";
+                    logger.LogInformation($"Zahtjev {idz} uspješno obrisana");
+                    TempData[Constants.Message] = $"Zahtjev {idz} uspješno obrisan";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
@@ -261,8 +267,8 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", IdZahtjev);
-                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + IdZahtjev;
+                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", id);
+                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + id;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
