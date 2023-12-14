@@ -10,5 +10,7 @@ namespace RPPP_WebApp.Controllers
 
         public PagingInfo PagingInfo { get; set; }
 
+        public List<String> popisZadataka  { get; set; }
+
     }
 }

@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Text.Json;
 using RPPP_WebApp.Models;
-
+using RPPP_WebApp.Extensions.Selectors;
+using Microsoft.Extensions.Options;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -12,16 +13,20 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<ZadatakController> logger;
+        private readonly AppSettings appSettings;
 
-        public ZadatakController(RPPP05Context ctx, ILogger<ZadatakController> logger)
+
+        public ZadatakController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZadatakController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
+
         }
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
 
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Zadatak
                      .AsNoTracking();
 
@@ -41,16 +46,14 @@ namespace RPPP_WebApp.Controllers
                 //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-            //query = query.ApplySort(sort, ascending);
+            query = query.ApplySort(sort, ascending);
 
 
-            var zadatci = ctx.Zadatak
-                      .AsNoTracking()
+            var zadatci = query
                       .Skip((page - 1) * pagesize)
                       .Take(pagesize)
-                      .OrderBy(d => d.IdZadatak)
                       .ToList();
-            var statusi = ctx.Zadatak.AsNoTracking()
+            var statusi = query
                          .Skip((page - 1) * pagesize)
                          .Take(pagesize)
                          .Select(m =>  m.IdStatusNavigation.NazivStatus)
@@ -85,18 +88,18 @@ namespace RPPP_WebApp.Controllers
 
             var hrv = await ctx.Zahtjev
                                   .Where(d => d.IdZahtjev == 1)
-                                  .Select(d =>  d.Opis + " (id: "  + d.IdZahtjev +")" )
+                                  .Select(d =>  new { v= d.Opis + " (id: " + d.IdZahtjev + ")", d.IdZahtjev } )
                                   .FirstOrDefaultAsync();
             var zahtjevi = await ctx.Zahtjev
                                   .Where(d => d.IdZahtjev != 1)
-                                  .OrderBy(d => d.Opis)
-                                  .Select(d =>  d.Opis + " (id: " + d.IdZahtjev +")" )
+                                  .OrderBy(d => d.IdZahtjev)
+                                  .Select(d =>  new { v= d.Opis + " (id: " + d.IdZahtjev + ")", d.IdZahtjev } )
                                   .ToListAsync();
             if (hrv != null)
             {
                 zahtjevi.Insert(0, hrv);
             }
-            ViewBag.ZahtjeviPopis = new SelectList(zahtjevi, nameof(hrv));
+            ViewBag.ZahtjeviPopis = new SelectList(zahtjevi,  nameof(hrv.IdZahtjev),nameof(hrv.v));
 
         }
 
@@ -126,7 +129,8 @@ namespace RPPP_WebApp.Controllers
                 }
                 catch (Exception exc)
                 {
-                    logger.LogError("Pogreška prilikom dodavanje novog zadatka: {0}", exc.Message);
+                    Console.WriteLine("Pogreška prilikom dodavanje novog zadatka: {0}" +  exc.InnerException.Message);
+                    logger.LogError("Pogreška prilikom dodavanje novog zadatka: {0}" + exc.InnerException.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
                     await PrepareDropDownLists();
 
