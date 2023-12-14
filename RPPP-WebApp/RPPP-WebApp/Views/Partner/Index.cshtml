@@ -47,7 +47,7 @@
                 </a>
             </th>
             <th class="text-center">
-                Popis partnera
+                Popis suradnika
             </th>
         </tr>
     </thead>
@@ -64,7 +64,9 @@
                 <td class="text-center">@partneri.AdresaPartner</td>
                 <td class="text-center">@partneri.EmailPartner</td>
                 <td class="text-center">@partneri.Oib</td>
-                <td class="text-center">@Model.nazivVrste[counter++]</td>
+                <td class="text-center">@partneri.Ibanpartner</td>
+                <td class="text-center">@Model.nazivVrste[counter]</td>
+                <td class="text-center">@Model.popisSuradnika[counter++]</td>
 
                 <td class="btn-group">
                     <a asp-action="Show"
