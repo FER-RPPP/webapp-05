@@ -1,0 +1,45 @@
+﻿@model Projekt
+
+@{
+    ViewBag.Title = "Novi Projekt";
+}
+
+<h2>Unos novog Projekta</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    
+    <div class="mb-3">
+        <label asp-for="VrPocetak" class="form-label"></label>
+        <input asp-for="VrPocetak" class="form-control" />
+        <div class="form-text"><span asp-validation-for="VrPocetak" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VrKraj" class="form-label"></label>
+        <input maxlength="3" asp-for="VrKraj" class="form-control" />
+        <div class="form-text"><span asp-validation-for="VrKraj" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Opis" class="form-label"></label>
+        <input asp-for="Opis" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Opis" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Naziv" class="form-label"></label>
+        <input asp-for="Naziv" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Naziv" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdTip" class="form-label"></label>
+        <select class="form-control" asp-for="IdTip" asp-items="ViewBag.Tipovi">
+            <option disabled selected value="">Odaberite tip projekta</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdTip" class="text-danger"></span></div>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+

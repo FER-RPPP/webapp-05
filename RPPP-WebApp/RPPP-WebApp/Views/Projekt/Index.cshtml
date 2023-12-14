@@ -6,7 +6,7 @@
 
 <h2>Popis Projekata</h2>
 
-<a asp-action="Create">Unos novog projekta</a>
+<a asp-action="Create" method="get">Unos novog projekta</a>
 
 <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
        class="float-end">
@@ -52,14 +52,14 @@
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i></a>
+                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
 
                     <form asp-action="Delete" method="post"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
                         <input type="hidden" name="OznDrzave" value="@projekt.IdProjekt" />
-                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt">Obriši</i></button>
                     </form>
                 </td>
             </tr>

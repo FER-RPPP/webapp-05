@@ -7,6 +7,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Http.HttpResults;
 using RPPP_WebApp.ViewModels;
 
+
 namespace RPPP_WebApp.Controllers
 {
     public class ProjektController : Controller
@@ -59,8 +60,44 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        private async Task PrepareDropdownListProjekt()
+        {
+            var tipovi = await ctx.TipProjekta.Select(d => new {d.IdTip, d.NazivTip}).ToListAsync();
+            ViewBag.Tipovi = new SelectList(tipovi, nameof(TipProjekta.IdTip), nameof(TipProjekta.NazivTip));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await PrepareDropdownListProjekt();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Projekt projekt)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    ctx.Add(projekt);
+                    await ctx.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }catch(Exception ex) {
+                    await PrepareDropdownListProjekt();
+                    return View(projekt);
+                }
+            }
+            else
+            {
+                await PrepareDropdownListProjekt();
+                return View(projekt);
+            }
+        }
 
     }
+
 
 
 }
