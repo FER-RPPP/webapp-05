@@ -9,6 +9,8 @@ namespace RPPP_WebApp.Controllers
         public List<Partner> partneri { get; set; }
         public List<string> nazivVrste { get; set; }
 
+        public List<string> popisSuradnika { get; set; }    
+
         public PagingInfo PagingInfo { get; set; }
 
     }

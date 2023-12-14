@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Text.Json;
 using RPPP_WebApp.Models;
+using RPPP_WebApp.Extensions.Selectors;
+using Microsoft.Extensions.Options;
 
 
 namespace RPPP_WebApp.Controllers
@@ -12,17 +14,19 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<SuradnikDetailController> logger;
+        private readonly AppSettings appSettings;
 
-        public SuradnikDetailController(RPPP05Context ctx, ILogger<SuradnikDetailController> logger)
+        public SuradnikDetailController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<SuradnikDetailController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
         }
 
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
 
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Suradnik
                      .AsNoTracking();
 
@@ -42,16 +46,14 @@ namespace RPPP_WebApp.Controllers
                 //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-            //query = query.ApplySort(sort, ascending);
+            query = query.ApplySort(sort, ascending);
 
 
-            var suradnici = ctx.Suradnik
-                      .AsNoTracking()
+            var suradnici = query
                       .Skip((page - 1) * pagesize)
                       .Take(pagesize)
-                      .OrderBy(d => d.IdSuradnik)
                       .ToList();
-            var kvalifikacije = ctx.Suradnik.AsNoTracking()
+            var kvalifikacije = query
                          .Skip((page - 1) * pagesize)
                          .Take(pagesize)
                          .Select(m => m.IdKvalifikacijaNavigation.NazivKvalifikacija)
@@ -86,18 +88,18 @@ namespace RPPP_WebApp.Controllers
 
             var hrv = await ctx.Partner
                                   .Where(d => d.IdPartner == 1)
-                                  .Select(d => d.EmailPartner + " (id: " + d.IdPartner + ")")
+                                  .Select(d => new { v = d.EmailPartner + " (id: " + d.IdPartner + ")", d.IdPartner })
                                   .FirstOrDefaultAsync();
             var partneri = await ctx.Partner
                                   .Where(d => d.IdPartner != 1)
                                   .OrderBy(d => d.EmailPartner)
-                                  .Select(d => d.EmailPartner + " (id: " + d.IdPartner + ")")
+                                  .Select(d => new { v = d.EmailPartner + " (id: " + d.IdPartner + ")", d.IdPartner })
                                   .ToListAsync();
             if (hrv != null)
             {
                 partneri.Insert(0, hrv);
             }
-            ViewBag.ParteriPopis = new SelectList(partneri, nameof(hrv));
+            ViewBag.ParteriPopis = new SelectList(partneri, nameof(hrv.IdPartner), nameof(hrv.v));
 
         }
 
@@ -127,7 +129,8 @@ namespace RPPP_WebApp.Controllers
                 }
                 catch (Exception exc)
                 {
-                    logger.LogError("Pogreška prilikom dodavanja novog suradnika: {0}", exc.Message);
+                    Console.WriteLine("Pogreška prilikom dodavanje novog suradnika: {0}" + exc.InnerException.Message);
+                    logger.LogError("Pogreška prilikom dodavanje novog suradnika: {0}" + exc.InnerException.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
                     await PrepareDropDownLists();
 

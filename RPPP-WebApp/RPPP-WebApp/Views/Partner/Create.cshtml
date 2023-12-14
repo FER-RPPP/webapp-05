@@ -6,7 +6,7 @@
     <div asp-validation-summary="All"></div>
     <div class="mb-3">
         <label asp-for="Oib" class="form-label"></label>
-        <input minlength="11" maxlength="11" asp-for="Oib" class="form-control" />
+        <input asp-for="Oib" class="form-control" />
         <div class="form-text"><span asp-validation-for="Oib" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
@@ -16,11 +16,11 @@
     </div>
     <div class="mb-3">
         <label asp-for="Ibanpartner" class="form-label">IBAN</label>
-        <input minlength="21" maxlength="21" asp-for="Ibanpartner" class="form-control" />
+        <input asp-for="Ibanpartner" class="form-control" />
         <div class="form-text"><span asp-validation-for="Ibanpartner" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
-        <label asp-for="EmailPartner" class="form-label">Email</label>
+        <label asp-for="EmailPartner" class="form-label">Email adresa</label>
         <input asp-for="EmailPartner" class="form-control" />
         <div class="form-text"><span asp-validation-for="EmailPartner" class="text-danger"></span></div>
     </div>

@@ -33,17 +33,17 @@
         <input asp-for="Prezime" class="form-control">
     </div>
     <div class="form-group">
-        <label asp-for="Mail"></label>
+        <label asp-for="Mail">Email</label>
         <div><span asp-validation-for="Mail" class="text-danger"></span></div>
         <input asp-for="Mail" class="form-control">
     </div>
     <div class="form-group">
-        <label asp-for="Oib"></label>
+        <label asp-for="Oib">OIB</label>
         <div><span asp-validation-for="Oib" class="text-danger"></span></div>
-        <input asp-for="Oib" class="form-control"></input>
+        <input asp-for="Oib" class="form-control">
     </div>
     <div class="form-group">
-        <label asp-for="Mobitel"></label>
+        <label asp-for="Mobitel">Broj mobitela</label>
         <div><span asp-validation-for="Mobitel" class="text-danger"></span></div>
         <input asp-for="Mobitel" class="form-control" />
     </div>
@@ -53,7 +53,7 @@
         <input asp-for="Stranka" class="form-control" />
     </div>
     <div class="mb-3">
-        <label asp-for="IdKvalifikacija" class="form-label">Status zadatka</label>
+        <label asp-for="IdKvalifikacija" class="form-label">Kvalifikacija suradnika</label>
         <select class="form-control" asp-for="IdKvalifikacija" asp-items="ViewBag.SuradniciKvalifikacije">
             <option disabled selected value="">Odaberite kvalifikaciju</option>
         </select>

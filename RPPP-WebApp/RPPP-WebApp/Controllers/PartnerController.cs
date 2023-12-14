@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Drawing.Printing;
+using RPPP_WebApp.Extensions.Selectors;
 
 
 namespace RPPP_WebApp.Controllers
@@ -20,16 +21,18 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<PartnerController> logger;
+        private readonly AppSettings appSettings;
 
-        public PartnerController(RPPP05Context ctx, ILogger<PartnerController> logger)
+        public PartnerController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<PartnerController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
         }
 
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Partner
                      .AsNoTracking();
 
@@ -49,23 +52,31 @@ namespace RPPP_WebApp.Controllers
                 //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-            var partneri = ctx.Partner
-                    .AsNoTracking()
+            query = query.ApplySort(sort, ascending);
+
+            var partneri = query
                     .Skip((page - 1) * pagesize)
                     .Take(pagesize)
-                    .OrderBy(d => d.IdPartner)
                     .ToList();
 
-            var tipovi = ctx.Partner.AsNoTracking()
+            var tipovi = query
                          .Skip((page - 1) * pagesize)
                          .Take(pagesize)
                          .Select(m => m.IdTipPartneraNavigation.TipPartnera1)
                          .ToList();
+
+            var listasuradnika = partneri
+                        .Select(zahtjev => string.Join(",", ctx.Suradnik
+                        .Where(z => z.IdPartner == zahtjev.IdPartner)
+                        .Select(z => z.IdSuradnik)))
+                        .ToList();
+
             var model = new PartnerViewModel
             {
                 partneri = partneri,
                 nazivVrste = tipovi,
                 PagingInfo = pagingInfo,
+                popisSuradnika = listasuradnika
             };
             return View(model);
         }
@@ -295,7 +306,7 @@ namespace RPPP_WebApp.Controllers
                                                .Select(p => p.TipPartnera1)
                                                .FirstOrDefaultAsync();
 
-                List<Partner> svipartneri = (await ctx.Partner.ToListAsync());
+                List<Partner> svipartneri = (await ctx.Partner.ApplySort(sort, ascending).ToListAsync());
                 int index = svipartneri.FindIndex(p => p.IdPartner == partner.IdPartner);
 
                 int idprethodnog = -1;
