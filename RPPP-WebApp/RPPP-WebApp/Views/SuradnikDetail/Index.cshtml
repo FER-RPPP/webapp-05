@@ -78,6 +78,7 @@
                        asp-route-ascending="@Model.PagingInfo.Ascending"
                        class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
                     <form asp-action="Delete" method="post"
+                          asp-route-oib="@suradnici.Oib"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">

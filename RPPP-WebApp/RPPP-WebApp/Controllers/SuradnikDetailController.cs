@@ -218,10 +218,10 @@ namespace RPPP_WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdSuradnik, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(string oib, int page = 1, int sort = 1, bool ascending = true)
         {
-            ViewBag.OnajKojiBrisem = IdSuradnik;
-            var suradnik = ctx.Suradnik.Find(IdSuradnik);
+            ViewBag.OnajKojiBrisem = oib;
+            var suradnik = ctx.Suradnik.Find(oib);
             if (suradnik != null)
             {
                 try
@@ -242,8 +242,8 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                logger.LogWarning("Ne postoji suradnik s oznakom: {0} ", IdSuradnik);
-                TempData[Constants.Message] = "Ne postoji suradnik s oznakom: " + IdSuradnik;
+                logger.LogWarning("Ne postoji suradnik s oznakom: {0} ", oib);
+                TempData[Constants.Message] = "Ne postoji suradnik s oznakom: " + oib;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
