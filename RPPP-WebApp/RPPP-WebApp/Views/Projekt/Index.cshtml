@@ -35,17 +35,33 @@
                     Vrijeme kraj
                 </a>
             </th>
+            <th>
+                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
+                    Vrsta projekta
+                </a>
+            </th>
+            <th>
+                <a>
+                    Povezani dokumenti
+                </a>
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
+        @{
+            int counter = 0;
+        }
         @foreach (var projekt in Model.Projekti)
         {
             <tr>
                 <td class="text-center">@projekt.IdProjekt</td>
                 <td class="text-left">@projekt.Naziv</td>
-                <td class="text-center">@projekt.VrPocetak</td>
-                <td class="text-center">@projekt.VrKraj</td>
+                <td class="text-left">@projekt.VrPocetak.ToShortDateString()</td>
+                <td class="text-left">@projekt.VrKraj</td>
+                <td class="text-center">@Model.vrstaProjekataList[counter]</td>
+                <td class="text-center">@Model.povezaniDokumenti[counter++]</td>
+                
                 <td class="btn-group">
                     <a asp-action="Edit"
                        asp-route-id="@projekt.IdProjekt"
@@ -55,10 +71,11 @@
                        class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
 
                     <form asp-action="Delete" method="post"
+                          asp-route-id="@projekt.IdProjekt"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
-                        <input type="hidden" name="OznDrzave" value="@projekt.IdProjekt" />
+                        <input type="hidden" name="IdProjekt" value="@projekt.IdProjekt" />
                         <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt">Obriši</i></button>
                     </form>
                 </td>
