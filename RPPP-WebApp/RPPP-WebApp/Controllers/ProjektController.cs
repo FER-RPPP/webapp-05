@@ -6,6 +6,7 @@ using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
 using System.Text.Json;
 using RPPP_WebApp.Extensions.Selectors;
+using RPPP_WebApp.Extensions;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -97,6 +98,7 @@ namespace RPPP_WebApp.Controllers
 			logger.LogTrace(JsonSerializer.Serialize(projekt));
 			if (ModelState.IsValid)
 			{
+                //potrebna dodatna validacija
 				try
 				{
 					ctx.Add(projekt);
@@ -111,8 +113,8 @@ namespace RPPP_WebApp.Controllers
 				catch (Exception ex)
 				{
 
-					logger.LogError("Pogreška prilikom dodavanje nove države: {0}", ex);
-					ModelState.AddModelError(string.Empty, ex.Message);
+					logger.LogError("Pogreška prilikom dodavanje novog projekta: {0}", ex);
+					ModelState.AddModelError(string.Empty, ex.CompleteExceptionMessage());
 					await PrepareDropdownListProjekt();
 					return View(projekt);
 				}
@@ -175,7 +177,7 @@ namespace RPPP_WebApp.Controllers
 					}
 					catch (Exception exc)
 					{
-						ModelState.AddModelError(string.Empty, exc.Message);
+						ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
 						return View(projekt);
 					}
 				}
@@ -187,7 +189,7 @@ namespace RPPP_WebApp.Controllers
 			}
 			catch (Exception exc)
 			{
-				TempData[Constants.Message] = exc.Message;
+				TempData[Constants.Message] = exc.CompleteExceptionMessage();
 				TempData[Constants.ErrorOccurred] = true;
 				return RedirectToAction(nameof(Edit), id);
 			}
@@ -199,6 +201,43 @@ namespace RPPP_WebApp.Controllers
         {
             var projekt = ctx.Projekt.Find(id);
             var dokumenti = ctx.Dokument.Where(d => d.IdProjekt == id).ToList();
+
+			var popisZah = ctx.Zahtjev.Where(z => z.IdProjekt == id).ToList();
+
+			foreach(var zah in popisZah)
+			{
+                var zahtjev = ctx.Zahtjev.Find(zah.IdZahtjev);
+                var zadatci = ctx.Zadatak.Where(z => z.IdZahtjev == zah.IdZahtjev).ToList();
+                if (zahtjev != null)
+                {
+                    try
+                    {
+                        foreach (var item in zadatci)
+                        {
+                            ctx.Remove(item);
+                        }
+                        int idz = zahtjev.IdZahtjev;
+                        ctx.Remove(zahtjev);
+                        ctx.SaveChanges();
+                        logger.LogInformation($"Zahtjev {idz} uspješno obrisana");
+                        TempData[Constants.Message] = $"Zahtjev {idz} uspješno obrisan";
+                        TempData[Constants.ErrorOccurred] = false;
+                    }
+                    catch (Exception exc)
+                    {
+                        TempData[Constants.Message] = "Pogreška prilikom brisanja zahtjeva: " + exc.Message;
+                        TempData[Constants.ErrorOccurred] = true;
+                        logger.LogError("Pogreška prilikom brisanja zahtjeva: " + exc.Message);
+                    }
+                }
+                else
+                {
+                    logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", id);
+                    TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + id;
+                    TempData[Constants.ErrorOccurred] = true;
+                }
+            }
+
             if (projekt != null)
             {
                 try
@@ -216,9 +255,9 @@ namespace RPPP_WebApp.Controllers
                 }
                 catch (Exception exc)
                 {
-                    TempData[Constants.Message] = "Pogreška prilikom brisanja projekta: " + exc.Message;
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja projekta: " + exc.CompleteExceptionMessage();
                     TempData[Constants.ErrorOccurred] = true;
-                    logger.LogError("Pogreška prilikom brisanja projekta: " + exc.Message);
+                    logger.LogError("Pogreška prilikom brisanja projekta: " + exc.CompleteExceptionMessage());
                 }
             }
             else
@@ -228,6 +267,117 @@ namespace RPPP_WebApp.Controllers
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
+        }
+
+        public async Task<IActionResult> MD(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(MD))
+        {
+
+            if (id == 0)
+            {
+                id = (await ctx.Projekt.FirstOrDefaultAsync()).IdProjekt;
+
+            }
+
+            var projekt = await ctx.Projekt
+                                    .Where(d => d.IdProjekt == id)
+                                    .Select(d => new Projekt
+                                    {
+                                        IdProjekt = d.IdProjekt,
+                                        Opis = d.Opis,
+                                        Naziv = d.Naziv,
+                                        VrKraj = d.VrKraj,
+                                        VrPocetak = d.VrPocetak,
+                                        IdTip = d.IdTip,
+                                    })
+                                    .FirstOrDefaultAsync();
+            int pagesize = 10;
+            var query = ctx.Projekt
+                     .AsNoTracking();
+
+            int count = query.Count();
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+
+            if (projekt == null)
+            {
+                return NotFound($"Projekt {id} ne postoji");
+            }
+            else
+            {
+                string nazivTip = await ctx.TipProjekta
+                                               .Where(p => p.IdTip == projekt.IdTip)
+                                               .Select(p => p.NazivTip)
+                                               .FirstOrDefaultAsync();
+
+                List<Projekt> sviProjekti = (await ctx.Projekt.ApplySort(sort, ascending).ToListAsync());
+                int index = sviProjekti.FindIndex(p => p.IdProjekt == projekt.IdProjekt);
+
+                int idprethodnog = -1;
+                int idsljedeceg = -1;
+
+                if (index != 0)
+                {
+                    idprethodnog = sviProjekti[index - 1].IdProjekt;
+                }
+                if (index != sviProjekti.Count - 1)
+                {
+                    idsljedeceg = sviProjekti[index + 1].IdProjekt;
+                }
+
+
+                //učitavanje dokumenata
+                var dokumenti = await ctx.Dokument
+                                      .Where(s => s.IdProjekt == projekt.IdProjekt)
+                                      .OrderBy(s => s.IdDokument)
+                                      .Select(s => new Dokument
+                                      {
+                                          IdDokument = s.IdDokument,
+                                          TipDokument = s.TipDokument,
+                                          VelicinaDokument = s.VelicinaDokument,
+                                          IdProjekt = s.IdProjekt,
+                                          IdVrstaDok = s.IdVrstaDok,
+                                          NazivDatoteka = s.NazivDatoteka,
+                                      })
+                                      .ToListAsync();
+
+                var vrste = ctx.Dokument.AsNoTracking()
+                         .Where(d => d.IdProjekt == id)
+                         .Select(m => m.IdVrstaDokNavigation.NazivVrstaDok)
+                         .ToList();
+
+                var docs = new DokumentiViewModel
+                {
+                    Dokumenti = dokumenti,
+                    VrstaDokumenta = vrste,
+                    PagingInfo = pagingInfo,
+                };
+
+
+                var ProjektDokumenti = new MDprojektViewModel
+                {
+                    projekt = projekt,
+                    TipProjekta = nazivTip,
+                    IdPrethProjekt = idprethodnog,
+                    IdSljedProjekt = idsljedeceg,
+                    dokumenti = docs
+                };
+
+                //await SetPreviousAndNext(position.Value, filter, sort, ascending);
+
+
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+
+
+                return View(viewName, ProjektDokumenti);
+            }
         }
 
     }
