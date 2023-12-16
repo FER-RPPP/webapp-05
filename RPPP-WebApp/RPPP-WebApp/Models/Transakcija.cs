@@ -23,7 +23,7 @@ namespace RPPP_WebApp.Models
 
 
         [Display(Name = "Vrsta")]
-        [Required(ErrorMessage = "Potrebno je odabrati vrstu")]
+        [Required(ErrorMessage = "Potrebno je odabrati vrstu (broj izmedu 1-4)")]
         public string Vrsta { get; set; }
 
 

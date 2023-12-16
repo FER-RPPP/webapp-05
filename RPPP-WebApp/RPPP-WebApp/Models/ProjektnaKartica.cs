@@ -33,7 +33,7 @@ namespace RPPP_WebApp.Models
 
 
         [Display(Name = "Projekt")]
-        [Required(ErrorMessage = "Potrebno je odabrati projekt")]
+        [Required(ErrorMessage = "Potrebno je odabrati projekt/ projektId postojeceg projekta")]
         public int IdProjekt { get; set; }
 
 

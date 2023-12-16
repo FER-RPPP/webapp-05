@@ -117,7 +117,7 @@ namespace RPPP_WebApp.Controllers
 
         // GET: Transakcija/Create
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateAsync()
         {
             await PrepareDropDownLists();
             return View();
@@ -144,7 +144,8 @@ namespace RPPP_WebApp.Controllers
                 }
                 catch (Exception exc)
                 {
-                    logger.LogError("Pogreška prilikom dodavanje nove transakcije: {0}", exc.Message);
+                    Console.WriteLine("Pogreška prilikom dodavanje nove transakcije: {0}", exc.InnerException.Message);
+                    logger.LogError("Pogreška prilikom dodavanje nove transakcije: {0}", exc.InnerException.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
                     await PrepareDropDownLists();
                     return View(transakcija);
