@@ -50,11 +50,11 @@
         @foreach (var dokument in Model.Dokumenti)
         {
             <tr>
-                <td class="text-center">@dokument.IdDokument</td>
+                <td class="text-left">@dokument.IdDokument</td>
                 <td class="text-left">@dokument.NazivDatoteka</td>
                 <td class="text-left">@dokument.TipDokument</td>
                 <td class="text-left">@dokument.VelicinaDokument</td>
-                <td class="text-center">@Model.VrstaDokumenta[counter++]</td>
+                <td class="text-left">@Model.VrstaDokumenta[counter++]</td>
                 
                 
                 <td class="btn-group">
@@ -63,7 +63,7 @@
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+                       class="btn btn-sm btn-warning" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
 
                     <form asp-action="Delete" method="post"
                           asp-route-id="@dokument.IdDokument"

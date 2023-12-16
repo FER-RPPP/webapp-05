@@ -63,12 +63,19 @@
                 <td class="text-center">@Model.povezaniDokumenti[counter++]</td>
                 
                 <td class="btn-group">
+                    <a asp-action="MD"
+                       asp-route-id="@projekt.IdProjekt"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm btn-info" title="Detalji"><i class="fas fa-edit"></i>Detalji</a>
+
                     <a asp-action="Edit"
                        asp-route-id="@projekt.IdProjekt"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+                       class="btn btn-sm btn-warning" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
 
                     <form asp-action="Delete" method="post"
                           asp-route-id="@projekt.IdProjekt"
