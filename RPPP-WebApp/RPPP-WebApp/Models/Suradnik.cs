@@ -21,24 +21,28 @@ namespace RPPP_WebApp.Models
 
         [Display(Name = "Broj mobitela")]
         [Required(ErrorMessage = "Potrebno je unjeti broj mobitela")]
-        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Broj mobitela smije koristiti samo brojke")]
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Broj mobitela mora sadržavati točno 10 znamenki.")]
+        [StringLength(10, ErrorMessage = "Broj mobitela mora imati točno 10 znakova.")]
         public string Mobitel { get; set; }
 
         [Display(Name = "Ime")]
         [Required(ErrorMessage = "Potrebno je unjeti ime suradnika")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Ime može imati samo slova.")]
+        [RegularExpression(@"^[a-zA-ZČčĆćŽžŠšĐđ]+$", ErrorMessage = "Ime može imati samo slova.")]
         public string Ime { get; set; }
 
         [Display(Name = "Prezime")]
         [Required(ErrorMessage = "Potrebno je unjeti prezime suradnika")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Prezime može imati samo slova.")]
+        [RegularExpression(@"^[a-zA-ZČčĆćŽžŠšĐđ]+$", ErrorMessage = "Prezime može imati samo slova.")]
         public string Prezime { get; set; }
 
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Potrebno je unjeti Email adresu.")]
         [EmailAddress(ErrorMessage = "Email adresa nije validna.")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Email adresa nije validna.")]
+        [RegularExpression(@"^[a-zA-Z0-9ČčĆćŽžŠšĐđ._%+-]+[._-]?[a-zA-Z0-9ČčĆćŽžŠšĐđ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Email adresa nije validna.")]
         public string Mail { get; set; }
+
+        [Display(Name = "Stranka")]
+        [Required(ErrorMessage = "Potrebno je unjeti stranku.")]
         public string Stranka { get; set; }
         public int IdSuradnik { get; set; }
         public int IdKvalifikacija { get; set; }

@@ -22,9 +22,10 @@ namespace RPPP_WebApp.Models
         [StringLength(11, ErrorMessage = "OIB mora imati točno 11 znakova.")]
         public string Oib { get; set; }
 
-        [Display(Name = "Adresa stanovanja")]
-        [Required(ErrorMessage = "Potrebno je unjeti adresu stanovanja")]
-        [RegularExpression(@"^[a-zA-Z]+(\s[a-zA-Z]+)*\s\d+", ErrorMessage = "Aadresa treba početi riječima i sadržavati kućanski broj.")]
+        [Display(Name = "Adresa")]
+        [Required(ErrorMessage = "Potrebno je unjeti adresu")]
+        [RegularExpression(@"^[a-zA-ZČčĆćŽžŠšĐđ]+(\s[a-zA-ZČčĆćŽžŠšĐđ]+)*\s\d+[A-Za-zČčĆćŽžŠšĐđ]?$", ErrorMessage = "Adresa treba početi riječima i sadržavati kućanski broj bez navođenja grada.")]
+
         public string AdresaPartner { get; set; }
 
         [Display(Name = "IBAN")]
@@ -36,7 +37,8 @@ namespace RPPP_WebApp.Models
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Potrebno je unjeti Email adresu.")]
         [EmailAddress(ErrorMessage = "Email adresa nije validna.")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Email adresa nije validna.")]
+        [RegularExpression(@"^[a-zA-Z0-9ČčĆćŽžŠšĐđ._%+-]+[._-]?[a-zA-Z0-9ČčĆćŽžŠšĐđ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Email adresa nije validna.")]
+
         public string EmailPartner { get; set; }
         public string NazivPartner { get; set; }
         public int IdTipPartnera { get; set; }

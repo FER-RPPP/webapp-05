@@ -226,11 +226,11 @@ namespace RPPP_WebApp.Controllers
             {
                 try
                 {
-                    int id = suradnik.IdSuradnik;
+                    string OIB = suradnik.Oib;
                     ctx.Remove(suradnik);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Suradnik {id} uspješno obrisan");
-                    TempData[Constants.Message] = $"Suradnik {id} uspješno obrisan";
+                    logger.LogInformation($"Suradnik {OIB} uspješno obrisan");
+                    TempData[Constants.Message] = $"Suradnik {OIB} uspješno obrisan";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
