@@ -1,0 +1,51 @@
+﻿@model Dokument
+
+@{
+    ViewBag.Title = "Ažuriranje Projekta";
+}
+
+<form asp-route-id="@Model.IdDokument"
+      asp-route-page="@ViewBag.Page"
+      asp-route-sort="@ViewBag.Sort"
+      asp-route-ascending="@ViewBag.Ascending"
+      method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="form-group">
+        <label asp-for="NazivDatoteka"></label>
+        <div><span asp-validation-for="NazivDatoteka" class="text-danger"></span></div>
+        <input asp-for="NazivDatoteka" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TipDokument"></label>
+        <div><span asp-validation-for="TipDokument" class="text-danger"></span></div>
+        <input asp-for="TipDokument" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="VelicinaDokument"></label>
+        <div><span asp-validation-for="VelicinaDokument" class="text-danger"></span></div>
+        <input asp-for="VelicinaDokument" class="form-control" />
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="IdVrstaDok"></label>
+        <select class="form-control" asp-for="IdVrstaDok" asp-items="ViewBag.vrste">
+            
+        </select>
+        <div class="form-text"><span asp-validation-for="IdVrstaDok" class="text-danger"></span></div>
+    </div>
+    <div class="form-group">
+        <label asp-for="IdProjekt"></label>
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.projekti">
+        </select>
+        <div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>
+    </div>
+    
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Spremi</button>
+        <a asp-action="Index"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+           class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
