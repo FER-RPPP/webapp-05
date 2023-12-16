@@ -78,9 +78,9 @@ namespace RPPP_WebApp.Controllers
             }
             ViewBag.PosloviVrste = new SelectList(poslovi, nameof(hr.IdVrstaPosao), nameof(hr.NazivPosao));
 
-            var hrv = await ctx.Posao
-                                  .Where(d => d.IdSuradnik.Any(s => s.IdSuradnik == 1))
-                                  .Select(d => d.IdPosao + " (id: " + d.IdSuradnik + ")")
+            var hrv = await ctx.Suradnik
+                                  .Where(d => d.IdSuradnik == 1)
+                                  .Select(d => d.Oib + " (id: " + d.IdSuradnik + ")")
                                   .FirstOrDefaultAsync();
 
             var suradnici = await ctx.Suradnik
@@ -208,19 +208,19 @@ namespace RPPP_WebApp.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdPosao, int page = 1, int sort = 1, bool ascending = true)
-        {
-            ViewBag.OnajKojiBrisem = IdPosao;
-            var posao = ctx.Posao.Find(IdPosao);
+        public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)
+        {   
+            ViewBag.OnajKojiBrisem = id;
+            var posao = ctx.Posao.Find(id);
             if (posao != null)
             {
                 try
                 {
-                    int id = posao.IdPosao;
+                    int idPosao = posao.IdPosao;
                     ctx.Remove(posao);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Posao {id} uspješno obrisan");
-                    TempData[Constants.Message] = $"Posao {id} uspješno obrisan";
+                    logger.LogInformation($"Posao {idPosao} uspješno obrisan");
+                    TempData[Constants.Message] = $"Posao {idPosao} uspješno obrisan";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
@@ -232,8 +232,8 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                logger.LogWarning("Ne postoji posao s oznakom: {0} ", IdPosao);
-                TempData[Constants.Message] = "Ne postoji posao s oznakom: " + IdPosao;
+                logger.LogWarning("Ne postoji zadatak s oznakom: {0} ", id);
+                TempData[Constants.Message] = "Ne postoji zadatak s oznakom: " + id;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
