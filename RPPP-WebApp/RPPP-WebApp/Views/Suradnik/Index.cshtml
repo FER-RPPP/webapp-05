@@ -45,11 +45,7 @@
                     Kvalifikacija
                 </a>
             </th>
-            <th>
-                <a asp-route-sort="8" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 8 ? !Model.PagingInfo.Ascending : true)">
-                    Popis poslova
-                </a>
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -68,7 +64,7 @@
                 <td class="text-left">@suradnici.Mail</td>
                 <td class="text-center">@suradnici.Stranka</td>
                 <td class="text-center">@Model.kvalifikacija[counter++]</td>
-                <td class="text-center">@Model.poslovi[counter++]</td>
+                
 
                 <td class="btn-group">
                     <a asp-action="Show"
