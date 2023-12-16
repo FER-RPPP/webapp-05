@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
+using System.Text;
+using RPPP_WebApp.Extensions.Selectors;
 using System.Text.Json;
 
 namespace RPPP_WebApp.Controllers
@@ -53,12 +56,23 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
             }
 
-            //query = query.ApplySort(sort, ascending);
+            query = query.ApplySort(sort, ascending);
 
             var projektnaKartica = query
                         .Skip((page - 1) * pagesize)
                         .Take(pagesize)
                         .ToList();
+            var vrste = query
+                         .Skip((page - 1) * pagesize)
+                         .Take(pagesize)
+                         .Select(m => m.IdProjektNavigation.Naziv)
+                         .ToList();
+
+            var listakartica = projektnaKartica
+                       .Select(kartica => string.Join(",", ctx.Transakcija
+                       .Where(z => z.SubjektIban == kartica.SubjektIban)
+                       .Select(z => z.PrimateljIban)))
+                       .ToList();
 
             var model = new ProjektnaKarticaViewModel
             {
@@ -69,18 +83,24 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
-        // GET: ProjektnaKartica/Create
-        [HttpGet]
-        public ActionResult Create()
+        private async Task PrepareDropDownLists()
         {
-            return View();
+            //TODO: napisat funkciju
         }
 
+
+        // GET: ProjektnaKartica/Create
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await PrepareDropDownLists();
+            return View();
+        }
 
         // POST: ProjektnaKartica/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ProjektnaKartica proj_kartica)
+        public async Task<IActionResult> Create(ProjektnaKartica proj_kartica)
         {
             logger.LogTrace(JsonSerializer.Serialize(proj_kartica));
             if (ModelState.IsValid)
@@ -99,19 +119,21 @@ namespace RPPP_WebApp.Controllers
                 {
                     logger.LogError("Pogreška prilikom dodavanje nove projektne kartice: {0}", exc.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
+                    await PrepareDropDownLists();
                     return View(proj_kartica);
                 }
             }
             else
             {
+                await PrepareDropDownLists();
                 return View(proj_kartica);
             }
         }
 
-        /*ZBOG NEKOG RAZLOGA ID JE JEDNAK PROJEKTID-u A NE IBANU SUBJEKTA*/
+        
         // GET: ProjektnaKartica/Edit/5
         [HttpGet]
-        public IActionResult Edit(string id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
             var kartica = ctx.ProjektnaKartica.AsNoTracking().Where(d => d.SubjektIban == id).SingleOrDefault();
             if (kartica == null)
@@ -124,14 +146,16 @@ namespace RPPP_WebApp.Controllers
                 ViewBag.Page = page;
                 ViewBag.Sort = sort;
                 ViewBag.Ascending = ascending;
+                await PrepareDropDownLists();
+
                 return View(kartica);
             }
         }
 
 
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(string id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
         {
 
             try
@@ -212,5 +236,143 @@ namespace RPPP_WebApp.Controllers
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
+
+
+
+
+
+
+
+        //TREBA DOVRSIT
+        public async Task<IActionResult> Show(string iban, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
+        {
+
+            var numbers = new StringBuilder();
+            foreach (char c in iban)
+            {
+                if (char.IsDigit(c))
+                {
+                    numbers.Append(c);
+                }
+            }
+            string nums = numbers.ToString();
+            int.TryParse(nums, out int id);
+
+
+
+            /*if (id == 0)
+            {
+                id = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).SubjektIban;
+
+            }*/
+
+            var kartica = await ctx.ProjektnaKartica
+                                    .Where(d => d.SubjektIban == iban)
+                                    .Select(d => new ProjektnaKartica
+                                    {
+                                        SubjektIban = d.SubjektIban,
+                                        Saldo = d.Saldo,
+                                        Valuta = d.Valuta,
+                                        VrijemeOtvaranja = d.VrijemeOtvaranja,
+                                        IdProjekt = d.IdProjekt
+
+                                    })
+                                    .FirstOrDefaultAsync();
+            int pagesize = 10;
+            var query = ctx.ProjektnaKartica
+                     .AsNoTracking();
+
+            int count = query.Count();
+            var pagingInfo = new PagingInfo
+            {
+                CurrentPage = page,
+                Sort = sort,
+                Ascending = ascending,
+                ItemsPerPage = pagesize,
+                TotalItems = count
+            };
+
+            if (kartica == null)
+            {
+                return NotFound($"Projektna kartica {id} ne postoji");
+            }
+            else
+            {
+                
+                string NazProjekt = await ctx.Projekt
+                                               .Where(p => p.IdProjekt == kartica.IdProjekt)
+                                               .Select(p => p.Naziv)
+                                               .FirstOrDefaultAsync();
+
+                List<ProjektnaKartica> svekartice = await ctx.ProjektnaKartica./*ApplySort(sort, ascending).*/ToListAsync();
+                int index = svekartice.FindIndex(p => p.SubjektIban == kartica.SubjektIban);
+
+                /*
+                int idprethodnog = -1;
+                int idsljedeceg = -1;
+                */
+
+                /*if (index != 0)
+                {
+                    idprethodnog = svekartice[index - 1].id;
+                }
+                if (index != svekartice.Count - 1)
+                {
+                    idsljedeceg = svekartice[index + 1].id;
+                }*/
+                
+
+                //učitavanje transakcije
+                var transakcije = await ctx.Transakcija
+                                      .Where(s => s.SubjektIban == kartica.SubjektIban)
+                                      .OrderBy(s => s.PrimateljIban)
+                                      .Select(s => new Transakcija
+                                      {
+                                          PrimateljIban = s.PrimateljIban,
+                                          Vrsta = s.Vrsta,
+                                          Opis = s.Opis,
+                                          IdTransakcije = s.IdTransakcije,
+                                          SubjektIban = s.SubjektIban,
+                                          Vrijednost = s.Vrijednost,
+                                          Valuta = s.Valuta,
+                                      })
+                                      .ToListAsync();
+
+                var trans = ctx.Transakcija.AsNoTracking()
+                         .Where(d => d.SubjektIban == iban)
+                         .Select(m => m.IdTransakcijeNavigation.NazivTransakcije)
+                         .ToList();
+
+                var model = new TransakcijaViewModel
+                {
+                    Transakcija = transakcije,
+                    nazivTransakcija = trans,
+                    PagingInfo = pagingInfo,
+                };
+
+
+                var CIJELAPREDAJA = new ProjektnaKarticaTransakcijaViewModel
+                {
+                    kartica = kartica,
+                    //NazVrsta = NazVrste,
+                    /*
+                     * IdPrethKartica = idprethodnog,
+                     * IdSljedKartica = idsljedeceg,
+                    */
+                    transakcije = model
+
+                };
+
+
+                ViewBag.Page = page;
+                ViewBag.Sort = sort;
+                ViewBag.Ascending = ascending;
+
+
+                return View(viewName, CIJELAPREDAJA);
+            }
+        }
+
+
     }
 }

@@ -7,6 +7,7 @@ namespace RPPP_WebApp.ViewModels
     public class TransakcijaViewModel
     {
         public IEnumerable<Transakcija> Transakcija { get; set; }
+        public List<string> nazivTransakcija { get; set; }
         public PagingInfo PagingInfo { get; set; }
     }
 }

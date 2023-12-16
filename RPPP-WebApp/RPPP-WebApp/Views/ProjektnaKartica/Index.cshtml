@@ -55,18 +55,18 @@
                 <td class="text-center">@karta.Saldo</td>
                 <td class="btn-group">
                     <a asp-action="Edit"
-                       asp-route-id="@karta.IdProjekt"
+                       asp-route-id="@karta.SubjektIban"
                        asp-route-page="@karta.SubjektIban"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
-                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i></a>
+                       class="btn btn-sm" title="Ažuriraj">EDIT<i class="fas fa-edit"></i></a>
 
                     <form asp-action="Delete" method="post"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
-                        <input type="hidden" name="OznDrzave" value="@karta.SubjektIban" />
-                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
+                        <input type="hidden" name="SubjektIBAN" value="@karta.SubjektIban" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">DELETE<i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>
             </tr>

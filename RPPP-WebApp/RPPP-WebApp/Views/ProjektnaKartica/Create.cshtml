@@ -10,7 +10,10 @@
     <div class="mb-3">
         <label asp-for="IdProjekt" class="form-label">Id Projekta: </label>
         <input asp-for="IdProjekt" class="form-control" />
-        <div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.Projekti">
+            <option disabled selected value="">Odaberite projekt</option>
+        </select>
+        @*<div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>*@
     </div>
 
     <div class="mb-3">

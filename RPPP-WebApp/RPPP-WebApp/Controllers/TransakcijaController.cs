@@ -5,7 +5,9 @@ using Microsoft.Extensions.Options;
 using RPPP_WebApp;
 using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
+using RPPP_WebApp.Extensions.Selectors;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -54,12 +56,18 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
             }
 
-            //query = query.ApplySort(sort, ascending);
+            query = query.ApplySort(sort, ascending);
 
             var transakcija = query
                         .Skip((page - 1) * pagesize)
                         .Take(pagesize)
                         .ToList();
+
+            var vrste = query
+                         .Skip((page - 1) * pagesize)
+                         .Take(pagesize)
+                         .Select(m => m.IdTransakcijeNavigation.NazivTransakcije)
+                         .ToList();
 
             var model = new TransakcijaViewModel
             {
@@ -70,9 +78,48 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
-        // GET: Transakcija/Create
-        public ActionResult Create()
+        private async Task PrepareDropDownLists()
         {
+            //TODO: napisati funkciju
+
+            var hr = await ctx.VrstaTransakcije
+                              .Where(d => d.IdTransakcije == 1)
+                              .Select(d => new { d.NazivTransakcije, d.IdTransakcije })
+                              .FirstOrDefaultAsync();
+            var transakcije = await ctx.VrstaTransakcije
+                                  .Where(d => d.IdTransakcije != 1)
+                                  .OrderBy(d => d.NazivTransakcije)
+                                  .Select(d => new { d.NazivTransakcije, d.IdTransakcije })
+                                  .ToListAsync();
+            if (hr != null)
+            {
+                transakcije.Insert(0, hr);
+            }
+            ViewBag.TransakcijeId = new SelectList(transakcije, nameof(hr.IdTransakcije), nameof(hr.NazivTransakcije));
+
+            var hrv = await ctx.ProjektnaKartica
+                                  .Where(d => d.SubjektIban == @"^hr\d{19}$")
+                                  .Select(d => new { v = d.SubjektIban + " (id: " + d.IdProjekt + ")", d.Valuta })
+                                  .FirstOrDefaultAsync();
+            var kartice = await ctx.ProjektnaKartica
+                                  .Where(d => d.SubjektIban != @"^hr\d{19}$")
+                                  .OrderBy(d => d.SubjektIban)
+                                  .Select(d => new { v = d.SubjektIban + " (id: " + d.IdProjekt + ")", d.Valuta })
+                                  .ToListAsync();
+            if (hrv != null)
+            {
+                kartice.Insert(0, hrv);
+            }
+            ViewBag.TransakcijePopis = new SelectList(kartice, nameof(hrv.Valuta), nameof(hrv.v));
+        }
+
+
+
+        // GET: Transakcija/Create
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await PrepareDropDownLists();
             return View();
         }
 
@@ -80,7 +127,7 @@ namespace RPPP_WebApp.Controllers
         // POST: Transakcija/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Transakcija transakcija)
+        public async Task<IActionResult> Create(Transakcija transakcija)
         {
             logger.LogTrace(JsonSerializer.Serialize(transakcija));
             if (ModelState.IsValid)
@@ -99,53 +146,56 @@ namespace RPPP_WebApp.Controllers
                 {
                     logger.LogError("Pogreška prilikom dodavanje nove transakcije: {0}", exc.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
+                    await PrepareDropDownLists();
                     return View(transakcija);
                 }
             }
             else
             {
+                await PrepareDropDownLists();
                 return View(transakcija);
             }
         }
 
-        /*ZBOG NEKOG RAZLOGA ID JE JEDNAK PROJEKTID-u A NE IBANU SUBJEKTA*/
+        
         // GET: ProjektnaKartica/Edit/5
         [HttpGet]
-        public IActionResult Edit(string id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
-            var transakcija = ctx.Transakcija.AsNoTracking().Where(d => d.PrimateljIban == id).SingleOrDefault();
+            var transakcija = ctx.Transakcija.AsNoTracking().Where(d => d.SubjektIban == id).SingleOrDefault();
             if (transakcija == null)
             {
-                logger.LogWarning("Ne postoji transakcija za IBAN: {0} ", id);
-                return NotFound("Ne postoji transakcija za IBAN:  " + id);
+                logger.LogWarning("Ne postoji transakcija : {0} ", id);
+                return NotFound("Ne postoji transakcija:  " + id);
             }
             else
             {
                 ViewBag.Page = page;
                 ViewBag.Sort = sort;
                 ViewBag.Ascending = ascending;
+                await PrepareDropDownLists();
                 return View(transakcija);
             }
         }
 
 
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(string id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
         {
 
             try
             {
                 Transakcija transakcija = await ctx.Transakcija
-                                  .Where(d => d.PrimateljIban == id)
+                                  .Where(d => d.SubjektIban == id)
                                   .FirstOrDefaultAsync();
                 if (transakcija == null)
                 {
-                    return NotFound("Neispravan IBAN: " + id);
+                    return NotFound("Neispravan idTransakcije: " + id);
                 }
 
                 if (await TryUpdateModelAsync<Transakcija>(transakcija, "",
-                    d => d.opis, d => d.Vrsta,d => d.IdTransakcije
+                    d => d.Opis, d => d.Vrsta,d => d.IdTransakcije,d =>d.Vrijednost, d=>d.Valuta
                 ))
                 {
                     ViewBag.Page = page;
