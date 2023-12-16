@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RPPP_WebApp.Models.Posao
+
+
+<h2>Unos novog posla</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="mb-3">
+        <label asp-for="Opis" class="form-label"></label>
+        <input asp-for="Opis" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Opis" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PredVrTrajanjaDani" class="form-label">Predviđeno vrijeme trajanja (u danima)</label>
+        <input asp-for="PredVrTrajanjaDani" class="form-control" />
+        <div class="form-text"><span asp-validation-for="PredVrTrajanjaDani" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Uloga" class="form-label">Uloga suradnika u poslu</label>
+        <input asp-for="Uloga" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Uloga" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdSuradnik" class="form-label">Suradnici koji rade na poslu</label>
+        <select class="form-control" asp-for="IdSuradnik" asp-items="ViewBag.SuradniciPopis">
+            <option disabled selected value="">Odaberite suradnike</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdSuradnik" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdVrstaPosao" class="form-label">Vrsta posla</label>
+        <select class="form-control" asp-for="IdVrstaPosao" asp-items="ViewBag.PosloviVrste">
+            <option disabled selected value="">Odaberite vrstu posla</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdVrstaPosao" class="text-danger"></span></div>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    @* <partial name="IncludeValidation" /> *@
+}

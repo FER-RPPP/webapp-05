@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using RPPP_WebApp.Models;
 using System.Reflection.Metadata.Ecma335;
+using System.Linq;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -82,21 +83,21 @@ namespace RPPP_WebApp.Controllers
             }
             ViewBag.SuradniciKvalifikacije = new SelectList(suradnici, nameof(hr.IdKvalifikacija), nameof(hr.NazivKvalifikacija));
             
-            var hrv = await ctx.Projekt
-                                .Where(d => d.IdProjekt == 1)
-                                .Select(d => new { d.Naziv, d.IdProjekt })
+            var hrv = await ctx.Partner
+                                .Where(d => d.IdPartner == 1)
+                                .Select(d => new { d.NazivPartner, d.IdPartner })
                                 .FirstOrDefaultAsync();
-            var projekti = await ctx.Projekt
-                                    .Where(d => d.IdProjekt == 1)
-                                    .OrderBy(d => d.Naziv)
-                                    .Select(d => new {d.Naziv , d.IdProjekt})
+            var partneri = await ctx.Partner
+                                    .Where(d => d.IdPartner != 1)
+                                    .OrderBy(d => d.NazivPartner)
+                                    .Select(d => new {d.NazivPartner , d.IdPartner})
                                     .ToListAsync();
 
             if (hrv != null)
             {
-                projekti.Insert(0 , hrv);
+                partneri.Insert(0 , hrv);
             }
-            ViewBag.ProjektiPopis = new SelectList(projekti, nameof(hrv.IdProjekt), nameof(hrv.Naziv));
+            ViewBag.PartneriPopis = new SelectList(partneri, nameof(hrv.IdPartner), nameof(hrv.NazivPartner));
         }
 
         [HttpGet]
@@ -166,7 +167,7 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
         {
             try
             {
@@ -221,9 +222,10 @@ namespace RPPP_WebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public IActionResult Delete(int idSuradnik, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(string oib, int page = 1, int sort = 1, bool ascending = true)
         {
-            var suradnik = ctx.Suradnik.Find(idSuradnik);
+            ViewBag.OnajKojiBrisem = oib;
+            var suradnik = ctx.Suradnik.Find(oib);
             if (suradnik != null)
             {
                 try
@@ -235,28 +237,24 @@ namespace RPPP_WebApp.Controllers
                     TempData[Constants.Message] = $"Suradnik {id} uspješno obrisan";
                     TempData[Constants.ErrorOccurred] = false;
                 }
-                catch (Exception exception)
+                catch (Exception exc)
                 {
-                    TempData[Constants.Message] = "Pogreška prilikom brisanja suradnika: " + exception.Message;
+                    TempData[Constants.Message] = "Pogreška prilikom brisanja suradnika: " + exc.Message;
                     TempData[Constants.ErrorOccurred] = true;
-                    logger.LogError("Pogreška prilikom brisanja suradnika: " + exception.Message);
+                    logger.LogError("Pogreška prilikom brisanja suradnika: " + exc.Message);
                 }
             }
             else
             {
-                logger.LogWarning("Ne postoji suradnik s oznakom: {0} ", idSuradnik);
-                TempData[Constants.Message] = "Ne postoji suradnik s oznakom: " + idSuradnik;
+                logger.LogWarning("Ne postoji suradnik s oznakom: {0} ", oib);
+                TempData[Constants.Message] = "Ne postoji suradnik s oznakom: " + oib;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
 
-        public int GetIdPartner()
-        {
-            return IdPartner;
-        }
 
-        public async Task<IActionResult> Show(int id, int idPartner, int page = 1, int sort = 1, bool ascending = true)
+        public async Task<IActionResult> Show(int id, int idPartner, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
 
             if (id == 0)
@@ -320,34 +318,39 @@ namespace RPPP_WebApp.Controllers
                 }
 
                 var poslovi = await ctx.Posao
-                                      .Where(s => s == suradnik.IdPosao)
+                                      .Where(s => s.IdSuradnik.Contains(suradnik))
                                       .OrderBy(s => s.IdPosao)
                                       .Select(s => new Posao
                                       {
                                           IdPosao = s.IdPosao,
-                                          IdVrstaPosao = s.IdVrstaPosao
-                                          
+                                          IdVrstaPosao = s.IdVrstaPosao,
+                                          Opis = s.Opis,
+                                          PredVrTrajanjaDani = s.PredVrTrajanjaDani,
+                                          Uloga = s.Uloga,
                                       })
                                       .ToListAsync();
 
                 var vrstaposla = ctx.Posao.AsNoTracking()
-                         .Where(d => d == suradnik.IdPosao)
-                         .Select(m => m.IdVrstaPosaoNavigation.na)
+                         .Where(d => suradnik.IdPosao.Contains(d))
+                         .Select(m => m.IdVrstaPosaoNavigation.NazivPosao)
                          .ToList();
 
                 var model = new PosaoViewModel
                 {
-                    ///
+                    poslovi = poslovi,
+                    vrstaPosla = vrstaposla,
+                    PagingInfo = pagingInfo,
                 };
 
 
                 var CIJELAPREDAJA = new SuradnikPosaoViewModel
                 {
-                    ///
-                    IdPrethZahtjev = idprethodnog,
-                    IdSljedZahtjev = idsljedeceg,
-                    
-
+                    suradnik = suradnik,
+                    Kvalifikacija = nazivKvalifikacije,
+                    poslovi = model,
+                    IdPrethSuradnik = idprethodnog,
+                    IdSljedSuradnik = idsljedeceg,
+                    PagingInfo = pagingInfo,
                 };
 
                 //await SetPreviousAndNext(position.Value, filter, sort, ascending);

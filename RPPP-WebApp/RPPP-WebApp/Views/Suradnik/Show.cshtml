@@ -1,37 +1,36 @@
-﻿ @model RPPP_WebApp.Controllers.ZahtjevZadatakViewModel
+﻿ @model RPPP_WebApp.Controllers.SuradnikPosaoViewModel
 @{
-    ViewBag.Title = "Zahtjev br. " + @Model.zahtjev.IdZahtjev;
+    ViewBag.Title = "Suradnik br. " + @Model.suradnik.IdSuradnik;
 }
-
 
 <div class="container">
     <div class="row text-center">
         <div class="col-sm-2">
-            @if (Model.IdPrethZahtjev != -1)
+            @if (Model.IdPrethSuradnik != -1)
             {
                 <a class="btn btn-sm btn-primary"
                    asp-action="Show"
                    asp-route-page="@ViewBag.Page"
                    asp-route-sort="@ViewBag.Sort"
                    asp-route-ascending="@ViewBag.Ascending"
-                   asp-route-id="@Model.IdPrethZahtjev">
+                   asp-route-id="@Model.IdPrethSuradnik">
                     <i class="fas fa-step-backward">prethodni</i>
                 </a>
             }
         </div>
         <div class="col-sm-8">
             <h4>
-                @Model.zahtjev.IdZahtjev/@Model.zahtjev.Prioritet/@Model.NazVrsta/@Model.zahtjev.VrPocetak.ToString("d.M.yyyy.")
+                @Model.suradnik.IdSuradnik/@Model.suradnik.Oib/@Model.suradnik.Ime/@Model.suradnik.Prezime/@Model.Kvalifikacija
             </h4>
         </div>
         <div class="col-sm-2">
-            @if (Model.IdSljedZahtjev != -1)
+            @if (Model.IdSljedSuradnik != -1)
             {
                 <a class="btn btn-sm btn-primary" asp-action="Show"
                    asp-route-page="@ViewBag.Page"
                    asp-route-sort="@ViewBag.Sort"
                    asp-route-ascending="@ViewBag.Ascending"
-                   asp-route-id="@Model.IdSljedZahtjev">
+                   asp-route-id="@Model.IdSljedSuradnik">
                     <i class="fas fa-step-forward">sljedeci</i>
                 </a>
             }
@@ -39,24 +38,33 @@
     </div>
 
 
-    @if (Model.IdPrethZahtjev != -1)
+    @if (Model.IdPrethSuradnik != -1)
     {
         <div class="row justify-content-sm-center">
             <div class="col-sm-2">
                 Prethodni dokument:
             </div>
             <div class="col-sm-6">
-                <a asp-action="Show" asp-route-id="@Model.IdPrethZahtjev" target="_blank">@Model.IdPrethZahtjev</a>
+                <a asp-action="Show" asp-route-id="@Model.IdPrethSuradnik" target="_blank">@Model.IdPrethSuradnik</a>
             </div>
         </div>
     }
 
     <div class="row justify-content-sm-center">
         <div class="col-sm-2">
-            opis: @Model.zahtjev.Opis
+            E-mail: @Model.suradnik.Mail
         </div>
         <div class="col-sm-2">
-            Vrijeme ocekivanog kraja: @Model.zahtjev.VrKrajOcekivano.ToString("d.M.yyyy.")
+            Mobitel: @Model.suradnik.Mobitel
+        </div>
+        <div class="col-sm-2">
+            OIB: @Model.suradnik.Oib
+        </div>
+        <div class="col-sm-2">
+            Stranka: @Model.suradnik.Stranka
+        </div>
+        <div class="col-sm-2">
+            Partner: @Model.suradnik.IdPartner
         </div>
         @* <div class="col-sm-1 text-right">
             <a asp-action="Edit"
@@ -89,11 +97,11 @@
             <thead>
                 <tr>
                     @{
-                        string[] nazivi = { "Artikl", "Količina", "Rabat", "Jedinična cijena", "Iznos" };
-                        for (int i = 0; i < nazivi.Length; i++)
+                        string[] poslovi = { "Oznaka posla", "Opis posla", "Očekivano trajanje (dani)", "Uloga", "Vrsta posla" };
+                        for (int i = 0; i < poslovi.Length; i++)
                         {
                             <th class="text-center">
-                                @nazivi[i]
+                                @poslovi[i]
                             </th>
                         }
                     }
@@ -104,29 +112,23 @@
                 @{
                     int counter = 0;
                 }
-                @foreach (var zadatak in Model.zadatci.zadatci)
+                @foreach (var posao in Model.poslovi.poslovi)
                 {
                     <tr>
                         <td class="text-left col-sm-4">
-                            @zadatak.IdZadatak
+                            @posao.IdPosao
                         </td>
                         <td class="text-right col-sm-1">
-                            @zadatak.Oibnositelj
+                            @posao.Opis
                         </td>
                         <td class="text-center col-sm-1">
-                            @zadatak.VrPoc.ToString("d.M.yyyy.")
+                            @posao.PredVrTrajanjaDani
                         </td>
                         <td class="text-right col-sm-2">
-                            @zadatak.VrKraj
-                        </td>
-                        <td class="text-right col-sm-2">
-                            @zadatak.VrKrajOcekivano.ToString("d.M.yyyy.")
-                        </td>
-                        <td class="text-right col-sm-2">
-                            @zadatak.Vrsta
+                            @posao.Uloga
                         </td>
                         <td class="text-center">
-                            @Model.zadatci.nazivStatusa[counter++]
+                            @Model.poslovi.vrstaPosla
                         </td>
                     </tr>
                 }
