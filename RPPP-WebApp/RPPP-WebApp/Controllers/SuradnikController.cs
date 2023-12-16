@@ -54,12 +54,20 @@ namespace RPPP_WebApp.Controllers
                                 .Take(pagesize)
                                 .Select(m => m.IdKvalifikacijaNavigation.NazivKvalifikacija)
                                 .ToList();
+            var poslovi = ctx.Suradnik
+                        .AsNoTracking()
+                        .Skip((page - 1) * pagesize)
+                        .Take(pagesize)
+                        .Select(m => m.IdPosao.ToString())
+                        .ToList();
+
 
             var model = new SuradnikViewModel
             {
                 suradnici = suradnici,
                 kvalifikacija = kvalifikacija,
                 PagingInfo = pagingInfo,
+                poslovi = poslovi,
             };
 
             return View(model);

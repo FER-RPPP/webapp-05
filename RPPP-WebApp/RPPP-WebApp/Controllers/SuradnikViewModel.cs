@@ -9,6 +9,8 @@ namespace RPPP_WebApp.Controllers
 
         public List<string> kvalifikacija { get; set; }
 
+        public List<string> poslovi {  get; set; }
+
         public PagingInfo PagingInfo { get; set; }
 
     }
