@@ -1,0 +1,129 @@
+﻿@model RPPP_WebApp.ViewModels.MDprojektViewModel
+@{
+    ViewBag.Title = "Projekt br. " + @Model.projekt.IdProjekt;
+}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm-2">
+            @if (Model.IdPrethProjekt != -1)
+            {
+                <a class="btn btn-sm btn-primary"
+                   asp-action="MD"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-id="@Model.IdPrethProjekt">
+                    <i class="fas fa-step-backward">prethodni</i>
+                </a>
+            }
+        </div>
+        <div class="col-sm-8">
+            <h4>
+                ID: @Model.projekt.IdProjekt
+            </h4>
+
+            <h5 class="boksic">
+                <div>
+                    Naziv:  @Model.projekt.Naziv
+                </div>
+                <div>
+                    Opis:  @Model.projekt.Opis
+                </div>
+                <div>
+                    Tip projekta: @Model.TipProjekta
+                </div>
+            </h5>
+        </div>
+        <div class="col-sm-2">
+            @if (Model.IdSljedProjekt != -1)
+            {
+                <a class="btn btn-sm btn-primary" asp-action="MD"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-id="@Model.IdSljedProjekt">
+                    <i class="fas fa-step-forward">sljedeci</i>
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="row justify-content-sm-center">
+        <div class="text-center">
+            Vrijeme početka: @Model.projekt.VrPocetak.ToString("d.M.yyyy.")
+        </div>
+        @if (Model.projekt.VrKraj.HasValue)
+        {
+            <div class="text-center">
+                Vrijeme kraja: @Model.projekt.VrKraj
+            </div>
+        }
+         <div class="col-sm-1 text-right">
+            <a asp-action="Edit"
+               asp-route-id="@Model.projekt.IdProjekt"
+               asp-route-page="@ViewBag.CurrentPage"
+               asp-route-sort="@ViewBag.Sort"
+               asp-route-ascending="@ViewBag.Ascending"
+               class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+
+            <form asp-action="Delete" method="post"
+                  asp-route-id="@Model.projekt.IdProjekt"
+                  asp-route-page="@ViewBag.CurrentPage"
+                  asp-route-sort="@ViewBag.Sort"
+                  asp-route-ascending="@ViewBag.Ascending">
+                <input type="hidden" name="IdProjekt" value="@Model.projekt.IdProjekt" />
+                <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt">Obriši</i></button>
+            </form>
+        </div>
+        <div class="col-sm-1 text-center">
+            <a class="btn btn-sm btn-primary cancel"
+               asp-action="Index"
+               asp-route-page="@ViewBag.Page"
+               asp-route-sort="@ViewBag.Sort"
+               asp-route-ascending="@ViewBag.Ascending"
+               title="Povratak na popis projekata">
+                <i class="fas fa-undo-alt">povratak</i>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table table-sm table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                            ID Dokument
+                    </th>
+                    <th>
+                            Naziv dokumenta
+                    </th>
+                    <th>
+                            Tip dokumenta
+                    </th>
+                    <th>
+                            Velicina dokumenta
+                    </th>
+                    <th>
+                            Vrsta dokumenta
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int counter = 0;
+                }
+                @foreach (var dokument in Model.dokumenti.Dokumenti)
+                {
+                    <tr>
+                        <td class="text-left">@dokument.IdDokument</td>
+                        <td class="text-left">@dokument.NazivDatoteka</td>
+                        <td class="text-left">@dokument.TipDokument</td>
+                        <td class="text-left">@dokument.VelicinaDokument</td>
+                        <td class="text-left">@Model.dokumenti.VrstaDokumenta[counter++]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 
