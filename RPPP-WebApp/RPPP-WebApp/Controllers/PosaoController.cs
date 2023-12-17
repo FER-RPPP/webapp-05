@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Text.Json;
 using RPPP_WebApp.Models;
+using Microsoft.Extensions.Options;
+using RPPP_WebApp.Extensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -11,16 +13,18 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<PosaoController> logger;
-        public PosaoController(RPPP05Context ctx, ILogger<PosaoController> logger)
+        private readonly AppSettings appSettings;
+        public PosaoController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<PosaoController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
         }
 
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
 
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Posao
                      .AsNoTracking();
 
@@ -39,24 +43,31 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
             }
 
+            query = query.ApplySort(sort, ascending);
 
-            var poslovi = ctx.Posao
-                      .AsNoTracking()
+            var poslovi = query
                       .Skip((page - 1) * pagesize)
                       .Take(pagesize)
-                      .OrderBy(d => d.IdPosao)
                       .ToList();
-            var nazivi = ctx.Posao.AsNoTracking()
+
+            var nazivi = query
                          .Skip((page - 1) * pagesize)
                          .Take(pagesize)
                          .Select(m => m.IdVrstaPosaoNavigation.NazivPosao)
                          .ToList();
+
+            var suradnici = poslovi
+                               .Select(posao => string.Join(",", ctx.Suradnik
+                                .Where(z => z.IdPosao.Contains(posao))
+                                .Select(z => z.IdSuradnik)))
+                                .ToList();
 
             var model = new PosaoViewModel
             {
                 poslovi = poslovi,
                 vrstaPosla = nazivi,
                 PagingInfo = pagingInfo,
+                suradnici = suradnici
             };
             return View(model);
 
@@ -80,20 +91,20 @@ namespace RPPP_WebApp.Controllers
 
             var hrv = await ctx.Suradnik
                                   .Where(d => d.IdSuradnik == 1)
-                                  .Select(d => d.Oib + " (id: " + d.IdSuradnik + ")")
+                                  .Select(d => new { v = d.Oib + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
                                   .FirstOrDefaultAsync();
 
             var suradnici = await ctx.Suradnik
                                   .Where(d => d.IdSuradnik != 1)
                                   .OrderBy(d => d.Oib)
-                                  .Select(d => d.Ime + d.Prezime + " (id: " + d.IdSuradnik + ")")
+                                  .Select(d => new {v = d.Ime + d.Prezime + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
                                   .ToListAsync();
             if (hrv != null)
             {
                 suradnici.Insert(0, hrv);
             }
 
-            ViewBag.SuradniciPopis = new SelectList(suradnici, nameof(hrv));
+            ViewBag.SuradniciPopis = new MultiSelectList(suradnici, nameof(hrv.IdSuradnik), nameof(hrv.v));
 
         }
 

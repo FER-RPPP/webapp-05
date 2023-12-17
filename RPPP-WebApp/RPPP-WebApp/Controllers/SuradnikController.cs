@@ -6,6 +6,8 @@ using System.Text.Json;
 using RPPP_WebApp.Models;
 using System.Reflection.Metadata.Ecma335;
 using System.Linq;
+using Microsoft.Extensions.Options;
+using RPPP_WebApp.Extensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -13,16 +15,18 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<SuradnikController> logger;
+        private readonly AppSettings appSettings;
 
-        public SuradnikController(RPPP05Context ctx, ILogger<SuradnikController> logger)
+        public SuradnikController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<SuradnikController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
         }
 
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Suradnik
                         .AsNoTracking();
 
@@ -41,23 +45,23 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Index), new { page = 1, sort, ascending });
             }
 
-            var suradnici = ctx.Suradnik
-                            .AsNoTracking()
-                            .Skip((page - 1) * pagesize)
-                            .Take(pagesize)
-                            .OrderBy(d => d.IdSuradnik)
-                            .ToList();
+            query = query.ApplySort(sort, ascending);
 
-            var kvalifikacija = ctx.Suradnik
-                                .AsNoTracking()
+            var suradnici = query.Skip((page - 1) * pagesize)
+                                  .Take(pagesize)
+                                  .ToList();
+
+            var kvalifikacija = query
                                 .Skip((page - 1) * pagesize)
                                 .Take(pagesize)
                                 .Select(m => m.IdKvalifikacijaNavigation.NazivKvalifikacija)
                                 .ToList();
 
             var listaposlova = suradnici
-                                .Select(suradnik => string.Join(",", suradnik.IdPosao.Select(p => p.IdPosao)))
-    .                           ToList();
+                               .Select(suradnik => string.Join(",", ctx.Posao
+                                .Where(z => z.IdSuradnik.Contains(suradnik))
+                                .Select(z => z.IdPosao)))
+                                .ToList();
 
             var model = new SuradnikViewModel
             {

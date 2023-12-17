@@ -27,7 +27,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="IdSuradnik" class="form-label">Suradnici koji rade na poslu</label>
-        <select class="form-control" asp-for="IdSuradnik" asp-items="ViewBag.SuradniciPopis">
+        <select class="form-control" asp-for="IdSuradnik" asp-items="ViewBag.SuradniciPopis" multiple>
             <option disabled selected value="">Odaberite suradnike</option>
         </select>
         <div class="form-text"><span asp-validation-for="IdSuradnik" class="text-danger"></span></div>

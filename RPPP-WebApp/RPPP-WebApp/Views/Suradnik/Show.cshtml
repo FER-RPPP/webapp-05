@@ -115,21 +115,22 @@
                 @foreach (var posao in Model.poslovi.poslovi)
                 {
                     <tr>
-                        <td class="text-left col-sm-4">
+                        <td class="text-center col-sm-4">
                             @posao.IdPosao
                         </td>
-                        <td class="text-right col-sm-1">
+                        <td class="text-center col-sm-1">
                             @posao.Opis
                         </td>
                         <td class="text-center col-sm-1">
                             @posao.PredVrTrajanjaDani
                         </td>
-                        <td class="text-right col-sm-2">
+                        <td class="text-center col-sm-2">
                             @posao.Uloga
                         </td>
                         <td class="text-center">
-                            @Model.poslovi.vrstaPosla
+                            @Model.poslovi.vrstaPosla[counter++]
                         </td>
+                        
                     </tr>
                 }
             </tbody>

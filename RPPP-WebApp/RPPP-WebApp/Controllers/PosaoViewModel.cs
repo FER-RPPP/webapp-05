@@ -9,6 +9,8 @@ namespace RPPP_WebApp.Controllers
 
         public List<string> vrstaPosla { get; set; }
 
+        public List<string> suradnici { get; set; }
+
         public PagingInfo PagingInfo { get; set; }
 
     }
