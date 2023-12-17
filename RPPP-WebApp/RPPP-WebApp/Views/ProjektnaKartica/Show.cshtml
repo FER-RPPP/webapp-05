@@ -1,0 +1,112 @@
+﻿@model RPPP_WebApp.ViewModels.ProjektnaKarticaTransakcijaViewModel
+@{
+    ViewBag.Title = "Projektna Kartica za IBAN. " + @Model.kartica.IdProjekt;
+}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm-2">
+            @if (Model.IdPrethKartica != (-1).ToString())
+            {
+                <a class="btn btn-sm btn-primary"
+                   asp-action="Show"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-id="@Model.IdPrethKartica">
+                    <i class="fas fa-step-backward">prethodni</i>
+                </a>
+            }
+        </div>
+        <div class="col-sm-8">
+            <h4>
+                ID: @Model.kartica.SubjektIban
+            </h4>
+
+            <h5 class="boksic">
+                <div>
+                    Prioritet:  @Model.kartica.Saldo
+                </div>
+                <div>
+                    Vrsta:  @Model.NazVrsta
+                </div>
+                <div>
+                    Opis: @Model.kartica.Valuta
+                </div>
+            </h5>
+        </div>
+        <div class="col-sm-2">
+            @if (Model.IdSljedKartica != (-1).ToString())
+            {
+                <a class="btn btn-sm btn-primary" asp-action="Show"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-id="@Model.IdSljedKartica">
+                    <i class="fas fa-step-forward">sljedeci</i>
+                </a>
+            }
+        </div>
+    </div>
+
+
+    <div class="row justify-content-sm-center">
+        <div class="text-center">
+            Vrijeme početka: @Model.kartica.VrijemeOtvaranja.ToString("d.M.yyyy.")
+        </div>
+
+        <div class="col-sm-1 text-center">
+            <a class="btn btn-sm btn-primary cancel"
+               asp-action="Index"
+               asp-route-page="@ViewBag.Page"
+               asp-route-sort="@ViewBag.Sort"
+               asp-route-ascending="@ViewBag.Ascending"
+               title="Povratak na popis dokumenata">
+                <i class="fas fa-undo-alt">povratak</i>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    @{
+                        string[] nazivi = { "vrsta transakcija","IBAN primatelja", "ID Transakcije", "Opis transakcije" };
+                        for (int i = 0; i < nazivi.Length; i++)
+                        {
+                            <th class="text-center">
+                                @nazivi[i]
+                            </th>
+                        }
+                    }
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var tran in Model.transakcije.Transakcija)
+                {
+                    <tr class="text-center">
+                        <td class="text-center col-sm-1">
+                            @tran.Vrsta
+                        </td>
+                        <td class="text-center col-sm-2">
+                            @tran.SubjektIban
+                        </td>
+                        <td class="text-center col-sm-1">
+                            @tran.Opis
+                        </td>
+                        <td class="text-center col-sm-1">
+                            @tran.Vrijednost
+                        </td>
+                        <td class="text-center col-sm-1">
+                            @tran.Valuta
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 
