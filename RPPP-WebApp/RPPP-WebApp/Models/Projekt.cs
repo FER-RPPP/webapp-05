@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models
 {
@@ -15,12 +16,29 @@ namespace RPPP_WebApp.Models
             Zahtjev = new HashSet<Zahtjev>();
             IdPartner = new HashSet<Partner>();
         }
-
+        
         public int IdProjekt { get; set; }
+
+
+        [Display(Name = "Datum početka projekta")]
+        [Required(ErrorMessage = "Potrebno je napisati ili izabrati datum")]
         public DateTime VrPocetak { get; set; }
+
+
+        [Display(Name = "Datum kraja projekta")]
         public DateTime? VrKraj { get; set; }
+
+        [Display(Name = "Opis projekta")]
+        [Required(ErrorMessage = "Potrebno je napisati opis projekta")]
         public string Opis { get; set; }
+
+        [Display(Name = "Naziv projekta")]
+        [Required(ErrorMessage = "Potrebno je napisati naziv projekta")]
         public string Naziv { get; set; }
+
+
+        [Display(Name = "Vrsta projekta")]
+        [Required(ErrorMessage = "Potrebno je odabrati vrstu projekta")]
         public int IdTip { get; set; }
 
         public virtual TipProjekta IdTipNavigation { get; set; }

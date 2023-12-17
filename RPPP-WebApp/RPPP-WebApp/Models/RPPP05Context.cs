@@ -53,6 +53,10 @@ namespace RPPP_WebApp.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.URLdokument)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.TipDokument)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -66,13 +70,13 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdProjektNavigation)
                     .WithMany(p => p.Dokument)
                     .HasForeignKey(d => d.IdProjekt)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Dokument__idProj__5F492382");
 
                 entity.HasOne(d => d.IdVrstaDokNavigation)
                     .WithMany(p => p.Dokument)
                     .HasForeignKey(d => d.IdVrstaDok)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Dokument__idVrst__603D47BB");
             });
 
@@ -88,7 +92,7 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdUlogaNavigation)
                     .WithMany(p => p.Ima)
                     .HasForeignKey(d => d.IdUloga)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Ima__idUloga__725BF7F6");
             });
 
@@ -161,7 +165,7 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdTipPartneraNavigation)
                     .WithMany(p => p.Partner)
                     .HasForeignKey(d => d.IdTipPartnera)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Partner__idTipPa__4E1E9780");
             });
 
@@ -173,7 +177,7 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdVrstaPosaoNavigation)
                     .WithMany(p => p.Posao)
                     .HasForeignKey(d => d.IdVrstaPosao)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Posao__IdVrstaPo__3DE82FB7");
             });
 
@@ -209,15 +213,15 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdTipNavigation)
                     .WithMany(p => p.Projekt)
                     .HasForeignKey(d => d.IdTip)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Projekt__idTip__44952D46");
 
                 entity.HasMany(d => d.IdPartner)
                     .WithMany(p => p.IdProjekt)
                     .UsingEntity<Dictionary<string, object>>(
                         "Narucio",
-                        l => l.HasOne<Partner>().WithMany().HasForeignKey("IdPartner").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Narucio__idPartn__5C6CB6D7"),
-                        r => r.HasOne<Projekt>().WithMany().HasForeignKey("IdProjekt").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK__Narucio__idProje__5B78929E"),
+                        l => l.HasOne<Partner>().WithMany().HasForeignKey("IdPartner").OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK__Narucio__idPartn__5C6CB6D7"),
+                        r => r.HasOne<Projekt>().WithMany().HasForeignKey("IdProjekt").OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK__Narucio__idProje__5B78929E"),
                         j =>
                         {
                             j.HasKey("IdProjekt", "IdPartner").HasName("PK__Narucio__6B1ACFD225EE3B16");
@@ -258,7 +262,7 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdProjektNavigation)
                     .WithMany(p => p.ProjektnaKartica)
                     .HasForeignKey(d => d.IdProjekt)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Projektna__idPro__50FB042B");
             });
 
@@ -336,21 +340,21 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdKvalifikacijaNavigation)
                     .WithMany(p => p.Suradnik)
                     .HasForeignKey(d => d.IdKvalifikacija)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Suradnik__idKval__65F62111");
 
                 entity.HasOne(d => d.IdPartnerNavigation)
                     .WithMany(p => p.Suradnik)
                     .HasForeignKey(d => d.IdPartner)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Suradnik__idPart__66EA454A");
 
                 entity.HasMany(d => d.IdPosao)
-                    .WithMany(p => p.Oib)
+                    .WithMany(p => p.IdSuradnik)
                     .UsingEntity<Dictionary<string, object>>(
                         "Radi",
-                        l => l.HasOne<Posao>().WithMany().HasForeignKey("IdPosao").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Radi_Posao"),
-                        r => r.HasOne<Suradnik>().WithMany().HasForeignKey("Oib").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Radi_Suradnik"),
+                        l => l.HasOne<Posao>().WithMany().HasForeignKey("IdPosao").OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Radi_Posao"),
+                        r => r.HasOne<Suradnik>().WithMany().HasForeignKey("Oib").OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Radi_Suradnik"),
                         j =>
                         {
                             j.HasKey("Oib", "IdPosao");
@@ -426,13 +430,13 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdTransakcijeNavigation)
                     .WithMany(p => p.Transakcija)
                     .HasForeignKey(d => d.IdTransakcije)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Transakci__idTra__6ABAD62E");
 
                 entity.HasOne(d => d.SubjektIbanNavigation)
                     .WithMany(p => p.Transakcija)
                     .HasForeignKey(d => d.SubjektIban)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Transakci__subje__69C6B1F5");
             });
 
@@ -456,7 +460,7 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdProjektNavigation)
                     .WithMany(p => p.Uloga)
                     .HasForeignKey(d => d.IdProjekt)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__uloga__idProjekt__589C25F3");
             });
 
@@ -554,13 +558,13 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdStatusNavigation)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.IdStatus)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Zadatak__idStatu__55BFB948");
 
                 entity.HasOne(d => d.IdZahtjevNavigation)
                     .WithMany(p => p.Zadatak)
                     .HasForeignKey(d => d.IdZahtjev)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Zadatak__idZahtj__54CB950F");
             });
 
@@ -602,13 +606,13 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdProjektNavigation)
                     .WithMany(p => p.Zahtjev)
                     .HasForeignKey(d => d.IdProjekt)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Zahtjev__idProje__4865BE2A");
 
                 entity.HasOne(d => d.IdVrstaNavigation)
                     .WithMany(p => p.Zahtjev)
                     .HasForeignKey(d => d.IdVrsta)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Zahtjev__idVrsta__477199F1");
             });
 

@@ -1,0 +1,86 @@
+﻿@model RPPP_WebApp.ViewModels.TransakcijaViewModel
+
+@{
+    ViewBag.Title = "Transakcije";
+}
+
+<h2>Popis transakcija</h2>
+
+<a asp-action="Create">Unos nove transakcije</a>
+
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table table-sm table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    ID transakcije
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    IBAN subjekta
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    IBAN primatelja
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Vrsta transakcije
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
+                    Vrijednost
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    Valuta
+                </a>
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tran in Model.Transakcija)
+        {
+            <tr>
+                <td class="text-center">@tran.IdTransakcije</td>
+                <td class="text-left">@tran.SubjektIban</td>
+                <td class="text-center">@tran.PrimateljIban</td>
+                <td class="text-center">@tran.Vrsta</td>
+                <td class="text-center">@tran.Vrijednost</td>
+                <td class="text-center">@tran.Valuta</td>
+                @*<td class="text-center">@tran.</td> Treba dodati kolicinu*@
+                <td class="btn-group">
+                    <a asp-action="Edit"
+                       asp-route-id="@tran.PrimateljIban"
+                       asp-route-page="@tran.PrimateljIban"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm" title="Ažuriraj">EDIT<i class="fas fa-edit"></i></a>
+
+                    <form asp-action="Delete" method="post"
+                          asp-route-page="@Model.PagingInfo.CurrentPage"
+                          asp-route-sort="@Model.PagingInfo.Sort"
+                          asp-route-ascending="@Model.PagingInfo.Ascending">
+                        <input type="hidden" name="OznDrzave" value="@tran.PrimateljIban" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">DELETE<i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
