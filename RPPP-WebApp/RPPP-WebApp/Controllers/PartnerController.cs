@@ -238,10 +238,10 @@ namespace RPPP_WebApp.Controllers
             {
                 try
                 {
-                    foreach (var item in suradnici)
-                    {
-                        ctx.Remove(item);
-                    }
+                    //foreach (var item in suradnici)
+                    //{
+                        //ctx.Remove(item);
+                    //}
                     int idz = partner.IdPartner;
                     ctx.Remove(partner);
                     ctx.SaveChanges();
