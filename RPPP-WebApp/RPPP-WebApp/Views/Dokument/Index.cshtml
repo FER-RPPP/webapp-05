@@ -1,0 +1,98 @@
+﻿@model RPPP_WebApp.ViewModels.DokumentiViewModel
+
+@{
+    ViewBag.Title = "Dokumenti";
+}
+
+<h2>Popis Dokumenata</h2>
+
+<a asp-action="Create" method="get">Unos novog dokumenta</a>
+
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
+       class="float-end">
+</pager>
+
+<table class="table table-sm table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
+                    ID Dokument
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Naziv dokumenta
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
+                    Tip dokumenta
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
+                    Velicina dokumenta
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
+                    Vrsta dokumenta
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    Lokacija
+                </a>
+            </th>
+            <th>
+                <a asp-route-sort="7" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    Pripadni projekt
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int counter = 0;
+        }
+        @foreach (var dokument in Model.Dokumenti)
+        {
+            <tr>
+                <td class="text-left">@dokument.IdDokument</td>
+                <td class="text-left">@dokument.NazivDatoteka</td>
+                <td class="text-left">@dokument.TipDokument</td>
+                <td class="text-left">@dokument.VelicinaDokument</td>
+                <td class="text-left">@Model.VrstaDokumenta[counter]</td>
+                <td class="text-left">@dokument.URLdokument</td>
+                <td class="text-left">@Model.povezaniProjekti[counter++].Naziv</td>
+                
+                
+                
+                <td class="btn-group">
+                    <a asp-action="Edit"
+                       asp-route-id="@dokument.IdDokument"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm btn-warning" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+
+                    <form asp-action="Delete" method="post"
+                          asp-route-id="@dokument.IdDokument"
+                          asp-route-page="@Model.PagingInfo.CurrentPage"
+                          asp-route-sort="@Model.PagingInfo.Sort"
+                          asp-route-ascending="@Model.PagingInfo.Ascending">
+                        <input type="hidden" name="IdProjekt" value="@dokument.IdDokument" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt">Obriši</i></button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+}
+

@@ -1,0 +1,51 @@
+﻿@model RPPP_WebApp.Models.ProjektnaKartica
+
+
+<h2>Unos nove projektne kartice</h2>
+
+<form asp-action="Create" method="post">
+
+    <div asp-validation-summary="All"></div>
+
+    <div class="mb-3">
+        <label asp-for="IdProjekt" class="form-label">Id Projekta: </label>
+        <input asp-for="IdProjekt" class="form-control" />
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.Projekti">
+            <option disabled selected value="">Odaberite projekt</option>
+        </select>
+        @*<div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>*@
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SubjektIban" class="form-label">IBAN subjekta: </label>
+        <input asp-for="SubjektIban" class="form-control" />
+        <div class="form-text"><span asp-validation-for="SubjektIban" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Saldo" class="form-label">Saldo: </label>
+        <input asp-for="Saldo" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Saldo" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Valuta" class="form-label">Valuta: </label>
+        <input asp-for="Valuta" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Valuta" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VrijemeOtvaranja" class="form-label">Vrijeme otvaranja računa: </label>
+        <input asp-for="VrijemeOtvaranja" class="form-control" />
+        <div class="form-text"><span asp-validation-for="VrijemeOtvaranja" class="text-danger"></span></div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    @* <partial name="IncludeValidation" /> *@
+}

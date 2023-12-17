@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RPPP_WebApp.Models.Zadatak
+
+
+<h2>Unos novog zadatka</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All"></div>
+    <div class="mb-3">
+        <label asp-for="IdZahtjev" class="form-label">ID zahtjeva</label>
+        <select class="form-control" asp-for="IdZahtjev" asp-items="ViewBag.ZahtjeviPopis">
+            <option disabled selected value="">Odaberite zahtjev kojem zadatak pripada</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdZahtjev" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Vrsta" class="form-label">Vrsta zadatka</label>
+        <input asp-for="Vrsta" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Vrsta" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Oibnositelj" class="form-label">OIB nositelja zadatka</label>
+        <input  asp-for="Oibnositelj" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Oibnositelj" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VrPoc" class="form-label">Vrijeme početka</label>
+        <input asp-for="VrPoc" class="form-control" />
+        <div class="form-text"><span asp-validation-for="VrPoc" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VrKraj" class="form-label">Vrijeme kraja</label>
+        <input asp-for="VrKraj" class="form-control" />
+        <div class="form-text"><span asp-validation-for="VrKraj" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VrKrajOcekivano" class="form-label">Očekivano vrijeme kraja</label>
+        <input asp-for="VrKrajOcekivano" class="form-control" />
+        <div class="form-text"><span asp-validation-for="VrKrajOcekivano" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdStatus" class="form-label">Status zadatka</label>
+        <select class="form-control" asp-for="IdStatus" asp-items="ViewBag.ZadatciStatusi">
+            <option disabled selected value="">Odaberite status</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdStatus" class="text-danger"></span></div>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    @* <partial name="IncludeValidation" /> *@
+}

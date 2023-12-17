@@ -1,0 +1,68 @@
+﻿
+@model RPPP_WebApp.Models.Transakcija
+
+
+<h2>Unos nove transakcije</h2>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+<form asp-action="Create" method="post">
+
+    <div asp-validation-summary="All"></div>
+
+    <div class="mb-3">
+        <label asp-for="Opis" class="form-label">Opis: </label>
+        <input asp-for="Opis" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Opis" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PrimateljIban" class="form-label">IBAN Primatelja: </label>
+        <input asp-for="PrimateljIban" class="form-control" />
+        <div class="form-text"><span asp-validation-for="PrimateljIban" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Vrsta" class="form-label">Vrsta: </label>
+        <input asp-for="Vrsta" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Vrsta" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SubjektIban" class="form-label">IBAN Subjekta:</label>
+        <input asp-for="SubjektIban" class="form-control" />
+        <div class="form-text"><span asp-validation-for="SubjektIban" class="text-danger"></span></div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="IdTransakcije" class="form-label">ID Transakcije: </label>
+        <input asp-for="IdTransakcije" class="form-control" />
+        <select class="form-control" asp-for="IdTransakcije" asp-items="ViewBag.Transakcije">
+            <option disabled selected value="">Odaberite vrstu transakcije</option>
+        </select>
+        @*<div class="form-text"><span asp-validation-for="IdTransakcije" class="text-danger"></span></div>*@
+
+    </div>
+    <div class="mb-3">
+        <label asp-for="Vrijednost" class="form-label">Iznos transakcije: </label>
+        <input asp-for="Vrijednost" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Vrijednost" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Valuta" class="form-label">Valuta: </label>
+        <input asp-for="Valuta" class="form-control" />
+        <div class="form-text"><span asp-validation-for="Valuta" class="text-danger"></span></div>
+    </div>
+    
+    
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Dodaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+    @* <partial name="IncludeValidation" /> *@
+}

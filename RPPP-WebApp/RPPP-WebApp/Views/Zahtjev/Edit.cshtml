@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model RPPP_WebApp.Models.Zahtjev
+
+@{
+    ViewBag.Title = "Ažuriranje zahtjeva";
+}
+
+<form asp-route-id="@Model.IdZahtjev"
+      asp-route-page="@ViewBag.Page"
+      asp-route-sort="@ViewBag.Sort"
+      asp-route-ascending="@ViewBag.Ascending"
+      method="post">
+    <div asp-validation-summary="All"></div>
+    @*Ne koristi se, jer se ne rekonstruira cijela država, već se samo koristi id koji je već u parametrima route*@
+    @*<input type="hidden" asp-for="OznDrzave" />*@
+    <div class="form-group">
+        <label asp-for="Prioritet"></label>
+        <div><span asp-validation-for="Prioritet" class="text-danger"></span></div>
+        <input asp-for="Prioritet" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Opis"></label>
+        <div><span asp-validation-for="Opis" class="text-danger"></span></div>
+        <input asp-for="Opis" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="VrPocetak">Vrijeme početka</label>
+        <div><span asp-validation-for="VrPocetak" class="text-danger"></span></div>
+        <input asp-for="VrPocetak" class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label asp-for="VrKraj">Vrijeme kraja</label>
+        <div><span asp-validation-for="VrKraj" class="text-danger"></span></div>
+        <input asp-for="VrKraj" class="form-control"></input>
+    </div>
+    <div class="form-group">
+        <label asp-for="VrKrajOcekivano">Očekivano vrijeme kraja</label>
+        <div><span asp-validation-for="VrKrajOcekivano" class="text-danger"></span></div>
+        <input asp-for="VrKrajOcekivano" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdProjekt" class="form-label">Projekt kojem zahtjev pripada</label>
+        <select class="form-control" asp-for="IdProjekt" asp-items="ViewBag.ProjektiPopis">
+            <option disabled selected value="">Odaberite projekt</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdProjekt" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="IdVrsta" class="form-label">Vrsta zahtjeva</label>
+        <select class="form-control" asp-for="IdVrsta" asp-items="ViewBag.ZahtjeviVrste">
+            <option disabled selected value="">Odaberite vrstu zahtjeva</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="IdVrsta" class="text-danger"></span></div>
+    </div>
+
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Spremi</button>
+        <a asp-action="Index"
+           asp-route-page="@ViewBag.Page"
+           asp-route-sort="@ViewBag.Sort"
+           asp-route-ascending="@ViewBag.Ascending"
+           class="btn btn-secondary">Odustani</a>
+    </div>
+</form>
+
+@section scripts {
+@*     <partial name="IncludeValidation" />
+ *@}

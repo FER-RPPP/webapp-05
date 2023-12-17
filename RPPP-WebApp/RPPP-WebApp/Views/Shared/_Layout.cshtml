@@ -1,3 +1,5 @@
+@using RPPP_WebApp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,22 +10,62 @@
   <title>RPPP Homework</title>
   <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" asp-append-version="true" />
   <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+   <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
+
   @RenderSection("styles", required: false)
 </head>
 <body>
   <partial name="_Nav" />
+    
+
+    
 
   <div class="container body-container">
-    @RenderBody()
+        
+        
+        @RenderBody()
+        <div>
+            <div id="tempmessage" class="alert">
+                
+            </div>
+        </div>
   </div>
 
+
+    
   <script>
     window.applicationBaseUrl = '@Url.Content("~/")';
   </script>
+    
 
   <script src="~/lib/jquery/jquery.min.js" asp-append-version="true"></script>
   <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-  <script src="~/js/site.js" asp-append-version="true"></script>
+  <script src="~/lib/toastr.js/toastr.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        toastr.options = {
+            positionClass: "toast-bottom-right"
+        };
+    </script>
+    <div>
+        @* Display Toastr success message if available *@
+        @{
+            var successMessage = TempData[Constants.Message] as string;
+            if (!string.IsNullOrEmpty(successMessage))
+            {
+                // Log the success message to the console for debugging
+                <script>console.log('@successMessage');</script>
+
+                // Display the success message using Toastr
+                <script>toastr.success('@successMessage');</script>
+            }
+            TempData.Remove(Constants.Message); // Clear TempData to prevent showing the message again
+        }
+    </div>
+    <partial name="HandleMessage" />
   @RenderSection("scripts", required: false)
 </body>
 </html>
+
+
+  
