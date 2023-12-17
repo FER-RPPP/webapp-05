@@ -13,6 +13,7 @@ namespace RPPP_WebApp.Models
         public int IdProjekt { get; set; }
         public int IdVrstaDok { get; set; }
         public string NazivDatoteka { get; set; }
+        public string URLdokument { get; set; }
 
         public virtual Projekt IdProjektNavigation { get; set; }
         public virtual VrstaDokumenta IdVrstaDokNavigation { get; set; }

@@ -26,7 +26,6 @@ namespace RPPP_WebApp.Models
 
 
         [Display(Name = "Datum kraja projekta")]
-        [Required(ErrorMessage = "Potrebno je napisati ili izabrati datum")]
         public DateTime? VrKraj { get; set; }
 
         [Display(Name = "Opis projekta")]

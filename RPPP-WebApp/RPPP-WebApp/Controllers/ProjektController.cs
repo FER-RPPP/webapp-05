@@ -33,8 +33,8 @@ namespace RPPP_WebApp.Controllers
 			int count = query.Count();
 			if (count == 0)
 			{
-				logger.LogInformation("Ne postoji nijedna država");
-				TempData[Constants.Message] = "Ne postoji niti jedna država.";
+				logger.LogInformation("Ne postoji nijedan projekt");
+				TempData[Constants.Message] = "Ne postoji niti jedan projekt.";
 				TempData[Constants.ErrorOccurred] = false;
 				return RedirectToAction(nameof(Create));
 			}
@@ -242,10 +242,10 @@ namespace RPPP_WebApp.Controllers
             {
                 try
                 {
-                    foreach (var doc in dokumenti)
+                    /*foreach (var doc in dokumenti)
                     {
                         ctx.Remove(doc);
-                    }
+                    }*/
                     int idP = projekt.IdProjekt;
                     ctx.Remove(projekt);
                     ctx.SaveChanges();

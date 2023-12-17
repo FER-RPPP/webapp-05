@@ -53,6 +53,10 @@ namespace RPPP_WebApp.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.URLdokument)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.TipDokument)
                     .IsRequired()
                     .HasMaxLength(20)
@@ -66,7 +70,7 @@ namespace RPPP_WebApp.Models
                 entity.HasOne(d => d.IdProjektNavigation)
                     .WithMany(p => p.Dokument)
                     .HasForeignKey(d => d.IdProjekt)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Dokument__idProj__5F492382");
 
                 entity.HasOne(d => d.IdVrstaDokNavigation)
