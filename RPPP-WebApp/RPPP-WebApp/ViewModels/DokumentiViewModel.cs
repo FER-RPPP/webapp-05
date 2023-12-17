@@ -8,5 +8,7 @@ namespace RPPP_WebApp.ViewModels
         public IEnumerable<Dokument> Dokumenti { get; set; }
         public PagingInfo PagingInfo { get; set; }
         public List<string> VrstaDokumenta { get; set; }
+
+        public List<Projekt> povezaniProjekti { get; set; }
     }
 }

@@ -61,6 +61,13 @@ namespace RPPP_WebApp.Controllers
             var vrstaDokumenta = query.Skip((page - 1) * pagesize).Take(pagesize)
                 .Select(p => p.IdVrstaDokNavigation.NazivVrstaDok).ToList();
 
+            List<Projekt> projekts = new List<Projekt>();
+
+            foreach(var doc in dokumenti)
+            {
+                var p = ctx.Projekt.Find(doc.IdProjekt);
+                projekts.Add(p);
+            }
             
 
 
@@ -69,6 +76,7 @@ namespace RPPP_WebApp.Controllers
                 Dokumenti = dokumenti,
                 PagingInfo = pagingInfo,
                 VrstaDokumenta = vrstaDokumenta,
+                povezaniProjekti = projekts
             };
 
             return View(model);

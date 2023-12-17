@@ -44,6 +44,12 @@
     </div>
     
     <div class="form-group">
+        <label asp-for="URLdokument"></label>
+        <div><span asp-validation-for="URLdokument" class="text-danger"></span></div>
+        <input asp-for="URLdokument" class="form-control" />
+    </div>
+
+    <div class="form-group">
         <label asp-for="IdVrstaDok"></label>
         <select class="form-control" asp-for="IdVrstaDok" asp-items="ViewBag.vrste">
             

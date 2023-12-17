@@ -343,6 +343,7 @@ namespace RPPP_WebApp.Controllers
                                           IdProjekt = s.IdProjekt,
                                           IdVrstaDok = s.IdVrstaDok,
                                           NazivDatoteka = s.NazivDatoteka,
+                                          URLdokument = s.URLdokument,
                                       })
                                       .ToListAsync();
 
@@ -367,8 +368,6 @@ namespace RPPP_WebApp.Controllers
                     IdSljedProjekt = idsljedeceg,
                     dokumenti = docs
                 };
-
-                //await SetPreviousAndNext(position.Value, filter, sort, ascending);
 
 
                 ViewBag.Page = page;

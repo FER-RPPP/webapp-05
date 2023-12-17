@@ -107,6 +107,9 @@
                     <th>
                             Vrsta dokumenta
                     </th>
+                    <th>
+                        Lokacija
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -121,6 +124,7 @@
                         <td class="text-left">@dokument.TipDokument</td>
                         <td class="text-left">@dokument.VelicinaDokument</td>
                         <td class="text-left">@Model.dokumenti.VrstaDokumenta[counter++]</td>
+                        <td class="text-left">@dokument.URLdokument</td>
                     </tr>
                 }
             </tbody>
