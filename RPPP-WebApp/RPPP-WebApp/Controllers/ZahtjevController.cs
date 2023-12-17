@@ -12,7 +12,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Drawing.Printing;
-
+using RPPP_WebApp.Extensions.Selectors;
+using RPPP_WebApp.ViewModels;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -20,15 +21,19 @@ namespace RPPP_WebApp.Controllers
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<ZahtjevController> logger;
+        private readonly AppSettings appSettings;
 
-        public ZahtjevController(RPPP05Context ctx, ILogger<ZahtjevController> logger)
+
+        public ZahtjevController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZahtjevController> logger)
         {
             this.ctx = ctx;
             this.logger = logger;
+            appSettings = options.Value;
+
         }
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
-            int pagesize = 10;
+            int pagesize = appSettings.PageSize;
             var query = ctx.Zahtjev
                      .AsNoTracking();
 
@@ -48,26 +53,38 @@ namespace RPPP_WebApp.Controllers
                 //return RedirectToAction(nameof(Index),new { page = pagingInfo.TotalPages, sort, ascending });
             }
 
-            //query = query.ApplySort(sort, ascending);
+            query = query.ApplySort(sort, ascending);
 
 
-            var zahtjevi = ctx.Zahtjev
-                      .AsNoTracking()
+            var zahtjevi = query
                       .Skip((page - 1) * pagesize)
                       .Take(pagesize)
-                      .OrderBy(d => d.IdZahtjev)
                       .ToList();
-            var vrste =  ctx.Zahtjev.AsNoTracking()
+            var vrste =  query
                          .Skip((page - 1) * pagesize)
                          .Take(pagesize)
                          .Select(m => m.IdVrstaNavigation.NazivVrsta)
                          .ToList();
+            //var listazadataka = new List<String>();
+            //foreach(var zahtjev in zahtjevi)
+            //{
+            //    listazadataka.Add(ctx.Zadatak.Where(z => z.IdZahtjev == zahtjev.IdZahtjev)
+            //                                .Select(z => z.IdZadatak)
+            //                                .ToList().ToString);
+            //}
+            var listazadataka = zahtjevi
+                        .Select(zahtjev => string.Join(",", ctx.Zadatak
+                        .Where(z => z.IdZahtjev == zahtjev.IdZahtjev)
+                        .Select(z => z.IdZadatak)))
+                        .ToList();
+
 
             var model = new ZahtjevViewModel
             {
                 zadatci = zahtjevi,
                 nazivVrste = vrste,
                 PagingInfo = pagingInfo,
+                popisZadataka = listazadataka
             };
             return View(model);
         }
@@ -222,18 +239,23 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int IdZahtjev, int page = 1, int sort = 1, bool ascending = true)
+        public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)
         {
-            var zahtjev = ctx.Zahtjev.Find(IdZahtjev);
+            var zahtjev = ctx.Zahtjev.Find(id);
+            var zadatci = ctx.Zadatak.Where(z => z.IdZahtjev == id).ToList();
             if (zahtjev != null)
             {
                 try
                 {
-                    int id = zahtjev.IdZahtjev;
+                    foreach (var item in zadatci)
+                    {
+                        ctx.Remove(item);
+                    }
+                    int idz = zahtjev.IdZahtjev;
                     ctx.Remove(zahtjev);
                     ctx.SaveChanges();
-                    logger.LogInformation($"Zahtjev {id} uspješno obrisana");
-                    TempData[Constants.Message] = $"Zahtjev {id} uspješno obrisana";
+                    logger.LogInformation($"Zahtjev {idz} uspješno obrisana");
+                    TempData[Constants.Message] = $"Zahtjev {idz} uspješno obrisan";
                     TempData[Constants.ErrorOccurred] = false;
                 }
                 catch (Exception exc)
@@ -245,8 +267,8 @@ namespace RPPP_WebApp.Controllers
             }
             else
             {
-                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", IdZahtjev);
-                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + IdZahtjev;
+                logger.LogWarning("Ne postoji zahtjev s oznakom: {0} ", id);
+                TempData[Constants.Message] = "Ne postoji zahtjev s oznakom: " + id;
                 TempData[Constants.ErrorOccurred] = true;
             }
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
@@ -300,7 +322,7 @@ namespace RPPP_WebApp.Controllers
                                                 .Select(p => p.NazivVrsta)
                                                 .FirstOrDefaultAsync();
 
-                List<Zahtjev> svizahtjevi = (await ctx.Zahtjev.ToListAsync());
+                List<Zahtjev> svizahtjevi = (await ctx.Zahtjev.ApplySort(sort, ascending).ToListAsync());
                 int index = svizahtjevi.FindIndex(p => p.IdZahtjev == zahtjev.IdZahtjev);
 
                 int idprethodnog = -1;

@@ -1,90 +1,109 @@
-﻿
-@model RPPP_WebApp.Controllers.ZadatakViewModel
+﻿@model RPPP_WebApp.Controllers.PartnerViewModel
 
- <h2>Popis Zadataka</h2>
+<h2>Popis Partnera</h2>
 
-<a asp-action="Create">Unos novog Zadatka</a>
+<a asp-action="Create">Unos novog Partnera</a>
 
- <pager page-info="@Model.PagingInfo"  page-action="Index" page-title="Unesite željenu stranicu"
+<pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu"
        class="float-end">
 </pager>
- 
 
 <table class="table table-sm table-striped table-hover" id="tabledrzave">
     <thead>
         <tr>
             <th class="text-center">
                 <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
-                    Oznaka zadatka
-                </a>
-            </th >
-            <th class="text-center">
-                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
-                    Vrsta zadatka
+                    Oznaka partnera
                 </a>
             </th>
             <th class="text-center">
+                <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
+                    Naziv
+                </a>
+            </th class="text-center"> 
+            <th>
                 <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    OIB nositelja
+                    Adresa
                 </a>
             </th>
             <th class="text-center">
                 <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
-                    Vrijeme pocetka
+                    Email adresa
                 </a>
             </th>
             <th class="text-center">
                 <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
-                    Vrijeme kraja
+                    OIB
                 </a>
             </th>
             <th class="text-center">
                 <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
-                    Status zadatka
+                    IBAN 
                 </a>
             </th>
-            <th></th>
+            <th class="text-center">
+                <a asp-route-sort="7" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 7 ? !Model.PagingInfo.Ascending : true)">
+                    Tip partnera
+                </a>
+            </th>
+            <th class="text-center">
+                Popis suradnika
+            </th>
         </tr>
     </thead>
-     <tbody>
+    <tbody>
         @{
             int counter = 0;
         }
-        @foreach (var zadatci in Model.zadatci)
+        @foreach (var partneri in Model.partneri)
         {
+
             <tr>
-                <td class="text-center">@zadatci.IdZadatak</td>
-                <td class="text-center">@zadatci.Vrsta</td>
-                <td class="text-center">@zadatci.Oibnositelj</td>
-                <td class="text-center">@zadatci.VrPoc.ToString("d.M.yyyy.")</td>
-                <td class="text-center">@zadatci.VrKraj</td>
-                <td class="text-center">@Model.nazivStatusa[counter++]</td>
+                <td class="text-center">@partneri.IdPartner</td>
+                <td class="text-center">@partneri.NazivPartner</td>
+                <td class="text-center">@partneri.AdresaPartner</td>
+                <td class="text-center">@partneri.EmailPartner</td>
+                <td class="text-center">@partneri.Oib</td>
+                <td class="text-center">@partneri.Ibanpartner</td>
+                <td class="text-center">@Model.nazivVrste[counter]</td>
+                <td class="text-center">@Model.popisSuradnika[counter++]</td>
 
                 <td class="btn-group">
+                    <a asp-action="Show"
+                       asp-route-id="@partneri.IdPartner"
+                       asp-route-page="@Model.PagingInfo.CurrentPage"
+                       asp-route-sort="@Model.PagingInfo.Sort"
+                       asp-route-ascending="@Model.PagingInfo.Ascending"
+                       class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Detalji</a>
                     <a asp-action="Edit"
-                       asp-route-id="@zadatci.IdZadatak"
+                       asp-route-id="@partneri.IdPartner"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
                        class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+
                     <form asp-action="Delete" method="post"
+                          asp-route-id="@partneri.IdPartner"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
-                        <input type="hidden" name="IdZadatak" value="@zadatci.IdZadatak" />
-                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">Obriši</button>
+                        <input type="hidden" name="OznDrzave" value="@partneri.IdPartner" />
+                        <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">
+                            Obriši
+
+                        </button>
                     </form>
-                    
                 </td>
             </tr>
+
         }
-    </tbody> 
-    
+    </tbody>
+
 </table>
 
-
-@* @section scripts{
-    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+@section scripts {
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+    @* <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -106,8 +125,5 @@
                 }
             });
         });
-    </script>
-} *@
- @section scripts {
-    <script src="~/js/pager.js" asp-append-version="true"></script>
-} 
+    </script> *@
+}

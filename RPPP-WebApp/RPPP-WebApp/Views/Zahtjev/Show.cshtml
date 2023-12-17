@@ -21,8 +21,20 @@
         </div>
         <div class="col-sm-8">
             <h4>
-                @Model.zahtjev.IdZahtjev/@Model.zahtjev.Prioritet/@Model.NazVrsta/@Model.zahtjev.VrPocetak.ToString("d.M.yyyy.")
+                ID: @Model.zahtjev.IdZahtjev 
             </h4>
+            
+            <h5 class="boksic">
+                <div>
+                    Prioritet:  @Model.zahtjev.Prioritet
+                </div> 
+                <div>
+                    Vrsta:  @Model.NazVrsta
+                </div>
+                <div> 
+                    Opis: @Model.zahtjev.Opis
+                </div>
+            </h5>
         </div>
         <div class="col-sm-2">
             @if (Model.IdSljedZahtjev != -1)
@@ -39,7 +51,7 @@
     </div>
 
 
-    @if (Model.IdPrethZahtjev != -1)
+  @*   @if (Model.IdPrethZahtjev != -1)
     {
         <div class="row justify-content-sm-center">
             <div class="col-sm-2">
@@ -49,15 +61,20 @@
                 <a asp-action="Show" asp-route-id="@Model.IdPrethZahtjev" target="_blank">@Model.IdPrethZahtjev</a>
             </div>
         </div>
-    }
+    } *@
 
     <div class="row justify-content-sm-center">
-        <div class="col-sm-2">
-            opis: @Model.zahtjev.Opis
+        <div class="text-center">
+            Vrijeme početka: @Model.zahtjev.VrPocetak.ToString("d.M.yyyy.")
         </div>
-        <div class="col-sm-2">
-            Vrijeme ocekivanog kraja: @Model.zahtjev.VrKrajOcekivano.ToString("d.M.yyyy.")
+        <div class="text-center">
+            Vrijeme očekivanog kraja: @Model.zahtjev.VrKrajOcekivano.ToString("d.M.yyyy.")
         </div>
+        @if (Model.zahtjev.VrKraj.HasValue){
+            <div class="text-center">
+            Vrijeme stvarnog kraja: @Model.zahtjev.VrKraj
+        </div>
+        }
         @* <div class="col-sm-1 text-right">
             <a asp-action="Edit"
                asp-route-id="@Model.IdDokumenta"
@@ -72,7 +89,7 @@
             <input type="hidden" name="IdDokumenta" value="@Model.IdDokumenta" />
             <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši"><i class="fas fa-trash-alt"></i></button>
         </form> *@
-        <div class="col-sm-1 text-left">
+        <div class="col-sm-1 text-center">
             <a class="btn btn-sm btn-primary cancel"
                asp-action="Index"
                asp-route-page="@ViewBag.Page"
@@ -89,7 +106,7 @@
             <thead>
                 <tr>
                     @{
-                        string[] nazivi = { "Artikl", "Količina", "Rabat", "Jedinična cijena", "Iznos" };
+                        string[] nazivi = { "ID zadatka", "OIB Nositelja", "Vrsta zadatka", "Status zadatka", "Vrijeme početka", "Vrijeme kraja", "Vrijeme očekivanog kraja" };
                         for (int i = 0; i < nazivi.Length; i++)
                         {
                             <th class="text-center">
@@ -106,28 +123,29 @@
                 }
                 @foreach (var zadatak in Model.zadatci.zadatci)
                 {
-                    <tr>
-                        <td class="text-left col-sm-4">
+                    <tr class="text-center">
+                        <td class="text-center col-sm-1">
                             @zadatak.IdZadatak
                         </td>
-                        <td class="text-right col-sm-1">
+                        <td class="text-center col-sm-2">
                             @zadatak.Oibnositelj
                         </td>
                         <td class="text-center col-sm-1">
-                            @zadatak.VrPoc.ToString("d.M.yyyy.")
-                        </td>
-                        <td class="text-right col-sm-2">
-                            @zadatak.VrKraj
-                        </td>
-                        <td class="text-right col-sm-2">
-                            @zadatak.VrKrajOcekivano.ToString("d.M.yyyy.")
-                        </td>
-                        <td class="text-right col-sm-2">
                             @zadatak.Vrsta
                         </td>
-                        <td class="text-center">
+                        <td class="text-center col-sm-2">
                             @Model.zadatci.nazivStatusa[counter++]
                         </td>
+                        <td class="text-center col-sm-2">
+                            @zadatak.VrPoc.ToString("d.M.yyyy.")
+                        </td>
+                        <td class="text-center col-sm-2">
+                            @zadatak.VrKraj
+                        </td>
+                        <td class="text-center col-sm-2">
+                            @zadatak.VrKrajOcekivano.ToString("d.M.yyyy.")
+                        </td>
+                        
                     </tr>
                 }
             </tbody>

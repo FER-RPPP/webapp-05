@@ -1,46 +1,54 @@
-﻿
-@model RPPP_WebApp.Controllers.ZadatakViewModel
+﻿@model RPPP_WebApp.Controllers.SuradnikDetailViewModel
 
- <h2>Popis Zadataka</h2>
+ <h2>Popis Suradnika</h2>
 
-<a asp-action="Create">Unos novog Zadatka</a>
+<a asp-action="Create">Unos novog Suradnika</a>
 
  <pager page-info="@Model.PagingInfo"  page-action="Index" page-title="Unesite željenu stranicu"
        class="float-end">
 </pager>
- 
 
 <table class="table table-sm table-striped table-hover" id="tabledrzave">
     <thead>
         <tr>
             <th class="text-center">
                 <a asp-route-sort="1" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 1 ? !Model.PagingInfo.Ascending : true)">
-                    Oznaka zadatka
+                    Oznaka suradnika
                 </a>
-            </th >
+            </th>
             <th class="text-center">
                 <a asp-route-sort="2" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 2 ? !Model.PagingInfo.Ascending : true)">
-                    Vrsta zadatka
+                    Ime
                 </a>
             </th>
             <th class="text-center">
                 <a asp-route-sort="3" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 3 ? !Model.PagingInfo.Ascending : true)">
-                    OIB nositelja
+                    Prezime
+                </a>
+            </th>
+            <th class ="text-center">
+                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
+                    OIB
+                </a>
+            </th>
+            <th class="text-center">
+                <a asp-route-sort="7" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 7 ? !Model.PagingInfo.Ascending : true)">
+                    Broj mobitela
                 </a>
             </th>
             <th class="text-center">
                 <a asp-route-sort="4" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 4 ? !Model.PagingInfo.Ascending : true)">
-                    Vrijeme pocetka
+                    Stranka
                 </a>
             </th>
             <th class="text-center">
                 <a asp-route-sort="5" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 5 ? !Model.PagingInfo.Ascending : true)">
-                    Vrijeme kraja
+                    Email
                 </a>
             </th>
             <th class="text-center">
-                <a asp-route-sort="6" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 6 ? !Model.PagingInfo.Ascending : true)">
-                    Status zadatka
+                <a asp-route-sort="8" asp-route-page="@Model.PagingInfo.CurrentPage" asp-route-ascending="@(Model.PagingInfo.Sort == 8 ? !Model.PagingInfo.Ascending : true)">
+                    Kvalifikacija
                 </a>
             </th>
             <th></th>
@@ -50,28 +58,31 @@
         @{
             int counter = 0;
         }
-        @foreach (var zadatci in Model.zadatci)
+        @foreach (var suradnici in Model.suradnici)
         {
             <tr>
-                <td class="text-center">@zadatci.IdZadatak</td>
-                <td class="text-center">@zadatci.Vrsta</td>
-                <td class="text-center">@zadatci.Oibnositelj</td>
-                <td class="text-center">@zadatci.VrPoc.ToString("d.M.yyyy.")</td>
-                <td class="text-center">@zadatci.VrKraj</td>
-                <td class="text-center">@Model.nazivStatusa[counter++]</td>
+                <td class="text-center">@suradnici.IdSuradnik</td>
+                <td class="text-center">@suradnici.Ime</td>
+                <td class="text-center">@suradnici.Prezime</td>
+                <td class="text-center">@suradnici.Oib</td>
+                <td class="text-center">@suradnici.Mobitel</td>
+                <td class="text-center">@suradnici.Stranka</td>
+                <td class="text-center">@suradnici.Mail</td>
+                <td class="text-center">@Model.nazivKvalifikacije[counter++]</td>
 
                 <td class="btn-group">
                     <a asp-action="Edit"
-                       asp-route-id="@zadatci.IdZadatak"
+                       asp-route-id="@suradnici.IdSuradnik"
                        asp-route-page="@Model.PagingInfo.CurrentPage"
                        asp-route-sort="@Model.PagingInfo.Sort"
                        asp-route-ascending="@Model.PagingInfo.Ascending"
                        class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
                     <form asp-action="Delete" method="post"
+                          asp-route-oib="@suradnici.Oib"
                           asp-route-page="@Model.PagingInfo.CurrentPage"
                           asp-route-sort="@Model.PagingInfo.Sort"
                           asp-route-ascending="@Model.PagingInfo.Ascending">
-                        <input type="hidden" name="IdZadatak" value="@zadatci.IdZadatak" />
+                        <input type="hidden" name="IdSuradnik" value="@suradnici.IdSuradnik" />
                         <button type="submit" class="btn btn-sm btn-danger delete" title="Obriši">Obriši</button>
                     </form>
                     
@@ -81,7 +92,6 @@
     </tbody> 
     
 </table>
-
 
 @* @section scripts{
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>

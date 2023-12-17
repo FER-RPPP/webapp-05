@@ -1,0 +1,127 @@
+﻿ @model RPPP_WebApp.Controllers.PartnerSuradnikViewModel
+@{
+    ViewBag.Title = "Partner br. " + @Model.partner.IdPartner;
+}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-sm-2">
+            @if (Model.IdPrethPartner != -1)
+            {
+                <a class="btn btn-sm btn-primary"
+                    asp-action="Show"
+                    asp-route-page="@ViewBag.Page"
+                    asp-route-sort="@ViewBag.Sort"
+                    asp-route-ascending="@ViewBag.Ascending"
+                    asp-route-id="@Model.IdPrethPartner">
+                        <i class="fas fa-step-backward">prethodni</i>
+                </a>
+            }
+        </div>
+        <div class="col-sm-8">
+            <h4>
+                ID: @Model.partner.IdPartner
+            </h4>
+
+            <h5 class="boksic">
+                <div>
+                    Naziv:  @Model.partner.NazivPartner
+                </div>
+                <div>
+                    Tip partnera:  @Model.TipPartnera
+                </div>
+                <div>
+                    IBAN: @Model.partner.Ibanpartner
+                </div>
+            </h5>
+        </div>
+        <div class="col-sm-2">
+            @if (Model.IdSljedPartner != -1)
+            {
+                <a class="btn btn-sm btn-primary" asp-action="Show"
+                    asp-route-page="@ViewBag.Page"
+                    asp-route-sort="@ViewBag.Sort"
+                    asp-route-ascending="@ViewBag.Ascending"
+                    asp-route-id="@Model.IdSljedPartner">
+                        <i class="fas fa-step-forward">sljedeci</i>
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="row justify-content-sm-center">
+        <div class="text-center">
+            Email: @Model.partner.EmailPartner
+        </div>
+        <div class="text-center">
+            Adresa: @Model.partner.AdresaPartner
+        </div>
+        <div class="text-center">
+            OIB: @Model.partner.Oib
+        </div>
+       
+        <div class="col-sm-1 text-center">
+            <a class="btn btn-sm btn-primary cancel"
+               asp-action="Index"
+               asp-route-page="@ViewBag.Page"
+               asp-route-sort="@ViewBag.Sort"
+               asp-route-ascending="@ViewBag.Ascending"
+               title="Povratak na popis partnera">
+                <i class="fas fa-undo-alt">povratak</i>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    @{
+                        string[] nazivi = { "ID Suradnika", "OIB", "Broj mobitela", "Ime", "Prezime", "Email", "Stranka", "Kvalifikacija" };
+                        for (int i = 0; i < nazivi.Length; i++)
+                        {
+                            <th class="text-center">
+                                @nazivi[i]
+                            </th>
+                        }
+                    }
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int counter = 0;
+                }
+                @foreach (var suradnik in Model.suradnici.suradnici)
+                {
+                    <tr class="text-center">
+                        <td class="text-center col-sm-1">
+                            @suradnik.IdSuradnik
+                        </td>
+                        <td class="text-center col-sm-2">
+                            @suradnik.Oib
+                        </td>
+                        <td class="text-center col-sm-1">
+                            @suradnik.Mobitel
+                        </td>
+                        <td class="text-right col-sm-2">
+                            @suradnik.Ime
+                        </td>
+                        <td class="text-right col-sm-2">
+                            @suradnik.Prezime
+                        </td>
+                        <td class="text-right col-sm-2">
+                            @suradnik.Mail
+                        </td>
+                        <td class="text-right col-sm-2">
+                            @suradnik.Stranka
+                        </td>
+                        <td class="text-center">
+                            @Model.suradnici.nazivKvalifikacije[counter++]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

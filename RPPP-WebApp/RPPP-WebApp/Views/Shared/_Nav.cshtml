@@ -14,10 +14,10 @@
                         Mia Crnolatac
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item"  asp-action="Index" asp-controller="Zadatak" >Zadatak</a></li>
-                        <li><a class="dropdown-item"  asp-action="Index" asp-controller="Zahtjev">Zahtjev</a></li>
+                        <li><a class="dropdown-item"  asp-action="Index" asp-controller="Zadatak" >Zadatak - jednostavna forma</a></li>
+                        <li><a class="dropdown-item"  asp-action="Index" asp-controller="Zahtjev">Zahtjev - složena forma</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" asp-action="Show" asp-controller="Zahtjev" >Master-detail</a></li>
+                        <li><a class="dropdown-item" asp-action="Show" asp-controller="Zahtjev" >Master(zahtjev)-detail(zadatak) prikaz podataka</a></li>
                     </ul>
                 </li>
 
@@ -38,10 +38,10 @@
                         Niko Vidović
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Showcase 1</a></li>
-                        <li><a class="dropdown-item" href="#">Showcase 2</a></li>
+                        <li><a class="dropdown-item" asp-action="Index" asp-controller="Partner">Partner - složena forma</a></li>
+                        <li><a class="dropdown-item" asp-action="Index" asp-controller="SuradnikDetail">Suradnik - jednostavna forma</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Showcase 3</a></li>
+                        <li><a class="dropdown-item" asp-action="Show" asp-controller="Partner">Master(partner)-detail(suradnik) prikaz podataka</a></li>
                     </ul>
                 </li>
 
@@ -62,10 +62,10 @@
                         Bruno Mikulan
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Showcase 1</a></li>
-                        <li><a class="dropdown-item" href="#">Showcase 2</a></li>
+                        <li><a class="dropdown-item" asp-action="Index" asp-controller="Projekt">Projekt</a></li>
+                        <li><a class="dropdown-item" asp-action="Index" asp-controller="Dokument">Dokument</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Showcase 3</a></li>
+                        <li><a class="dropdown-item" asp-action="MD" asp-controller="Projekt">Master-detail - projekt</a></li>
                     </ul>
                 </li>
 
