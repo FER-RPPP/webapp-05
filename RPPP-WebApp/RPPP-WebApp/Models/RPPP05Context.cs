@@ -350,7 +350,7 @@ namespace RPPP_WebApp.Models
                     .HasConstraintName("FK__Suradnik__idPart__66EA454A");
 
                 entity.HasMany(d => d.IdPosao)
-                    .WithMany(p => p.Oib)
+                    .WithMany(p => p.IdSuradnik)
                     .UsingEntity<Dictionary<string, object>>(
                         "Radi",
                         l => l.HasOne<Posao>().WithMany().HasForeignKey("IdPosao").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Radi_Posao"),
