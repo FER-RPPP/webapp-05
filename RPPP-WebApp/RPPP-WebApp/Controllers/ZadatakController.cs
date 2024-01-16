@@ -72,6 +72,22 @@ namespace RPPP_WebApp.Controllers
 
         private async Task PrepareDropDownLists()
         {
+            var hrc = await ctx.Suradnik
+                              .Where(d => d.Oib.Equals(1))
+                              .Select(d => new { S = d.Ime + " "+ d.Prezime + " (OIB: " + d.Oib + ")", d.Oib })
+                              .FirstOrDefaultAsync();
+            var suradnici = await ctx.Suradnik
+                                  .Where(d => !d.Oib.Equals(1))
+                                  .OrderBy(d => d.Mail)
+                                  .Select(d => new { S = d.Ime + " " + d.Prezime + " (OIB: " + d.Oib + ")", d.Oib })
+                                  .ToListAsync();
+            if (hrc != null)
+            {
+                suradnici.Insert(0, hrc);
+            }
+            ViewBag.ZadatciSuradnici = new SelectList(suradnici, nameof(hrc.Oib), nameof(hrc.S));
+
+
             var hr = await ctx.StatusZadatka
                               .Where(d => d.IdStatus == 1)
                               .Select(d => new { d.NazivStatus, d.IdStatus })

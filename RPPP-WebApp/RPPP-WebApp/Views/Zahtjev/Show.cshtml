@@ -34,6 +34,9 @@
                 <div> 
                     Opis: @Model.zahtjev.Opis
                 </div>
+                <div>
+                    Projekt: @ViewBag.Projektic
+                </div>
             </h5>
         </div>
         <div class="col-sm-2">
@@ -75,12 +78,12 @@
             Vrijeme stvarnog kraja: @Model.zahtjev.VrKraj
         </div>
         }
-        @* <div class="col-sm-1 text-right">
-            <a asp-action="Edit"
-               asp-route-id="@Model.IdDokumenta"
+         <div class="col-sm-1 text-right">
+            <a asp-action="Update"
+               asp-route-id="@Model.zahtjev.IdZahtjev"
                target="_blank"
-               class="btn btn-warning btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i></a>
-        </div> *@
+               class="btn btn-warning btn-sm" title="Ažuriraj"><i class="fas fa-edit">Uredi</i></a>
+        </div> 
         @* <form asp-action="Delete" method="post"
               asp-route-page="@ViewBag.Page"
               asp-route-sort="@ViewBag.Sort"
@@ -106,7 +109,7 @@
             <thead>
                 <tr>
                     @{
-                        string[] nazivi = { "ID zadatka", "OIB Nositelja", "Vrsta zadatka", "Status zadatka", "Vrijeme početka", "Vrijeme kraja", "Vrijeme očekivanog kraja" };
+                        string[] nazivi = { "ID zadatka", "OIB Nositelja", "Naziv zadatka", "Status zadatka", "Vrijeme početka", "Vrijeme kraja", "Vrijeme očekivanog kraja" };
                         for (int i = 0; i < nazivi.Length; i++)
                         {
                             <th class="text-center">

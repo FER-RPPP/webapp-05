@@ -1,0 +1,285 @@
+﻿@model ZahtjevZadatakViewModel
+@{
+    ViewBag.Title = "Izmjena";
+}
+
+<div style="padding-left:3%;" class="text-center">
+        <h4>Zahtjev br: @Model.zahtjev.IdZahtjev</h4>
+    </div>
+ <hr />
+
+
+<div class="container" >
+    <form id="zahtjev_form" method="post" 
+          asp-action="Update"
+          asp-route-page="@ViewBag.Page"
+          asp-route-sort="@ViewBag.Sort"
+          asp-route-ascending="@ViewBag.Ascending"
+          asp-route-filter="@ViewBag.Filter"
+          asp-route-position="@ViewBag.Position">
+        <input type="hidden" asp-for="zahtjev.IdZahtjev" />
+        <div asp-validation-summary="All" class="form-group row"></div>
+
+        <div style="padding-bottom:5px;  padding-left:4%;" class="form-group row  text-center">
+            <label asp-for="NazVrsta" class="col-sm-2 col-form-label">Vrsta</label>
+            <div class="col-sm-2">
+                @* <select class="form-control" asp-for="NazVrsta">
+                    <option disabled selected value=""></option>
+                    <option value="R">R-1</option>
+                    <option value="O">O</option>
+                </select> *@
+                <select class="form-control" asp-for="zahtjev.IdVrsta" asp-items="ViewBag.ZahtjeviVrste">
+                    <option disabled selected value="">@Model.NazVrsta</option>
+                </select>
+            </div>
+            <label asp-for="zahtjev.Prioritet" class="col-sm-1 col-form-label"></label>
+            <div class="col-sm-1">
+                <input asp-for="zahtjev.Prioritet" class="form-control" />
+            </div>
+            <label asp-for="zahtjev.Opis" class="col-sm-1 col-form-label">Opis</label>
+            <div class="col-sm-5">
+                <input asp-for="zahtjev.Opis" class="form-control" />
+            </div>
+        </div>
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center col-sm-15 ">
+            
+            <label asp-for="NazVrsta" class="col-sm-2 col-form-label">Projekt</label>
+            <div class="col-sm-2">
+                @* <select class="form-control" asp-for="NazVrsta">
+                <option disabled selected value=""></option>
+                <option value="R">R-1</option>
+                <option value="O">O</option>
+                </select> *@
+                <select class="form-control" asp-for="zahtjev.IdProjekt" asp-items="ViewBag.ProjektiPopis">
+                    <option disabled selected value="">@Model.zahtjev.IdProjekt</option>
+                </select>
+            </div>
+            <label asp-for="zahtjev.VrPocetak" class="col-sm-2 col-form-label">Vrijeme Početka</label>
+            <div class="col-sm-2">
+                <input asp-for="zahtjev.VrPocetak" class="form-control" />
+            </div>
+            <label asp-for="zahtjev.VrKraj" class="col-sm-2 col-form-label">Vrijeme kraja</label>
+            <div class="col-sm-2">
+                <input class="form-control"  asp-for="@Model.zahtjev.VrKraj" />
+            </div>
+        </div>
+            
+        
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center ">
+            
+            <label asp-for="zahtjev.VrKrajOcekivano" class="col-sm-2 col-form-label">Očekivano vrijeme kraja</label>
+            <div class="col-sm-2">
+                <input asp-for="@Model.zahtjev.VrKrajOcekivano"  class="form-control"  />
+            </div>
+            
+            <div  class="col-sm-3 text-right">
+                @* <button hx-include="closest tr"
+                hx-encoding="multipart/form-data"
+                hx-post="@Url.Action(nameof(ZahtjevController.Update))"
+                class="btn btn-sm btn-primary" title="Spremi">
+                <i class="fas fa-save"></i>
+                </button> *@
+                <button  id="save" type="submit" class="btn btn-sm btn-primary save" title="Spremi"><i class="fas fa-save"></i>Spremi</button>
+
+
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Update"
+                   asp-route-id="@Model.zahtjev.IdZahtjev"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   asp-route-position="@ViewBag.Position"
+                   title="Osvježi">
+                    <i class="fas fa-sync-alt">Osvježi</i>
+                </a>
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Show"
+                   asp-route-id="@Model.zahtjev.IdZahtjev"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   title="Odustani">
+                    <i class="fas fa-undo-alt">Odustani</i>
+                </a>
+            </div>
+            @* ID PROJEKTAAAA *@
+
+
+
+
+        </div>
+
+        @* <div class="form-group row">
+            <label asp-for="IdPrethDokumenta" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-1">
+                <input asp-for="IdPrethDokumenta" readonly="readonly" class="form-control" data-autocomplete-placeholder="dokument" />
+            </div>
+            <div class="col-sm-3">
+                <input class="form-control" data-autocomplete="dokument" value="@Model.NazPrethodnogDokumenta" />
+            </div>
+            <label asp-for="IznosDokumenta" class="col-sm-1 col-form-label"></label>
+            <label class="col-sm-2 col-form-label">@Model.IznosDokumenta.ToString("C2")</label>
+
+        </div> *@
+
+
+
+        
+            <table class="table table-striped" id="table-zadatci">
+                <thead>
+                    <tr>
+                        @{
+                            string[] nazivi = {  "OIB Nositelj", "Naziv zadatka", "Status ", "Vrijeme početka", "Očekivano vrijeme kraja", "Vrijeme kraja" };
+                            for (int i = 0; i < nazivi.Length; i++)
+                            {
+                                <th class="text-center">
+                                    @nazivi[i]
+                                </th>
+                            }
+                        }
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 0;
+                    }
+                    @foreach (var zadatak in Model.Zadatci)
+                    {
+                    <tr >
+                        <input type="hidden" name="Zadatci.Index" value="@zadatak.IdZadatak" />
+
+                        <td style="width:fit-content !important;" class="text-center col-sm-2">
+@*                                 <input name="Zadatci[@zadatak.IdZadatak].Oibnositelj" class="form-control" value="@zadatak.Oibnositelj" />
+                        *@      <select style="font-size:small; width:fit-content" name="Zadatci[@zadatak.IdZadatak].Oibnositelj" class="form-control" asp-for="@zadatak.Oibnositelj" asp-items="ViewBag.ZadatciSuradnici">
+                                    <option  value=""></option>
+                                </select>
+                                <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdZadatak" value="@zadatak.IdZadatak" />
+                                <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdZahtjev" value="@zadatak.IdZahtjev" />
+                                <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdStatus" value="@zadatak.IdStatus" />
+
+                            </td>
+                            <td class="text-center col-sm-1">
+                                <input name="Zadatci[@zadatak.IdZadatak].Vrsta" class="form-control" value="@zadatak.Vrsta" />
+                            </td>
+                            <td class="text-right col-sm-1">
+                                @* <input name="Zadatci[@zadatak.IdZadatak].NazivStatus" value="@zadatak.NazivStatus" /> *@
+                            <select name="Zadatci[@zadatak.IdZadatak].NazivStatus" class="form-control" asp-for="@zadatak.NazivStatus" asp-items="ViewBag.ZadatciStatusi">
+                                <option value="">@zadatak.NazivStatus</option> <!-- Provide a default option -->
+                                @* @foreach (var status in ViewBag.ZadatciStatusi)
+                                {
+                                    <option value="@status.Value" selected="@((status.Value == zadatak.NazivStatus).ToString().ToLower())">
+                                        @zadatak.NazivStatus
+                                    </option>
+                                } *@
+                            </select>
+                        </td>
+
+                            <td class="text-right col-sm-1">
+@*                              @*    <input data-valmsg-replace="true" type="date" name="Zadatci[@zadatak.IdZadatak].VrPoc" value="@zadatak.VrPoc" /> *@
+@*                                 <label for="@zadatak.VrPoc">Očekivano vrijeme kraja</label>
+                                 <div><span class="text-danger field-validation-valid" data-valmsg-for="@zadatak.VrPoc" data-valmsg-replace="true"></span></div>
+                                <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " id="Zadatci[@zadatak.IdZadatak].VrPoc" name="Zadatci[@zadatak.IdZadatak].VrPoc" value="@zadatak.VrPoc" />@* <input name="__Invariant" type="hidden" value="@zadatak.VrPoc" /> *@
+                                @* <div>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="Zadatci[@zadatak.IdZadatak].VrPoc" data-valmsg-replace="true"></span>
+                                </div> *@
+                                <div>
+                                <input  class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " id="Zadatci[@zadatak.IdZadatak].VrPoc" name="Zadatci[@zadatak.IdZadatak].VrPoc" value="@zadatak.VrPoc.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                                </div>
+
+                            </td>
+                            <td class="text-right col-sm-1">
+                            <input  class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[@zadatak.IdZadatak].VrKrajOcekivano" value="@zadatak.VrKrajOcekivano.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                            </td>
+                            @* <td class="text-right col-sm-2">
+                                @{
+                                    string formattedDateTime = zadatak.VrKraj.HasValue ? zadatak.VrKraj.Value.ToString("yyyy-MM-ddTHH:mm:ss") : string.Empty;
+                                }
+                                <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[@zadatak.IdZadatak].VrKraj" value="@formatted" />
+                            </td> *@
+                            <td class="text-right col-sm-1">
+                                <div>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="Zadatci[@zadatak.IdZadatak].VrKraj" data-valmsg-replace="true"></span>
+                                </div>
+                                <div>
+                                <input  class="form-control" type="datetime-local" data-val="true"
+                                       id="Zadatci[@zadatak.IdZadatak].VrKraj"
+                                           name="Zadatci[@zadatak.IdZadatak].VrKraj"
+                                           value="@((zadatak.VrKraj != null) ? zadatak.VrKraj.Value.ToString("yyyy-MM-ddTHH:mm:ss") : string.Empty)" />
+                                </div>
+                            </td>
+
+                            <td>
+
+                            
+                                 <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                            <input id="artikl-sifra" type="hidden" data-autocomplete-placeholder="artikl" readonly="readonly" />
+                            <input id="artikl-naziv" type="text" data-autocomplete="artikl" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <input id="artikl-kolicina" type="text" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <input id="artikl-rabat" type="text" />
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <input id="artikl-cijena" type="text" data-autocomplete-placeholder-cijena="artikl" readonly="readonly" />
+                        </td>
+                        <td class="text-left" colspan="3">
+                            <button id="artikl-dodaj" class="btn btn-sm btn-secondary" title="Dodaj"><i class="fas fa-plus"></i>+</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        
+    </form>
+</div>
+
+<table id="template" style="visibility:hidden">
+    <tr>
+        <td class="text-left col-sm-4">
+            <input type="hidden" name="Stavke.Index" value="--sifra--" />
+            <input type="hidden" name="Stavke[--sifra--].SifArtikla" value="--sifra--" />
+            <input type="hidden" name="Stavke[--sifra--].NazArtikla" value="--naziv--" />
+            --naziv--
+        </td>
+        <td class="text-center col-sm-1">
+            <input name="Stavke[--sifra--].KolArtikla" class="form-control" value="--kolicina--" />
+        </td>
+        <td class="text-center col-sm-1">
+            <input name="Stavke[--sifra--].PostoRabat" class="form-control" value="--rabat--" />
+        </td>
+        <td class="text-right col-sm-3">
+            <input type="hidden" name="Stavke[--sifra--].JedCijArtikla" value="--cijena--" />
+            --cijena_formatirana--
+        </td>
+        <td class="text-right col-sm-2">--iznos--</td>
+        <td>
+            <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fas fa-minus"></i></button>
+        </td>
+    </tr>
+</table>
+
+@section styles{
+    <link rel="stylesheet" href="~/lib/jqueryui/themes/base/jquery-ui.css" />
+}
+
+@section scripts{
+    <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
+    <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
+
+    <script src="~/js/validation.js" asp-append-version="true"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script src="~/js/autocomplete.js" asp-append-version="true"></script>
+    <script src="~/js/zahtjevi.js" asp-append-version="true"></script>
+}
