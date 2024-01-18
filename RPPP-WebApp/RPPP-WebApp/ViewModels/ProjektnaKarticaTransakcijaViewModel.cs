@@ -11,9 +11,9 @@ namespace RPPP_WebApp.ViewModels
     public class ProjektnaKarticaTransakcijaViewModel
     {
         public ProjektnaKartica kartica { get; set; }
-        public string NazVrsta { get; set; }/*POTENCIJALNO POPRAVIT*/
-        public string? IdPrethKartica { get; set; }
-        public string? IdSljedKartica { get; set; }
+        //public string NazVrsta { get; set; }/*POTENCIJALNO POPRAVIT*/
+        public int? IdPrethKartica { get; set; }
+        public int? IdSljedKartica { get; set; }
 
         public TransakcijaViewModel transakcije { get; set; }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using RPPP_WebApp.Models;
 
 namespace RPPP_WebApp.Models
 {
@@ -37,6 +38,8 @@ namespace RPPP_WebApp.Models
         public virtual DbSet<VrstaZahtjeva> VrstaZahtjeva { get; set; }
         public virtual DbSet<Zadatak> Zadatak { get; set; }
         public virtual DbSet<Zahtjev> Zahtjev { get; set; }
+
+        //public virtual DbSet<ViewDokumentInfo> vw_Dokumenti { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

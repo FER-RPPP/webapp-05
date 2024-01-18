@@ -8,6 +8,8 @@ using RPPP_WebApp.ViewModels;
 using System.Text;
 using RPPP_WebApp.Extensions.Selectors;
 using System.Text.Json;
+using RPPP_WebApp.Extensions;
+using RPPP_WebApp.Exstensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -244,8 +246,13 @@ namespace RPPP_WebApp.Controllers
 
 
         //TREBA DOVRSIT
-        public async Task<IActionResult> Show(string iban, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
+        public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
+            /*if (iban == null)
+            {
+                iban = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).SubjektIban;
+
+            }
 
             var numbers = new StringBuilder();
             foreach (char c in iban)
@@ -256,18 +263,16 @@ namespace RPPP_WebApp.Controllers
                 }
             }
             string nums = numbers.ToString();
-            int.TryParse(nums, out int id);
+            int.TryParse(nums, out int id);*/
 
-
-
-            /*if (id == 0)
+            if (id == 0)
             {
-                id = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).SubjektIban;
+                id = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).IdProjekt;
 
-            }*/
+            }
 
             var kartica = await ctx.ProjektnaKartica
-                                    .Where(d => d.SubjektIban == iban)
+                                    .Where(d => d.IdProjekt == id)
                                     .Select(d => new ProjektnaKartica
                                     {
                                         SubjektIban = d.SubjektIban,
@@ -307,19 +312,19 @@ namespace RPPP_WebApp.Controllers
                 List<ProjektnaKartica> svekartice = await ctx.ProjektnaKartica./*ApplySort(sort, ascending).*/ToListAsync();
                 int index = svekartice.FindIndex(p => p.SubjektIban == kartica.SubjektIban);
 
-                /*
+                
                 int idprethodnog = -1;
                 int idsljedeceg = -1;
-                */
+                
 
-                /*if (index != 0)
+                if (index != 0)
                 {
-                    idprethodnog = svekartice[index - 1].id;
+                    idprethodnog = svekartice[index - 1].IdProjekt;
                 }
                 if (index != svekartice.Count - 1)
                 {
-                    idsljedeceg = svekartice[index + 1].id;
-                }*/
+                    idsljedeceg = svekartice[index + 1].IdProjekt;
+                }
                 
 
                 //učitavanje transakcije
@@ -339,7 +344,7 @@ namespace RPPP_WebApp.Controllers
                                       .ToListAsync();
 
                 var trans = ctx.Transakcija.AsNoTracking()
-                         .Where(d => d.SubjektIban == iban)
+                         .Where(d => d.SubjektIban == kartica.SubjektIban)
                          .Select(m => m.IdTransakcijeNavigation.NazivTransakcije)
                          .ToList();
 
@@ -355,10 +360,10 @@ namespace RPPP_WebApp.Controllers
                 {
                     kartica = kartica,
                     //NazVrsta = NazVrste,
-                    /*
-                     * IdPrethKartica = idprethodnog,
-                     * IdSljedKartica = idsljedeceg,
-                    */
+                    
+                    IdPrethKartica = idprethodnog,
+                    IdSljedKartica = idsljedeceg,
+                    
                     transakcije = model
 
                 };
@@ -372,6 +377,120 @@ namespace RPPP_WebApp.Controllers
                 return View(viewName, CIJELAPREDAJA);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        {
+            ViewBag.ViewName = "Update";
+            //await PrepareDropDownLists();
+
+            var result = await Show(id, page, sort, ascending, viewName: nameof(Update));
+
+            return result;
+        }
+
+        /*[HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(ProjektnaKarticaTransakcijaViewModel model, int page = 1, int sort = 1, bool ascending = true)
+        {
+            ViewBag.ViewName = "Update";
+            //if (model.Zadatci == null)
+            //{
+            //    return NotFound("Nema poslanih podataka");
+            //}
+            //else
+            //{
+            //    return NotFound(model.Zadatci);
+            //}
+
+            //await PrepareDropDownLists();
+
+            ViewBag.Page = page;
+            ViewBag.Sort = sort;
+            ViewBag.Ascending = ascending;
+            if (ModelState.IsValid)
+            {
+                var kart = await ctx.ProjektnaKartica
+                                        .Include(d => d.Transakcija)
+                                        .Where(d => d.SubjektIban == model.kartica.SubjektIban)
+                                        .FirstOrDefaultAsync();
+                if (kart == null)
+                {
+                    return NotFound("Ne postoji zahtjev s IBAN-om: " + model.kartica.SubjektIban);
+                }
+
+                kart.SubjektIban = model.kartica.SubjektIban;
+                
+
+                List<string>  = model.transakcije
+                                          .Where(s => s.subjektIBAN != null)
+                                          .Select(s => s.subjektIBAN)
+                                          .ToList();
+
+                //if (model.Zadatci == null)
+                //    {
+                //        return NotFound("Nema poslanih podataka");
+                //    }
+                //    else
+                //    {
+                //        return NotFound(model.Zadatci);
+                //    }
+                //izbaci sve koje su nisu više u modelu
+                ctx.RemoveRange(kart.Transakcija.Where(s => !subjektIBAN.Contains(s.SubjektIban)));
+
+
+                foreach (var stavka in model.Zadatci)
+                {
+                    //ažuriraj postojeće i dodaj nove
+                    Zadatak novaStavka; // potpuno nova ili dohvaćena ona koju treba izmijeniti
+                    if (stavka.IdZadatak > 0)
+                    {
+                        novaStavka = zahtjev.Zadatak.First(s => s.IdZadatak == stavka.IdZadatak);
+                    }
+                    else
+                    {
+                        novaStavka = new Zadatak();
+                        zahtjev.Zadatak.Add(novaStavka);
+                    }
+                    novaStavka.Oibnositelj = stavka.Oibnositelj;
+                    novaStavka.Vrsta = stavka.Vrsta;
+                    novaStavka.IdStatus = stavka.IdStatus;
+                    novaStavka.VrPoc = stavka.VrPoc;
+                    novaStavka.VrKraj = stavka.VrKraj;
+                    novaStavka.VrKrajOcekivano = stavka.VrKrajOcekivano;
+                    novaStavka.IdZahtjev = stavka.IdZahtjev;
+
+                }
+
+                //dokument.IznosDokumenta = (1 + dokument.PostoPorez) * model.Stavke.Sum(s => s.IznosArtikla);
+                //eventualno umanji iznos za dodatni popust za kupca i sl... nešto što bi bilo poslovno pravilo
+                try
+                {
+
+                    await ctx.SaveChangesAsync();
+
+                    TempData[Constants.Message] = $"Zahtjev {zahtjev.IdZahtjev} uspješno ažuriran.";
+                    TempData[Constants.ErrorOccurred] = false;
+                    return RedirectToAction(nameof(Show), new
+                    {
+                        id = zahtjev.IdZahtjev,
+                        page,
+                        sort,
+                        ascending
+                    });
+
+                }
+                catch (Exception exc)
+                {
+                    ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    return View(model);
+                }
+            }
+            else
+            {
+                return View(model);
+            }
+        }*/
 
 
     }

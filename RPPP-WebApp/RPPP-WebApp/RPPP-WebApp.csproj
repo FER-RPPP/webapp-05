@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="EPPlus" Version="7.0.6" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
 		<PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
@@ -26,13 +27,12 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
+		<PackageReference Include="NetVips" Version="2.4.0" />
+		<PackageReference Include="NetVips.Native.win-x64" Version="8.15.1" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.4" />
+		<PackageReference Include="PdfRpt.Core" Version="1.5.11" />
 
 
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\ViewLog\" />
 	</ItemGroup>
 
 	<ItemGroup>

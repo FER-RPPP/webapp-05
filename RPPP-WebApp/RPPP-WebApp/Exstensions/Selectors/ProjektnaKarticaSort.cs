@@ -1,8 +1,7 @@
-﻿
-using RPPP_WebApp.Models;
+﻿using RPPP_WebApp.Models;
 using System.Linq.Expressions;
 
-namespace RPPP_WebApp.Extensions.Selectors
+namespace RPPP_WebApp.Exstensions.Selectors
 {
     public static class ProjektnaKarticaSort
     {

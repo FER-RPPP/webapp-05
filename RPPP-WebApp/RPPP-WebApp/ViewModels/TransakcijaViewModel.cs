@@ -9,5 +9,10 @@ namespace RPPP_WebApp.ViewModels
         public IEnumerable<Transakcija> Transakcija { get; set; }
         public List<string> nazivTransakcija { get; set; }
         public PagingInfo PagingInfo { get; set; }
+
+        internal object Where(Func<object, bool> value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

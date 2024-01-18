@@ -69,6 +69,22 @@
                     </ul>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link
+                        @(ViewBag.Controller == "Report" ? "active": "")"
+                       asp-action="Index" asp-controller="Report">
+                        Izvještaji
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link
+                        @(ViewBag.Controller == "ViewLog" ? "active": "")"
+                       asp-action="Index" asp-controller="ViewLog">
+                        Pregled log datoteka
+                    </a>
+                </li>
+
             </ul>
      
     </div>
