@@ -133,7 +133,7 @@
                 <thead>
                     <tr>
                         @{
-                            string[] nazivi = {  "OIB Nositelj", "Naziv zadatka", "Status ", "Vrijeme početka", "Očekivano vrijeme kraja", "Vrijeme kraja" };
+                            string[] nazivi = {  "OIB Nositelja", "Naziv zadatka", "Status ", "Vrijeme početka", "Očekivano vrijeme kraja", "Vrijeme kraja" };
                             for (int i = 0; i < nazivi.Length; i++)
                             {
                                 <th class="text-center">
@@ -154,8 +154,7 @@
                         <input type="hidden" name="Zadatci.Index" value="@zadatak.IdZadatak" />
 
                         <td style="width:fit-content !important;" class="text-center col-sm-2">
-@*                                 <input name="Zadatci[@zadatak.IdZadatak].Oibnositelj" class="form-control" value="@zadatak.Oibnositelj" />
-                        *@      <select style="font-size:small; width:fit-content" name="Zadatci[@zadatak.IdZadatak].Oibnositelj" class="form-control" asp-for="@zadatak.Oibnositelj" asp-items="ViewBag.ZadatciSuradnici">
+                                <select style="font-size:small; width:fit-content" name="Zadatci[@zadatak.IdZadatak].Oibnositelj" class="form-control" asp-for="@zadatak.Oibnositelj" asp-items="ViewBag.ZadatciSuradnici">
                                     <option  value=""></option>
                                 </select>
                                 <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdZadatak" value="@zadatak.IdZadatak" />
@@ -167,26 +166,13 @@
                                 <input name="Zadatci[@zadatak.IdZadatak].Vrsta" class="form-control" value="@zadatak.Vrsta" />
                             </td>
                             <td class="text-right col-sm-1">
-                                @* <input name="Zadatci[@zadatak.IdZadatak].NazivStatus" value="@zadatak.NazivStatus" /> *@
                             <select name="Zadatci[@zadatak.IdZadatak].NazivStatus" class="form-control" asp-for="@zadatak.NazivStatus" asp-items="ViewBag.ZadatciStatusi">
                                 <option value="">@zadatak.NazivStatus</option> <!-- Provide a default option -->
-                                @* @foreach (var status in ViewBag.ZadatciStatusi)
-                                {
-                                    <option value="@status.Value" selected="@((status.Value == zadatak.NazivStatus).ToString().ToLower())">
-                                        @zadatak.NazivStatus
-                                    </option>
-                                } *@
+
                             </select>
                         </td>
 
                             <td class="text-right col-sm-1">
-@*                              @*    <input data-valmsg-replace="true" type="date" name="Zadatci[@zadatak.IdZadatak].VrPoc" value="@zadatak.VrPoc" /> *@
-@*                                 <label for="@zadatak.VrPoc">Očekivano vrijeme kraja</label>
-                                 <div><span class="text-danger field-validation-valid" data-valmsg-for="@zadatak.VrPoc" data-valmsg-replace="true"></span></div>
-                                <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " id="Zadatci[@zadatak.IdZadatak].VrPoc" name="Zadatci[@zadatak.IdZadatak].VrPoc" value="@zadatak.VrPoc" />@* <input name="__Invariant" type="hidden" value="@zadatak.VrPoc" /> *@
-                                @* <div>
-                                    <span class="text-danger field-validation-valid" data-valmsg-for="Zadatci[@zadatak.IdZadatak].VrPoc" data-valmsg-replace="true"></span>
-                                </div> *@
                                 <div>
                                 <input  class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " id="Zadatci[@zadatak.IdZadatak].VrPoc" name="Zadatci[@zadatak.IdZadatak].VrPoc" value="@zadatak.VrPoc.ToString("yyyy-MM-ddTHH:mm:ss")" />
                                 </div>
@@ -195,12 +181,6 @@
                             <td class="text-right col-sm-1">
                             <input  class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[@zadatak.IdZadatak].VrKrajOcekivano" value="@zadatak.VrKrajOcekivano.ToString("yyyy-MM-ddTHH:mm:ss")" />
                             </td>
-                            @* <td class="text-right col-sm-2">
-                                @{
-                                    string formattedDateTime = zadatak.VrKraj.HasValue ? zadatak.VrKraj.Value.ToString("yyyy-MM-ddTHH:mm:ss") : string.Empty;
-                                }
-                                <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[@zadatak.IdZadatak].VrKraj" value="@formatted" />
-                            </td> *@
                             <td class="text-right col-sm-1">
                                 <div>
                                     <span class="text-danger field-validation-valid" data-valmsg-for="Zadatci[@zadatak.IdZadatak].VrKraj" data-valmsg-replace="true"></span>
@@ -214,28 +194,46 @@
                             </td>
 
                             <td>
-
+                                @{counter++;}
                             
                                  <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
                             </td>
                         </tr>
                     }
                     <tr>
-                        <td>
-                            <input id="artikl-sifra" type="hidden" data-autocomplete-placeholder="artikl" readonly="readonly" />
-                            <input id="artikl-naziv" type="text" data-autocomplete="artikl" />
+                    <td class="text-center col-sm-1 hidden">
+                        <input  id="zadatak-sifra" type="hidden" value=@counter />
+                        <input  id="zadatak-zahtjev" type="hidden" value=@Model.zahtjev.IdZahtjev />
+
+                        <select style="font-size:small; width:fit-content" name="zadatak-oibnositelj" id="zadatak-oibnositelj" class="form-control" asp-items="ViewBag.ZadatciSuradnici">
+                                <option value=""></option>
+                            </select>
                         </td>
                         <td class="text-center col-sm-1">
-                            <input id="artikl-kolicina" type="text" />
+                            <input id="zadatak-naziv" type="text" />
                         </td>
                         <td class="text-center col-sm-1">
-                            <input id="artikl-rabat" type="text" />
+                        <select style=" width:fit-content" name="zadatak-status" id="zadatak-status" class="form-control" asp-items="ViewBag.ZadatciStatusi">
+                                <option value=""></option> <!-- Provide a default option -->
+                            </select>
                         </td>
-                        <td class="text-right col-sm-2">
-                            <input id="artikl-cijena" type="text" data-autocomplete-placeholder-cijena="artikl" readonly="readonly" />
+                        <td class="text-right col-sm-1">
+                            <div>
+                                <input id="zadatak-pocetak" type="datetime-local" data-val="true" />
+                            </div>
                         </td>
-                        <td class="text-left" colspan="3">
-                            <button id="artikl-dodaj" class="btn btn-sm btn-secondary" title="Dodaj"><i class="fas fa-plus"></i>+</button>
+                        <td class="text-right col-sm-1">
+                            <div>
+                                <input id="zadatak-kraj" type="datetime-local" data-val="true" />
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-1">
+                            <div>
+                                <input id="zadatak-ockraj" type="datetime-local" data-val="true" />
+                            </div>
+                        </td>
+                            <td class="text-left" colspan="3">
+                                <button id="zadatak-dodaj" class="btn btn-sm btn-secondary" title="Dodaj"><i class="fas fa-plus"></i>+</button>
                         </td>
                     </tr>
                 </tbody>
@@ -248,22 +246,29 @@
 <table id="template" style="visibility:hidden">
     <tr>
         <td class="text-left col-sm-4">
-            <input type="hidden" name="Stavke.Index" value="--sifra--" />
-            <input type="hidden" name="Stavke[--sifra--].SifArtikla" value="--sifra--" />
-            <input type="hidden" name="Stavke[--sifra--].NazArtikla" value="--naziv--" />
-            --naziv--
+            <input type="hidden" name="Zadatci.Index" value="--sifra--" />
+            <input type="hidden" name="Zadatci[--sifra--].IdZahtjev" value="--zahtjev--" />
+            <select style="font-size:small; width:fit-content" name="Zadatci[--sifra--].Oibnositelj" class="form-control" asp-items="ViewBag.ZadatciSuradnici">
+                <option value="--oib--"></option>
+            </select>
         </td>
         <td class="text-center col-sm-1">
-            <input name="Stavke[--sifra--].KolArtikla" class="form-control" value="--kolicina--" />
+            <input name="Zadatci[--sifra--].Vrsta" class="form-control" value="--naziv--" />
         </td>
-        <td class="text-center col-sm-1">
-            <input name="Stavke[--sifra--].PostoRabat" class="form-control" value="--rabat--" />
+        <td>
+            <select style=" width:fit-content" name="Zadatci[--sifra--].IdStatus" class="form-control" asp-items="ViewBag.ZadatciStatusi">
+                <option value="--status--"></option> <!-- Provide a default option -->
+            </select>
         </td>
-        <td class="text-right col-sm-3">
-            <input type="hidden" name="Stavke[--sifra--].JedCijArtikla" value="--cijena--" />
-            --cijena_formatirana--
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[--sifra--].VrKPoc" value="--vrpoc--" />
         </td>
-        <td class="text-right col-sm-2">--iznos--</td>
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="datetime-local" data-val="true" name="Zadatci[--sifra--].VrKraj" value="--vrkraj--" />
+        </td>
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[--sifra--].VrKrajOcekivano" value="--vrockraj--" />
+        </td>
         <td>
             <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fas fa-minus"></i></button>
         </td>
@@ -278,8 +283,6 @@
     <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
     <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
 
-    <script src="~/js/validation.js" asp-append-version="true"></script>
     <script src="~/lib/jqueryui/jquery-ui.js"></script>
-    <script src="~/js/autocomplete.js" asp-append-version="true"></script>
     <script src="~/js/zahtjevi.js" asp-append-version="true"></script>
 }

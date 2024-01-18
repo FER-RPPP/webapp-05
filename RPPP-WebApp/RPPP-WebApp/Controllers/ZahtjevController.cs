@@ -536,9 +536,13 @@ namespace RPPP_WebApp.Controllers
                     if (stavka.IdZadatak > 0)
                     {
                         novaStavka = zahtjev.Zadatak.First(s => s.IdZadatak == stavka.IdZadatak);
+                        
                     }
                     else
                     {
+
+                        NotFound("Ne postoji zahtjev s id-om: " + stavka);
+
                         novaStavka = new Zadatak();
                         zahtjev.Zadatak.Add(novaStavka);
                     }
@@ -548,7 +552,7 @@ namespace RPPP_WebApp.Controllers
                     novaStavka.VrPoc = stavka.VrPoc;
                     novaStavka.VrKraj = stavka.VrKraj;
                     novaStavka.VrKrajOcekivano = stavka.VrKrajOcekivano;
-                    novaStavka.IdZahtjev = stavka.IdZahtjev;
+                    novaStavka.IdZahtjev = model.zahtjev.IdZahtjev;
 
                 }
 

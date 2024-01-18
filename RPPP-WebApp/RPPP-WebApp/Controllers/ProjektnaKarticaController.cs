@@ -255,6 +255,7 @@ namespace RPPP_WebApp.Controllers
             }
 
             var numbers = new StringBuilder();
+
             foreach (char c in iban)
             {
                 if (char.IsDigit(c))
