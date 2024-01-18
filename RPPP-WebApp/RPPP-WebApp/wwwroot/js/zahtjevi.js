@@ -17,50 +17,54 @@ $(function () {
 
     $("#artikl-dodaj").click(function () {
         event.preventDefault();
-        dodajArtikl();
+        dodajZadatak();
     });
 });
 
-function dodajArtikl() {
-    var sifra = $("#artikl-sifra").val();
+function dodajZadatak() {
+    var sifra = $("#zadatak-sifra").val();
+
+    console.log("jdhkjfhlkJH");
     if (sifra != '') {
-        if ($("[name='Stavke[" + sifra + "].SifArtikla'").length > 0) {
-            alert('Artikl je već u dokumentu');
+        if ($("[name='Zadatci[" + sifra + "].IdZadatak'").length > 0) {
+            alert('Zadatak je već u dokumentu');
             return;
         }
 
-        var kolicina = parseFloat($("#artikl-kolicina").val().replace(',', '.')); //treba biti točka, a ne zarez za parseFloat
-        if (isNaN(kolicina))
-            kolicina = 1;
+        var oib = $("#zadatak-oibnositelj").val();
+        var idzahtjev = $("zadtak-zahtjev").val();
+        var naziv = $("#zadatak-naziv").val();
+        var status = $("#zadatak-status").val();
+        var vrpoc = new Date($("#zadatak-pocetak").val());
+        var vrkraj = new Date($("#zadatak-kraj").val());
+        var vrockraj = new Date($("#zadatak-ockraj").val());
 
-        var rabat = parseFloat($("#artikl-rabat").val().replace(',', '.')); //treba točka, a ne zarez za parseFloat
-        if (isNaN(rabat))
-            rabat = 0;
 
-        var cijena = parseFloat($("#artikl-cijena").val());
         var template = $('#template').html();
-        var naziv = $("#artikl-naziv").val();
-        var iznos = kolicina * cijena * (1 - rabat);
-        iznos = iznos.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + ' kn';
-        var cijena_formatirana = cijena.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + ' kn'
 
         //Alternativa ako su hr postavke sa zarezom //http://haacked.com/archive/2011/03/19/fixing-binding-to-decimals.aspx/
         //ili ovo http://intellitect.com/custom-model-binding-in-asp-net-core-1-0/
 
         template = template.replace(/--sifra--/g, sifra)
-            .replace(/--kolicina--/g, kolicina.toFixed(2).replace('.', ','))
-            .replace(/--cijena--/g, cijena)
-            .replace(/--cijena_formatirana--/g, cijena_formatirana)
+            .replace(/--status--/g, status)
+            .replace(/--oib--/g, oib)
+            .replace(/--zahtjev--/g, idzahtjev)
             .replace(/--naziv--/g, naziv)
-            .replace(/--iznos--/g, iznos)
-            .replace(/--rabat--/g, rabat.toFixed(2).replace('.', ','));
-        $(template).find('tr').insertBefore($("#table-stavke").find('tr').last());
+            .replace(/--vrpoc--/g, vrpoc)
+            .replace(/--vrkraj--/g, vrkraj)
+            .replace(/--vrockraj--/g, vrockraj)
 
-        $("#artikl-sifra").val('');
-        $("#artikl-kolicina").val('');
-        $("#artikl-rabat").val('');
-        $("#artikl-cijena").val('');
-        $("#artikl-naziv").val('');
+        $(template).find('tr').insertBefore($("#table-zadatci").find('tr').last());
+
+        $("#zadatak-sifra").val('');
+        $("#zadatak-status").val('');
+        $("#zadatak-oibnositelj").val('');
+        $("#zadatak-zahtjev").val('');
+        $("#zadatak-naziv").val('');
+        $("#zadatak-pocetak").val('');
+        $("#zadatak-kraj").val('');
+        $("#zadatak-ockraj").val('');
+
 
         clearOldMessage();
     }
