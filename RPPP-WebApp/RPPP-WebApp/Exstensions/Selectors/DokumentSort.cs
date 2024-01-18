@@ -14,6 +14,8 @@ namespace RPPP_WebApp.Extensions.Selectors
                 3 => p => p.TipDokument,
                 4 => p => p.VelicinaDokument,
                 5 => p => p.IdVrstaDokNavigation.NazivVrstaDok,
+                6 => p => p.URLdokument,
+                7 => p => p.IdProjektNavigation.Naziv,
                 _ => null
             };
 

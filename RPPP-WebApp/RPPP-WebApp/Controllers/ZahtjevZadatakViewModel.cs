@@ -13,9 +13,20 @@ namespace RPPP_WebApp.Controllers
         public int? IdPrethZahtjev { get; set; }
         public int? IdSljedZahtjev { get; set; }
 
+        public IEnumerable<ZadatakPomocniViewModel> Zadatci { get; set; }
+
+        public List<int> brisani { get; set; }
+        public List<string> Statusi { get; set; }
+
         public ZadatakViewModel zadatci { get; set; }
 
         public PagingInfo PagingInfo { get; set; }
+    public ZahtjevZadatakViewModel()
+    {
+        this.Zadatci = new List<ZadatakPomocniViewModel>();
     }
+    }
+    
 }
+
 

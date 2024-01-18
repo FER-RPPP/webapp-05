@@ -1,7 +1,7 @@
 ﻿@model Dokument
 
 @{
-    ViewBag.Title = "Ažuriranje Projekta";
+    ViewBag.Title = "Ažuriranje Dokumenta";
 }
 
 <form asp-route-id="@Model.IdDokument"
@@ -16,16 +16,39 @@
         <input asp-for="NazivDatoteka" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="TipDokument"></label>
-        <div><span asp-validation-for="TipDokument" class="text-danger"></span></div>
-        <input asp-for="TipDokument" class="form-control" />
+        <label asp-for="TipDokument" class="form-label"></label>
+        <select asp-for="TipDokument" class="form-control">
+            <option value=".txt">.txt</option>
+            <option value=".docx">.docx</option>
+            <option value=".xlsx">.xlsx</option>
+            <option value=".pdf">.pdf</option>
+            <option value=".c">.c</option>
+            <option value=".cpp">.cpp</option>
+            <option value=".java">.java</option>
+            <option value=".cs">.cs</option>
+            <option value=".json">.json</option>
+            <option value=".exe">.exe</option>
+        </select>
+        <div class="form-text"><span asp-validation-for="TipDokument" class="text-danger"></span></div>
     </div>
     <div class="form-group">
-        <label asp-for="VelicinaDokument"></label>
-        <div><span asp-validation-for="VelicinaDokument" class="text-danger"></span></div>
-        <input asp-for="VelicinaDokument" class="form-control" />
+        <label asp-for="VelicinaDokument" class="form-label"></label>
+        <input id="sizeValue" class="form-control" type="number" required pattern="\d+" />
+        <select id="sizeUnit" class="form-control">
+            <option value="KB">KB</option>
+            <option value="MB">MB</option>
+            <option value="GB">GB</option>
+        </select>
+        <input type=hidden asp-for="VelicinaDokument" class="form-control" id="poslanaVelicina" />
+        <div class="form-text"><span asp-validation-for="VelicinaDokument" class="text-danger"></span></div>
     </div>
     
+    <div class="form-group">
+        <label asp-for="URLdokument"></label>
+        <div><span asp-validation-for="URLdokument" class="text-danger"></span></div>
+        <input asp-for="URLdokument" class="form-control" />
+    </div>
+
     <div class="form-group">
         <label asp-for="IdVrstaDok"></label>
         <select class="form-control" asp-for="IdVrstaDok" asp-items="ViewBag.vrste">
@@ -48,4 +71,30 @@
            asp-route-ascending="@ViewBag.Ascending"
            class="btn btn-secondary">Odustani</a>
     </div>
+
+    <script>
+       
+        document.addEventListener('DOMContentLoaded', function () {
+            var sizeValueInput = document.getElementById('sizeValue');
+            var sizeUnitInput = document.getElementById('sizeUnit');
+            var concatenatedSizeInput = document.getElementById('poslanaVelicina');
+
+            var velicinaDoc = "@Model.VelicinaDokument";
+            velicinaDoc = velicinaDoc.split(" ");
+
+            sizeValueInput.value = velicinaDoc[0];
+
+            for (var i = 0; i < sizeUnitInput.options.length; i++) {
+                if (sizeUnitInput.options[i].value === velicinaDoc[1] ){
+                    sizeUnitInput.options[i].selected = true;
+                    break;  
+                }
+            }
+
+            document.querySelector('form').addEventListener('submit', function () {
+                
+                concatenatedSizeInput.value = sizeValueInput.value + ' ' + sizeUnitInput.value;
+            });
+        });
+    </script>
 </form>

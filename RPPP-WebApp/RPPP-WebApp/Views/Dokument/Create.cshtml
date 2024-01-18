@@ -16,13 +16,35 @@
     </div>
     <div class="mb-3">
         <label asp-for="TipDokument" class="form-label"></label>
-        <input asp-for="TipDokument" class="form-control" />
+        <select asp-for="TipDokument" class="form-control">
+            <option value=".txt">.txt</option>
+            <option value=".docx">.docx</option>
+            <option value=".xlsx">.xlsx</option>
+            <option value=".pdf">.pdf</option>
+            <option value=".c">.c</option>
+            <option value=".cpp">.cpp</option>
+            <option value=".java">.java</option>
+            <option value=".cs">.cs</option>
+            <option value=".json">.json</option>
+            <option value=".exe">.exe</option>
+        </select>
         <div class="form-text"><span asp-validation-for="TipDokument" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
         <label asp-for="VelicinaDokument" class="form-label"></label>
-        <input asp-for="VelicinaDokument" class="form-control" />
+        <input id="sizeValue" class="form-control" type="number" required pattern="\d+"/>
+        <select id="sizeUnit" class="form-control">
+            <option value="KB">KB</option>
+            <option value="MB">MB</option>
+            <option value="GB">GB</option>
+        </select>
+        <input type=hidden asp-for="VelicinaDokument" class="form-control" id="poslanaVelicina"/>
         <div class="form-text"><span asp-validation-for="VelicinaDokument" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="URLdokument" class="form-label"></label>
+        <input asp-for="URLdokument" class="form-control" />
+        <div class="form-text"><span asp-validation-for="URLdokument" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
         <label asp-for="IdVrstaDok" class="form-label"></label>
@@ -42,6 +64,19 @@
         <button class="btn btn-primary" type="submit">Dodaj</button>
         <a asp-action="Index" class="btn btn-secondary">Odustani</a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sizeValueInput = document.getElementById('sizeValue');
+            var sizeUnitInput = document.getElementById('sizeUnit');
+            var concatenatedSizeInput = document.getElementById('poslanaVelicina');
+
+            document.querySelector('form').addEventListener('submit', function () {
+                // Concatenate sizeValue and sizeUnit and set the value to concatenatedSize input
+                concatenatedSizeInput.value = sizeValueInput.value + ' ' + sizeUnitInput.value;
+            });
+        });
+    </script>
 </form>
 
 
