@@ -35,7 +35,9 @@ public class ViewLogController : Controller
             Controller = c.Logger,
             Level = c.Level,
             Message = c.Message,
-            //url,action dodaj
+            Url = c.Url,
+            Id = c.Id,
+            Time = c.Logged
 
         }).ToListAsync();
 

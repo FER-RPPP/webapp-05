@@ -549,12 +549,6 @@ namespace RPPP_WebApp.Controllers
         #region PDF M-D forma
         public async Task<IActionResult> ProjektnaKarticaTransakcijePDF()
         {
-           /*var kartice = await ctx.ProjektnaKartica
-                                 .AsNoTracking()
-                                 .OrderBy(s => s.IdProjekt)
-                                 .ThenBy(s => s.SubjektIban)
-                                 .ToListAsync();*/
-            //int n = kartice.Count;
             /*var kartice = await ctx.ProjektnaKartica
                                   .Select(u => new ProjektnaKarticaDenorm
                                   {
@@ -568,14 +562,21 @@ namespace RPPP_WebApp.Controllers
                                   })
                                   .OrderBy(u => u.subjektIBAN)
                                   .ToListAsync();*/
-            var transakcije = await ctx.Transakcija
-                                  .AsNoTracking()
-                                  .OrderBy(d => d.IdTransakcije)
-                                  .ToListAsync();
+            var transakcije =  await ctx.Transakcija
+                                  .Select(u => new ProjektnaKarticaDenorm
+                                  {
+                                      primateljIBAN = u.PrimateljIban,
+                                      subjektIBAN = u.SubjektIban,
+                                      opis = u.Opis,
+                                      valuta = u.Valuta,
+                                      vrsta = u.Vrsta,
+                                      vrijednost = u.Vrijednost
+
+                                  }).ToListAsync();
 
             string title = $"M-D form ProjektneKarticeTransakcije";
 
-            kartice.ForEach(s => s.KarticaUrl = Url.Action("Edit", "Projektna Kartica", new { iban = s.subjektIBAN }));
+            transakcije.ForEach(s => s.KarticaUrl = Url.Action("Edit", "Projektna Kartica", new { iban = s.subjektIBAN }));
             PdfReport report = CreateReport(title);
 
             #region Header and footer
@@ -595,10 +596,8 @@ namespace RPPP_WebApp.Controllers
 
             #region Set datasource and define columns
 
-            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(kartice));
-            //report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(transakcije));
-            //popravit denorm dodat transakcija varijable
-            //
+            //report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(kartice));
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(transakcije));
 
             report.MainTableColumns(columns =>
             {
@@ -656,6 +655,63 @@ namespace RPPP_WebApp.Controllers
                     column.HeaderCell("ID Projekta", horizontalAlignment: HorizontalAlignment.Center);
                 });
 
+
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.primateljIBAN);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("Primatelj IBAN", horizontalAlignment: HorizontalAlignment.Center);
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.opis);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("Opis", horizontalAlignment: HorizontalAlignment.Center);
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.vrsta);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("Vrsta trans.", horizontalAlignment: HorizontalAlignment.Center);
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.subjektIBAN);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("Subjekt IBAN", horizontalAlignment: HorizontalAlignment.Center);
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.idTransakcija);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("ID Transakcije", horizontalAlignment: HorizontalAlignment.Center);
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.vrijednost);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("Vrijednost", horizontalAlignment: HorizontalAlignment.Center);
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName<ProjektnaKarticaDenorm>(x => x.valuta);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Width(2);
+                    column.HeaderCell("Valuta", horizontalAlignment: HorizontalAlignment.Center);
+                });
 
             });
 
