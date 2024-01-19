@@ -1,5 +1,5 @@
 ﻿{
-   "CodeGenerationMode": 2,
+   "CodeGenerationMode": 3,
    "ContextClassName": "RPPP05Context",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
@@ -25,6 +25,10 @@
       },
       {
          "Name": "[dbo].[kvalifikacija]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Log]",
          "ObjectType": 0
       },
       {

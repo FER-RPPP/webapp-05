@@ -1,10 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto.Signers;
+using RPPP_WebApp.Models;
 using RPPP_WebApp.ViewModels;
 
 namespace RPPP_WebApp.Controllers;
 
 public class ViewLogController : Controller
 {
+    private RPPP05Context ctx;
+
+    public ViewLogController(RPPP05Context ctx)
+    {
+        this.ctx = ctx;
+    }
+
     public IActionResult Index()
     {
         return View();
@@ -15,43 +25,20 @@ public class ViewLogController : Controller
         List<LogEntry> list = new List<LogEntry>();
         ViewBag.Day = day;
         string format = day.ToString("yyyy-MM-dd");
-        string filename = Path.Combine(AppContext.BaseDirectory, $"logs/nlog-own-{format}.log");
-        if (System.IO.File.Exists(filename))
-        {
-            string previousEntry = string.Empty;
-            using (FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                using (StreamReader reader = new StreamReader(fileStream))
-                {
-                    string line;
-                    while ((line = await reader.ReadLineAsync()) != null)
-                    {
-                        if (line.StartsWith(format))
-                        {
-                            //new entry begins, add previous in the list
-                            if (previousEntry != string.Empty)
-                            {
-                                LogEntry logEntry = LogEntry.FromString(previousEntry);
-                                list.Add(logEntry);
-                            }
-                            previousEntry = line;
-                        }
-                        else
-                        {
-                            previousEntry += line;
-                        }
-                    }
-                }
-            }
-            //add last one
+        DateTime tommorow = day.AddDays(1);
 
-            if (previousEntry != string.Empty)
-            {
-                LogEntry logEntry = LogEntry.FromString(previousEntry);
-                list.Add(logEntry);
-            }
-        }
-        list.Sort((a, b) => -a.Time.CompareTo(b.Time));
+        list = await ctx.Log
+            .Where(c => c.Logged >= day && c.Logged < tommorow)
+            .Select(c => new LogEntry
+        {
+            Action = c.Action,
+            Controller = c.Logger,
+            Level = c.Level,
+            Message = c.Message,
+            //url,action dodaj
+
+        }).ToListAsync();
+
         return View(list);
     }
 }

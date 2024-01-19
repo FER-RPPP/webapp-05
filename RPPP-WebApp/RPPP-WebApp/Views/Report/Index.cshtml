@@ -3,6 +3,7 @@
 }
 
 
+<r1>Baraa Yassin Reports begin</r1>
 <ul>
     <li>
         <a asp-action="ProjektneKarticeExcel">Popis svih projektnih kartic</a>
@@ -26,4 +27,20 @@
         <a asp-action="ProjektnaKarticaTransakcijePDF">Popis master(ProjektnaKartica)-detail(Transakcija) PDF</a>
     </li>
 </ul>
+
+<div id="upload row">
+    <form class="form-inline" asp-action="ImportProjektneKartice" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="form-group col-xs-6 col-md-3 ">
+                <label for="importFile">Uvoz podataka u excel formatu za opremu i uređaje</label>
+                <input type="file" class="form-control" id="importFile" name="importFile" data-save="">
+            </div>
+            <div class="form-group">
+                <label for="submit"></label>
+                <input type="submit" id="submit" value="Uvezi">
+            </div>
+        </div>
+    </form>
+</div>
+<r1>Baraa Yassin Reports end</r1><br /><br />
 
