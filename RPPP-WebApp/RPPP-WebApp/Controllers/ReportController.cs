@@ -907,9 +907,480 @@ namespace RPPP_WebApp.Controllers
                 return table.AddBorderToTable();
             }
         }
-     #endregion
 
+
+        #endregion
+
+        public async Task<IActionResult> ZahtjevExcel()
+        {
+            var zahtjevi = await ctx.Zahtjev
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdZahtjev)
+                                  .ToListAsync();
+
+            var vrste = await ctx.Zahtjev.AsNoTracking().OrderBy(d => d.IdZahtjev)
+                                  .Select(d => d.IdVrstaNavigation.NazivVrsta)
+                                  .ToListAsync();
+
+            var projekti = await ctx.Zahtjev.AsNoTracking().OrderBy(d => d.IdZahtjev)
+                                  .Select(d => d.IdProjektNavigation.Naziv)
+                                  .ToListAsync();
+
+            byte[] content;
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                excel.Workbook.Properties.Title = "Popis zahtjeva";
+                excel.Workbook.Properties.Author = "RPPP05";
+                var worksheet = excel.Workbook.Worksheets.Add("Zahtjevi");
+
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "ID zahtjeva";
+                worksheet.Cells[1, 2].Value = "ID Projekta";
+                worksheet.Cells[1, 3].Value = "Naziv Vrste";
+                worksheet.Cells[1, 4].Value = "Opis";
+                worksheet.Cells[1, 5].Value = "Prioritet";
+                worksheet.Cells[1, 6].Value = "Vrijeme početka";
+                worksheet.Cells[1, 7].Value = "Vrijeme kraja";
+                worksheet.Cells[1, 8].Value = "Očekivano vrijeme kraja";
+
+
+                for (int i = 0; i < zahtjevi.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = zahtjevi[i].IdZahtjev;
+                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 2, 2].Value = projekti[i];
+                    worksheet.Cells[i + 2, 3].Value = vrste[i];
+                    worksheet.Cells[i + 2, 4].Value = zahtjevi[i].Opis;
+                    worksheet.Cells[i + 2, 5].Value = zahtjevi[i].Prioritet;
+                    worksheet.Cells[i + 2, 6].Value = zahtjevi[i].VrPocetak.ToString("g");
+                    worksheet.Cells[i + 2, 7].Value = zahtjevi[i].VrKraj.HasValue ? zahtjevi[i].VrKraj.Value.ToString("g") : "";
+                    worksheet.Cells[i + 2, 8].Value = zahtjevi[i].VrKrajOcekivano.ToString("g");
+
+                }
+
+                worksheet.Cells[1, 1, zahtjevi.Count + 1, 8].AutoFitColumns();
+
+                content = excel.GetAsByteArray();
+            }
+            return File(content, ExcelContentType, "Zahtjevi.xlsx");
+        }
+        public async Task<IActionResult> ZadatakExcel()
+        {
+            var zadatci = await ctx.Zadatak
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdZadatak)
+                                  .ToListAsync();
+
+            var statusi = await ctx.Zadatak.AsNoTracking().OrderBy(d => d.IdZahtjev)
+                                  .Select(d => d.IdStatusNavigation.NazivStatus)
+                                  .ToListAsync();
+
+            byte[] content;
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                excel.Workbook.Properties.Title = "Popis Zadataka";
+                excel.Workbook.Properties.Author = "RPPP05";
+                var worksheet = excel.Workbook.Worksheets.Add("Zadatci");
+
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "ID zadatka";
+                worksheet.Cells[1, 2].Value = "Naziv";
+                worksheet.Cells[1, 3].Value = "OIB nositelja";
+                worksheet.Cells[1, 4].Value = "Status zadatka";
+                worksheet.Cells[1, 5].Value = "Vrijeme početka";
+                worksheet.Cells[1, 6].Value = "Vrijeme kraja";
+                worksheet.Cells[1, 7].Value = "Vrijeme očekivanog kraja";
+
+                for (int i = 0; i < zadatci.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = zadatci[i].IdZadatak;
+                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 2, 2].Value = zadatci[i].Vrsta;
+                    worksheet.Cells[i + 2, 3].Value = zadatci[i].Oibnositelj;
+                    worksheet.Cells[i + 2, 4].Value = statusi[i];
+                    worksheet.Cells[i + 2, 5].Value = zadatci[i].VrPoc.ToString("g");
+                    worksheet.Cells[i + 2, 6].Value = zadatci[i].VrKraj.HasValue ? zadatci[i].VrKraj.Value.ToString("g") : "";
+                    worksheet.Cells[i + 2, 7].Value = zadatci[i].VrKrajOcekivano.ToString("g");
+                }
+
+                worksheet.Cells[1, 1, zadatci.Count + 1, 7].AutoFitColumns();
+
+                content = excel.GetAsByteArray();
+            }
+            return File(content, ExcelContentType, "Zadatci.xlsx");
+        }
+        public async Task<IActionResult> ZahtjeviZadatciExcel()
+        {
+            var zahtjevi = await ctx.Zahtjev
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdZahtjev)
+                                  .ToListAsync();
+            var vrste = await ctx.Zahtjev
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdZahtjev)
+                                  .Select(d => d.IdVrstaNavigation.NazivVrsta)
+                                  .ToListAsync();
+            var projekti = await ctx.Zahtjev
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdZahtjev)
+                                  .Select(d => d.IdProjektNavigation.Naziv)
+                                  .ToListAsync();
+
+
+            var zadatcisvi = await ctx.Zadatak
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdZadatak)
+                                  .ToListAsync();
+            byte[] content;
+
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                for (int i = 0; i < zahtjevi.Count; i++)
+                {
+                    var zahtjev = zahtjevi[i];
+
+                    // Create a worksheet for each kartica
+                    var worksheet = excel.Workbook.Worksheets.Add($"Zahtjev_{i + 1}");
+
+                    
+                    worksheet.Cells[1, 1].Value = "ID zahtjeva";
+                    worksheet.Cells[1, 2].Value = "ID Projekta";
+                    worksheet.Cells[1, 3].Value = "Naziv Vrste";
+                    worksheet.Cells[1, 4].Value = "Opis";
+                    worksheet.Cells[1, 5].Value = "Prioritet";
+                    worksheet.Cells[1, 6].Value = "Vrijeme početka";
+                    worksheet.Cells[1, 7].Value = "Vrijeme kraja";
+                    worksheet.Cells[1, 8].Value = "Očekivano vrijeme kraja";
+
+
+                    worksheet.Cells[2, 1].Value = zahtjevi[i].IdZahtjev;
+                    worksheet.Cells[2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[2, 2].Value = projekti[i];
+                    worksheet.Cells[2, 3].Value = vrste[i];
+                    worksheet.Cells[2, 4].Value = zahtjevi[i].Opis;
+                    worksheet.Cells[2, 5].Value = zahtjevi[i].Prioritet;
+                    worksheet.Cells[2, 6].Value = zahtjevi[i].VrPocetak.ToString("g");
+                    worksheet.Cells[2, 7].Value = zahtjevi[i].VrKraj.HasValue ? zahtjevi[i].VrKraj.Value.ToString("g") : "";
+                    worksheet.Cells[2, 8].Value = zahtjevi[i].VrKrajOcekivano.ToString("g") ;
+
+
+
+                    // Add headers to the worksheet
+                    worksheet.Cells[4, 1].Value = "ID zadatka";
+                    worksheet.Cells[4, 2].Value = "Naziv";
+                    worksheet.Cells[4, 3].Value = "OIB nositelja";
+                    worksheet.Cells[4, 4].Value = "Status zadatka";
+                    worksheet.Cells[4, 5].Value = "Vrijeme početka";
+                    worksheet.Cells[4, 6].Value = "Vrijeme kraja";
+                    worksheet.Cells[4, 7].Value = "Vrijeme očekivanog kraja";
+
+                    // Filter transakcije for the current kartica
+                    var zadatci = zadatcisvi.Where(t => t.IdZahtjev == zahtjev.IdZahtjev).ToList();
+
+                    for (int j = 0; j < zadatci.Count; j++)
+                    {
+
+                        var statusi = ctx.Zadatak.AsNoTracking().Where(d => d.IdZadatak == zadatci[j].IdZadatak)
+                                                            .Select(d => d.IdStatusNavigation.NazivStatus).FirstOrDefault();
+
+
+                        worksheet.Cells[j + 5, 1].Value = zadatci[j].IdZadatak;
+                        worksheet.Cells[j + 5, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[j + 5, 2].Value = zadatci[j].Vrsta;
+                        worksheet.Cells[j + 5, 3].Value = zadatci[j].Oibnositelj;
+                        worksheet.Cells[j + 5, 4].Value = statusi;
+                        worksheet.Cells[j + 5, 5].Value = zadatci[j].VrPoc.ToString("g");
+                        worksheet.Cells[j + 5, 6].Value = zadatci[j].VrKraj.HasValue ? zadatci[j].VrKraj.Value.ToString("g") : "";
+                        worksheet.Cells[j + 5, 7].Value = zadatci[j].VrKrajOcekivano.ToString("g");
+                    }
+
+                    worksheet.Cells[1, 1, zadatci.Count + 1, 7].AutoFitColumns();
+
+                }
+                content = excel.GetAsByteArray();
+                return File(content, ExcelContentType, "master(Zahtjev)-detail(Zadatak).xlsx");
+            }
+        }
+
+        public async Task<IActionResult> ZahtjevPDF()
+        {
+            string naslov = "Popis zahtjeva";
+
+            var zadatci = await ctx.Zahtjev
+                                      .AsNoTracking()
+                                      .Select(s => new ZahtjevPomocniViewModel
+                                      {
+                                          IdZahtjev = s.IdZahtjev,
+                                          VrKraj = s.VrKraj,
+                                          VrKrajOcekivano = s.VrKrajOcekivano,
+                                          VrPocetak = s.VrPocetak,
+                                          Prioritet = s.Prioritet,
+                                          Opis = s.Opis,
+                                          IdProjekt = s.IdProjekt,
+                                          IdVrsta = s.IdVrsta,
+                                          NazivVrsta = s.IdVrstaNavigation.NazivVrsta
+                                      })
+                                      .ToListAsync();
+
+
+            PdfReport report = CreateReport(naslov);
+            #region Podnožje i zaglavlje
+            report.PagesFooter(footer =>
+            {
+                footer.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+            })
+            .PagesHeader(header =>
+            {
+                header.CacheHeader(cache: true); // It's a default setting to improve the performance.
+                header.DefaultHeader(defaultHeader =>
+                {
+                    defaultHeader.RunDirection(PdfRunDirection.LeftToRight);
+                    defaultHeader.Message(naslov);
+                });
+            });
+            #endregion
+
+            #region Postavljanje izvora podataka i stupaca
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(zadatci));
+
+            report.MainTableColumns(columns =>
+            {
+                columns.AddColumn(column =>
+                {
+                    column.IsRowNumber(true);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                    column.IsVisible(true);
+                    column.Order(0);
+                    column.Width(1);
+                    column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                });
+
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.IdZahtjev));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(1);
+                    column.Width(2);
+                    column.HeaderCell("ID Zahtjeva");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.IdProjekt));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(false);
+                    column.Order(2);
+                    column.Width(1);
+                    column.HeaderCell("ID Projekta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.IdVrstaNavigation.NazivVrsta));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(3);
+                    column.Width(3);
+                    column.HeaderCell("Vrsta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.Opis));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(4);
+                    column.Width(3);
+                    column.HeaderCell("Opis");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.Prioritet));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(5);
+                    column.Width(2);
+                    column.HeaderCell("Prioritet");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.VrPocetak));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(6);
+                    column.Width(2);
+                    column.HeaderCell("Vrijeme početka");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.VrKraj));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(7);
+                    column.Width(2);
+                    column.HeaderCell("Vrijeme kraja");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zahtjev.VrKrajOcekivano));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(8);
+                    column.Width(2);
+                    column.HeaderCell("Očekivano vrijeme kraja");
+                });
+            });
+
+            #endregion
+
+            byte[] pdf = report.GenerateAsByteArray();
+
+            if (pdf != null)
+            {
+                Response.Headers.Add("content-disposition", "inline; filename=zahtjevi.pdf");
+                return File(pdf, "application/pdf");
+                //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        public async Task<IActionResult> ZadatakPDF()
+        {
+            string naslov = "Popis zadataka";
+
+            var zadatci = await ctx.Zadatak
+                      .OrderBy(s => s.IdZadatak)
+                      .Select(s => new ZadatakPomocniViewModel
+                      {
+                          IdZadatak = s.IdZadatak,
+                          VrKraj = s.VrKraj,
+                          VrKrajOcekivano = s.VrKrajOcekivano,
+                          VrPoc = s.VrPoc,
+                          Oibnositelj = s.Oibnositelj,
+                          IdStatus = s.IdStatus,
+                          IdZahtjev = s.IdZahtjev,
+                          Vrsta = s.Vrsta,
+                          NazivStatus = s.IdStatusNavigation.NazivStatus
+                      })
+                      .ToListAsync();
+
+
+            PdfReport report = CreateReport(naslov);
+            #region Podnožje i zaglavlje
+            report.PagesFooter(footer =>
+            {
+                footer.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+            })
+            .PagesHeader(header =>
+            {
+                header.CacheHeader(cache: true); // It's a default setting to improve the performance.
+                header.DefaultHeader(defaultHeader =>
+                {
+                    defaultHeader.RunDirection(PdfRunDirection.LeftToRight);
+                    defaultHeader.Message(naslov);
+                });
+            });
+            #endregion
+
+            #region Postavljanje izvora podataka i stupaca
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(zadatci));
+
+            report.MainTableColumns(columns =>
+            {
+                columns.AddColumn(column =>
+                {
+                    column.IsRowNumber(true);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                    column.IsVisible(true);
+                    column.Order(0);
+                    column.Width(1);
+                    column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                });
+
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.IdZadatak));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(1);
+                    column.Width(1.5f);
+                    column.HeaderCell("ID Zadatka");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.Vrsta));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(2);
+                    column.Width(3);
+                    column.HeaderCell("Naziv");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.Oibnositelj));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(3);
+                    column.Width(2);
+                    column.HeaderCell("OIB nositelja");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.IdStatusNavigation.NazivStatus));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(4);
+                    column.Width(2);
+                    column.HeaderCell("Status");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.VrPoc));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(5);
+                    column.Width(2);
+                    column.HeaderCell("Vrijeme početka");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.VrKraj));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(6);
+                    column.Width(2);
+                    column.HeaderCell("Vrijeme kraja");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Zadatak.VrKrajOcekivano));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(7);
+                    column.Width(2);
+                    column.HeaderCell("Očekivano vrijeme kraja");
+                });
+            });
+
+            #endregion
+
+            byte[] pdf = report.GenerateAsByteArray();
+
+            if (pdf != null)
+            {
+                Response.Headers.Add("content-disposition", "inline; filename=zahtjevi.pdf");
+                return File(pdf, "application/pdf");
+                //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
+
+
 
 
 
