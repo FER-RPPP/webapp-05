@@ -185,6 +185,9 @@
                     }
                     <tr>
                     <td class="text-center col-sm-1 hidden">
+                            @{
+                                counter = counter + 1;
+                            }
                         <input  id="zadatak-sifra" type="hidden" value=@counter />
                         <input  id="zadatak-zahtjev" type="hidden" value=@Model.zahtjev.IdZahtjev />
 
@@ -254,7 +257,7 @@
             <input class="form-control" type="datetime-local" data-val="true" name="Zadatci[--sifra--].VrKraj" value="--vrkraj--" />
         </td>
         <td>
-            <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fas fa-minus"></i></button>
+            <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fas fa-minus">-</i></button>
         </td>
     </tr>
 </table>

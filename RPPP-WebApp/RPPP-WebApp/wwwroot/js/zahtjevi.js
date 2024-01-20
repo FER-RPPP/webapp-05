@@ -49,7 +49,7 @@ function dodajZadatak() {
         //Alternativa ako su hr postavke sa zarezom //http://haacked.com/archive/2011/03/19/fixing-binding-to-decimals.aspx/
         //ili ovo http://intellitect.com/custom-model-binding-in-asp-net-core-1-0/
 
-        
+        var newIndex = Date.now();
 
         template = template.replace(/--sifra--/g, sifra)
             .replace(/--status--/g, status)
