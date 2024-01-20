@@ -197,7 +197,7 @@
                         </td>
                         <td class="text-center col-sm-1">
                         <select style=" width:fit-content" name="zadatak-status" id="zadatak-status" class="form-control" asp-items="ViewBag.ZadatciStatusi">
-                                <option id="naziv-statusa" value=""></option> <!-- Provide a default option -->
+                                <option value=""></option> <!-- Provide a default option -->
                             </select>
                         </td>
                         <td class="text-right col-sm-1">
@@ -233,7 +233,7 @@
             <input type="hidden" name="Zadatci.Index" value="--sifra--" />
             <input type="hidden" name="Zadatci[--sifra--].IdZahtjev" value="@Model.zahtjev.IdZahtjev" />
             <select style="font-size:small; width:fit-content" name="Zadatci[--sifra--].Oibnositelj" class="form-control" class="dynamic-oib" value="" asp-items="ViewBag.ZadatciSuradnici">
-                <option selected value="--oib--">--oib--</option>
+                <option selected value="--oib--">--punioib--</option>
             </select>
         </td>
         <td class="text-center col-sm-1">
@@ -241,7 +241,7 @@
         </td>
         <td>
             <select style=" width:fit-content" name="Zadatci[--sifra--].NazivStatus" class="form-control"  asp-items="ViewBag.ZadatciStatusi">
-                <option  value="--status--">--status--</option> <!-- Provide a default option -->
+                <option  value="--status--">--nazivstatus--</option> <!-- Provide a default option -->
             </select>
         </td>
         <td class="text-right col-sm-1">

@@ -38,7 +38,10 @@ function dodajZadatak() {
         var vrpoc = ($("#zadatak-pocetak").val());
         var vrkraj = ($("#zadatak-kraj").val());
         var vrockraj = ($("#zadatak-ockraj").val());
-        var nazivstatusa = ($("#naziv-statusa").val());
+        var nazivstatusa = ($("#zadatak-status option:selected").text());
+        var punioib = ($("#zadatak-oibnositelj option:selected").text());
+
+
 
 
         var template = $('#template').html();
@@ -57,6 +60,7 @@ function dodajZadatak() {
             .replace(/--vrkraj--/g, vrkraj)
             .replace(/--vrockraj--/g, vrockraj)
             .replace(/--nazivstatus--/g, nazivstatusa)
+            .replace(/--punioib--/g, punioib)
                     
 
         $(template).find('.dynamic-oib').val(oib);

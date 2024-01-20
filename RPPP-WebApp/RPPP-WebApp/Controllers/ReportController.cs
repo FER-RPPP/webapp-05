@@ -1101,7 +1101,6 @@ namespace RPPP_WebApp.Controllers
                 return File(content, ExcelContentType, "master(Zahtjev)-detail(Zadatak).xlsx");
             }
         }
-
         public async Task<IActionResult> ZahtjevPDF()
         {
             string naslov = "Popis zahtjeva";
@@ -1244,7 +1243,6 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
-
         public async Task<IActionResult> ZadatakPDF()
         {
             string naslov = "Popis zadataka";
