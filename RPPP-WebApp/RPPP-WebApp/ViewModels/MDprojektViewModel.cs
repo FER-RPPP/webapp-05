@@ -10,9 +10,14 @@ namespace RPPP_WebApp.ViewModels
         public int? IdPrethProjekt { get; set; }
         public int? IdSljedProjekt { get; set; }
 
-        public DokumentiViewModel dokumenti { get; set; }
-
         public PagingInfo PagingInfo { get; set; }
+
+        public IEnumerable<DokPomViewModel> Dokumenti { get; set;}
+
+        public MDprojektViewModel()
+        {
+            this.Dokumenti = new List<DokPomViewModel>();
+        }
 
     }
 }
