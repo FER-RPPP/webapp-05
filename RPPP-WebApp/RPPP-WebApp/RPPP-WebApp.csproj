@@ -29,6 +29,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
 		<PackageReference Include="NetVips" Version="2.4.0" />
 		<PackageReference Include="NetVips.Native.win-x64" Version="8.15.1" />
+		<PackageReference Include="NLog.Database" Version="5.2.8" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.4" />
 		<PackageReference Include="PdfRpt.Core" Version="1.5.11" />
 
