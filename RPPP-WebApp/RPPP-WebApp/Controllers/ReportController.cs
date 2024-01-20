@@ -1378,6 +1378,490 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
+
+
+        //pocetakNiko
+        public async Task<IActionResult> PartnerExcel()
+        {
+            var partneri = await ctx.Partner
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdPartner)
+                                  .ToListAsync();
+
+            var vrste = await ctx.Partner.AsNoTracking().OrderBy(d => d.IdPartner)
+                                  .Select(d => d.IdTipPartneraNavigation.TipPartnera1)
+                                  .ToListAsync();
+
+            var projekti = await ctx.Partner.AsNoTracking().OrderBy(d => d.IdPartner)
+                                  .Select(d => d.IdTipPartneraNavigation.TipPartnera1)
+                                  .ToListAsync();
+
+            byte[] content;
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                excel.Workbook.Properties.Title = "Popis partnera";
+                excel.Workbook.Properties.Author = "RPPP05";
+                var worksheet = excel.Workbook.Worksheets.Add("Partneri");
+
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "ID partnera";
+                worksheet.Cells[1, 2].Value = "ID Projekta";
+                worksheet.Cells[1, 3].Value = "Naziv Tipa";
+                worksheet.Cells[1, 4].Value = "OIB";
+                worksheet.Cells[1, 5].Value = "Adresa";
+                worksheet.Cells[1, 6].Value = "IBAN";
+                worksheet.Cells[1, 7].Value = "Email";
+                worksheet.Cells[1, 8].Value = "Naziv partnera";
+
+
+                for (int i = 0; i < partneri.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = partneri[i].IdPartner;
+                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 2, 2].Value = projekti[i];
+                    worksheet.Cells[i + 2, 3].Value = vrste[i];
+                    worksheet.Cells[i + 2, 4].Value = partneri[i].Oib;
+                    worksheet.Cells[i + 2, 5].Value = partneri[i].AdresaPartner;
+                    worksheet.Cells[i + 2, 6].Value = partneri[i].Ibanpartner;
+                    worksheet.Cells[i + 2, 7].Value = partneri[i].EmailPartner;
+                    worksheet.Cells[i + 2, 8].Value = partneri[i].NazivPartner;
+
+                }
+
+                worksheet.Cells[1, 1, partneri.Count + 1, 8].AutoFitColumns();
+
+                content = excel.GetAsByteArray();
+            }
+            return File(content, ExcelContentType, "Partneri.xlsx");
+        }
+        public async Task<IActionResult> SuradnikDetailExcel()
+        {
+            var suradnici = await ctx.Suradnik
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdSuradnik)
+                                  .ToListAsync();
+
+            var kvalifikacije = await ctx.Suradnik.AsNoTracking().OrderBy(d => d.IdPartner)
+                                  .Select(d => d.IdKvalifikacijaNavigation.NazivKvalifikacija)
+                                  .ToListAsync();
+
+            byte[] content;
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                excel.Workbook.Properties.Title = "Popis Suradnika";
+                excel.Workbook.Properties.Author = "RPPP05";
+                var worksheet = excel.Workbook.Worksheets.Add("Suradnici");
+
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "ID suradnika";
+                worksheet.Cells[1, 2].Value = "OIB";
+                worksheet.Cells[1, 3].Value = "Broj mobitela";
+                worksheet.Cells[1, 4].Value = "Kvalifikacija";
+                worksheet.Cells[1, 5].Value = "Ime";
+                worksheet.Cells[1, 6].Value = "Prezime";
+                worksheet.Cells[1, 7].Value = "Email";
+                worksheet.Cells[1, 8].Value = "Stranka";
+
+                for (int i = 0; i < suradnici.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = suradnici[i].IdSuradnik;
+                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 2, 2].Value = suradnici[i].Oib;
+                    worksheet.Cells[i + 2, 3].Value = suradnici[i].Mobitel;
+                    worksheet.Cells[i + 2, 4].Value = kvalifikacije[i];
+                    worksheet.Cells[i + 2, 5].Value = suradnici[i].Ime;
+                    worksheet.Cells[i + 2, 6].Value = suradnici[i].Prezime;
+                    worksheet.Cells[i + 2, 7].Value = suradnici[i].Mail;
+                    worksheet.Cells[i + 2, 8].Value = suradnici[i].Stranka;
+                }
+
+                worksheet.Cells[1, 1, suradnici.Count + 1, 7].AutoFitColumns();
+
+                content = excel.GetAsByteArray();
+            }
+            return File(content, ExcelContentType, "Suradnici.xlsx");
+        }
+        public async Task<IActionResult> PartneriSuradniciExcel()
+        {
+            var partneri = await ctx.Partner
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdPartner)
+                                  .ToListAsync();
+            var vrste = await ctx.Partner
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdPartner)
+                                  .Select(d => d.IdTipPartneraNavigation.TipPartnera1)
+                                  .ToListAsync();
+            var projekti = await ctx.Partner
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdPartner)
+                                  .Select(d => d.IdTipPartneraNavigation.TipPartnera1)
+                                  .ToListAsync();
+
+
+            var suradnicisvi = await ctx.Suradnik
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdSuradnik)
+                                  .ToListAsync();
+            byte[] content;
+
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                for (int i = 0; i < partneri.Count; i++)
+                {
+                    var partner = partneri[i];
+
+                    // Create a worksheet for each kartica
+                    var worksheet = excel.Workbook.Worksheets.Add($"Partner_{i + 1}");
+
+
+                    worksheet.Cells[1, 1].Value = "ID partnera";
+                    worksheet.Cells[1, 2].Value = "ID Projekta";
+                    worksheet.Cells[1, 3].Value = "Naziv Tipa";
+                    worksheet.Cells[1, 4].Value = "OIB";
+                    worksheet.Cells[1, 5].Value = "Adresa";
+                    worksheet.Cells[1, 6].Value = "IBAN";
+                    worksheet.Cells[1, 7].Value = "Email";
+                    worksheet.Cells[1, 8].Value = "Naziv Partnera";
+
+
+                    worksheet.Cells[2, 1].Value = partneri[i].IdPartner;
+                    worksheet.Cells[2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[2, 2].Value = projekti[i];
+                    worksheet.Cells[2, 3].Value = vrste[i];
+                    worksheet.Cells[2, 4].Value = partneri[i].Oib;
+                    worksheet.Cells[2, 5].Value = partneri[i].AdresaPartner;
+                    worksheet.Cells[2, 6].Value = partneri[i].Ibanpartner;
+                    worksheet.Cells[2, 7].Value = partneri[i].EmailPartner;
+                    worksheet.Cells[2, 8].Value = partneri[i].NazivPartner;
+
+
+
+                    // Add headers to the worksheet
+                    worksheet.Cells[4, 1].Value = "ID suradnika";
+                    worksheet.Cells[4, 2].Value = "OIB";
+                    worksheet.Cells[4, 3].Value = "Broj mobitela";
+                    worksheet.Cells[4, 4].Value = "Kvalifikacija";
+                    worksheet.Cells[4, 5].Value = "Ime";
+                    worksheet.Cells[4, 6].Value = "Prezime";
+                    worksheet.Cells[4, 7].Value = "Email";
+                    worksheet.Cells[4, 8].Value = "Stranka";
+
+                    // Filter transakcije for the current kartica
+                    var suradnici = suradnicisvi.Where(t => t.IdPartner == partner.IdPartner).ToList();
+
+                    for (int j = 0; j < suradnici.Count; j++)
+                    {
+
+                        var kvalifikacije = ctx.Suradnik.AsNoTracking().Where(d => d.IdSuradnik == suradnici[j].IdSuradnik)
+                                                            .Select(d => d.IdKvalifikacijaNavigation.NazivKvalifikacija).FirstOrDefault();
+
+
+                        worksheet.Cells[j + 5, 1].Value = suradnici[j].IdSuradnik;
+                        worksheet.Cells[j + 5, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[j + 5, 2].Value = suradnici[j].Oib;
+                        worksheet.Cells[j + 5, 3].Value = suradnici[j].Mobitel;
+                        worksheet.Cells[j + 5, 4].Value = kvalifikacije;
+                        worksheet.Cells[j + 5, 5].Value = suradnici[j].Ime;
+                        worksheet.Cells[j + 5, 6].Value = suradnici[j].Prezime;
+                        worksheet.Cells[j + 5, 7].Value = suradnici[j].Mail;
+                        worksheet.Cells[j + 5, 8].Value = suradnici[j].Stranka;
+                    }
+
+                    worksheet.Cells[1, 1, suradnici.Count + 1, 7].AutoFitColumns();
+
+                }
+                content = excel.GetAsByteArray();
+                return File(content, ExcelContentType, "master(Partner)-detail(Suradnik).xlsx");
+            }
+        }
+
+        public async Task<IActionResult> PartnerPDF()
+        {
+            string naslov = "Popis partnera";
+
+            var suradnici = await ctx.Partner
+                                      .AsNoTracking()
+                                      .Select(s => new PartnerPomocniViewModel
+                                      {
+                                          IdPartner = s.IdPartner,
+                                          Oib = s.Oib,
+                                          AdresaPartner = s.AdresaPartner,
+                                          Ibanpartner = s.Ibanpartner,
+                                          EmailPartner = s.EmailPartner,
+                                          NazivPartner = s.NazivPartner,
+                                          IdProjekt = s.IdProjekt,
+                                          IdTipPartnera = s.IdTipPartnera,
+                                          TipPartnera1 = s.IdTipPartneraNavigation.TipPartnera1
+                                      })
+                                      .ToListAsync();
+
+
+            PdfReport report = CreateReport(naslov);
+            #region Podnožje i zaglavlje
+            report.PagesFooter(footer =>
+            {
+                footer.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+            })
+            .PagesHeader(header =>
+            {
+                header.CacheHeader(cache: true); // It's a default setting to improve the performance.
+                header.DefaultHeader(defaultHeader =>
+                {
+                    defaultHeader.RunDirection(PdfRunDirection.LeftToRight);
+                    defaultHeader.Message(naslov);
+                });
+            });
+            #endregion
+
+            #region Postavljanje izvora podataka i stupaca
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(suradnici));
+
+            report.MainTableColumns(columns =>
+            {
+                columns.AddColumn(column =>
+                {
+                    column.IsRowNumber(true);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                    column.IsVisible(true);
+                    column.Order(0);
+                    column.Width(1);
+                    column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                });
+
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.IdPartner));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(1);
+                    column.Width(2);
+                    column.HeaderCell("ID Partnera");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.IdProjekt));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(false);
+                    column.Order(2);
+                    column.Width(1);
+                    column.HeaderCell("ID Projekta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.IdTipPartneraNavigation.TipPartnera1));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(3);
+                    column.Width(3);
+                    column.HeaderCell("Tip partnera");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.Oib));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(4);
+                    column.Width(3);
+                    column.HeaderCell("OIB");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.AdresaPartner));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(5);
+                    column.Width(2);
+                    column.HeaderCell("Adresa");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.Ibanpartner));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(6);
+                    column.Width(2);
+                    column.HeaderCell("IBAN");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.EmailPartner));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(7);
+                    column.Width(2);
+                    column.HeaderCell("Email");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Partner.NazivPartner));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(8);
+                    column.Width(2);
+                    column.HeaderCell("Naziv partnera");
+                });
+            });
+
+            #endregion
+
+            byte[] pdf = report.GenerateAsByteArray();
+
+            if (pdf != null)
+            {
+                Response.Headers.Add("content-disposition", "inline; filename=partneri.pdf");
+                return File(pdf, "application/pdf");
+                //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        public async Task<IActionResult> SuradnikDetailPDF()
+        {
+            string naslov = "Popis suradnika";
+
+            var suradnici = await ctx.Suradnik
+                      .OrderBy(s => s.IdSuradnik)
+                      .Select(s => new SuradnikDetailPomocniViewModel
+                      {
+                          IdSuradnik = s.IdSuradnik,
+                          Oib = s.Oib,
+                          Mobitel = s.Mobitel,
+                          Ime = s.Ime,
+                          Prezime = s.Prezime,
+                          IdKvalifikacija = s.IdKvalifikacija,
+                          IdPartner = s.IdPartner,
+                          Mail = s.Mail,
+                          Stranka = s.Stranka,
+                          NazivKvalifikacija = s.IdKvalifikacijaNavigation.NazivKvalifikacija
+                      })
+                      .ToListAsync();
+
+
+            PdfReport report = CreateReport(naslov);
+            #region Podnožje i zaglavlje
+            report.PagesFooter(footer =>
+            {
+                footer.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+            })
+            .PagesHeader(header =>
+            {
+                header.CacheHeader(cache: true); // It's a default setting to improve the performance.
+                header.DefaultHeader(defaultHeader =>
+                {
+                    defaultHeader.RunDirection(PdfRunDirection.LeftToRight);
+                    defaultHeader.Message(naslov);
+                });
+            });
+            #endregion
+
+            #region Postavljanje izvora podataka i stupaca
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(suradnici));
+
+            report.MainTableColumns(columns =>
+            {
+                columns.AddColumn(column =>
+                {
+                    column.IsRowNumber(true);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                    column.IsVisible(true);
+                    column.Order(0);
+                    column.Width(1);
+                    column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
+                });
+
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.IdSuradnik));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(1);
+                    column.Width(1.5f);
+                    column.HeaderCell("ID Suradnika");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.Oib));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(2);
+                    column.Width(3);
+                    column.HeaderCell("OIB");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.Mobitel));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(3);
+                    column.Width(2);
+                    column.HeaderCell("Broj mobitela");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.IdKvalifikacijaNavigation.NazivKvalifikacija));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(4);
+                    column.Width(2);
+                    column.HeaderCell("Kvalifikacija");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.Ime));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(5);
+                    column.Width(2);
+                    column.HeaderCell("Ime");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.Prezime));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(6);
+                    column.Width(2);
+                    column.HeaderCell("Prezime");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.Mail));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(7);
+                    column.Width(2);
+                    column.HeaderCell("Email");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Suradnik.Stranka));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(7);
+                    column.Width(2);
+                    column.HeaderCell("Stranka");
+                });
+            });
+
+            #endregion
+
+            byte[] pdf = report.GenerateAsByteArray();
+
+            if (pdf != null)
+            {
+                Response.Headers.Add("content-disposition", "inline; filename=suradnici.pdf");
+                return File(pdf, "application/pdf");
+                //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 
 
