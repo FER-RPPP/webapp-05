@@ -15,16 +15,16 @@ $(function () {
 
 
 
-    $("#artikl-dodaj").click(function () {
+    $("#zadatak-dodaj").click(function () {
         event.preventDefault();
         dodajZadatak();
     });
 });
 
 function dodajZadatak() {
+    //debugger;
     var sifra = $("#zadatak-sifra").val();
 
-    console.log("jdhkjfhlkJH");
     if (sifra != '') {
         if ($("[name='Zadatci[" + sifra + "].IdZadatak'").length > 0) {
             alert('Zadatak je već u dokumentu');
@@ -32,18 +32,21 @@ function dodajZadatak() {
         }
 
         var oib = $("#zadatak-oibnositelj").val();
-        var idzahtjev = $("zadtak-zahtjev").val();
+        var idzahtjev = $("zadatak-zahtjev").val();
         var naziv = $("#zadatak-naziv").val();
         var status = $("#zadatak-status").val();
-        var vrpoc = new Date($("#zadatak-pocetak").val());
-        var vrkraj = new Date($("#zadatak-kraj").val());
-        var vrockraj = new Date($("#zadatak-ockraj").val());
+        var vrpoc = ($("#zadatak-pocetak").val());
+        var vrkraj = ($("#zadatak-kraj").val());
+        var vrockraj = ($("#zadatak-ockraj").val());
+        var nazivstatusa = ($("#naziv-statusa").val());
 
 
         var template = $('#template').html();
 
         //Alternativa ako su hr postavke sa zarezom //http://haacked.com/archive/2011/03/19/fixing-binding-to-decimals.aspx/
         //ili ovo http://intellitect.com/custom-model-binding-in-asp-net-core-1-0/
+
+        
 
         template = template.replace(/--sifra--/g, sifra)
             .replace(/--status--/g, status)
@@ -53,8 +56,14 @@ function dodajZadatak() {
             .replace(/--vrpoc--/g, vrpoc)
             .replace(/--vrkraj--/g, vrkraj)
             .replace(/--vrockraj--/g, vrockraj)
+            .replace(/--nazivstatus--/g, nazivstatusa)
+                    
+
+        $(template).find('.dynamic-oib').val(oib);
 
         $(template).find('tr').insertBefore($("#table-zadatci").find('tr').last());
+
+
 
         $("#zadatak-sifra").val('');
         $("#zadatak-status").val('');

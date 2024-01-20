@@ -17,6 +17,8 @@ using RPPP_WebApp.ViewModels;
 using RPPP_WebApp.Extensions;
 using System.Collections;
 using NLog.Fluent;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using PdfRpt.Core.Helper;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -433,25 +435,6 @@ namespace RPPP_WebApp.Controllers
                 
                 };
 
-                //if (CIJELAPREDAJA.Zadatci == null)
-                //{
-                //    return NotFound("Nema poslanih podataka");
-                //}
-                //else
-                //{
-                //    return NotFound(CIJELAPREDAJA.Zadatci);
-                //}
-
-                //if (CIJELAPREDAJA.Statusi == null)
-                //{
-                //    return NotFound("Nema poslanih podataka");
-                //}
-                //else
-                //{
-                //    return NotFound(CIJELAPREDAJA.Statusi.Count());
-                //}
-
-                //await SetPreviousAndNext(position.Value, filter, sort, ascending);
 
 
                 ViewBag.Page = page;
@@ -531,8 +514,7 @@ namespace RPPP_WebApp.Controllers
 
                 foreach (var stavka in model.Zadatci)
                 {
-                    //ažuriraj postojeće i dodaj nove
-                    Zadatak novaStavka; // potpuno nova ili dohvaćena ona koju treba izmijeniti
+                    Zadatak novaStavka; 
                     if (stavka.IdZadatak > 0)
                     {
                         novaStavka = zahtjev.Zadatak.First(s => s.IdZadatak == stavka.IdZadatak);
@@ -541,23 +523,38 @@ namespace RPPP_WebApp.Controllers
                     else
                     {
 
-                        NotFound("Ne postoji zahtjev s id-om: " + stavka);
-
                         novaStavka = new Zadatak();
+                        novaStavka.IdZahtjev = model.zahtjev.IdZahtjev;
                         zahtjev.Zadatak.Add(novaStavka);
                     }
+
+                    var idstatusa = await ctx.StatusZadatka
+                                     .Where(s => s.NazivStatus == stavka.NazivStatus)
+                                     .Select(s => s.IdStatus)
+                                     .FirstOrDefaultAsync();
+
+                    //stavka.IdStatus = idstatusa;
+
+
+                    int.TryParse(stavka.NazivStatus, out int parsedStatus);
+
+                    //stavka.IdStatus = parsedStatus;
+
+
+
                     novaStavka.Oibnositelj = stavka.Oibnositelj;
                     novaStavka.Vrsta = stavka.Vrsta;
-                    novaStavka.IdStatus = stavka.IdStatus;
+                    novaStavka.IdStatus = (stavka.NazivStatus == null && stavka.IdStatus == novaStavka.IdStatus) ? stavka.IdStatus : parsedStatus;
                     novaStavka.VrPoc = stavka.VrPoc;
                     novaStavka.VrKraj = stavka.VrKraj;
                     novaStavka.VrKrajOcekivano = stavka.VrKrajOcekivano;
                     novaStavka.IdZahtjev = model.zahtjev.IdZahtjev;
+                    novaStavka.IdStatusNavigation = stavka.IdStatusNavigation;
+
+
 
                 }
 
-                //dokument.IznosDokumenta = (1 + dokument.PostoPorez) * model.Stavke.Sum(s => s.IznosArtikla);
-                //eventualno umanji iznos za dodatni popust za kupca i sl... nešto što bi bilo poslovno pravilo
                 try
                 {
 
@@ -585,30 +582,6 @@ namespace RPPP_WebApp.Controllers
                 return View(model);
             }
         }
-        //private async Task SetPreviousAndNext(int position, string filter, int sort, bool ascending)
-        //{
-        //    var query = ctx.vw_Dokumenti.AsQueryable();
 
-        //    DokumentFilter df = new DokumentFilter();
-        //    if (!string.IsNullOrWhiteSpace(filter))
-        //    {
-        //        df = DokumentFilter.FromString(filter);
-        //        if (!df.IsEmpty())
-        //        {
-        //            query = df.Apply(query);
-        //        }
-        //    }
-
-        //    query = query.ApplySort(sort, ascending);
-        //    if (position > 0)
-        //    {
-        //        ViewBag.Previous = await query.Skip(position - 1).Select(d => d.IdDokumenta).FirstAsync();
-        //    }
-        //    if (position < await query.CountAsync() - 1)
-        //    {
-        //        ViewBag.Next = await query.Skip(position + 1).Select(d => d.IdDokumenta).FirstAsync();
-        //    }
-        //}
-        
     }
 }

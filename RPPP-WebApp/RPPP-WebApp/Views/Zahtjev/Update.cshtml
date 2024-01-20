@@ -105,28 +105,10 @@
                    title="Odustani">
                     <i class="fas fa-undo-alt">Odustani</i>
                 </a>
-            </div>
-            @* ID PROJEKTAAAA *@
-
 
 
 
         </div>
-
-        @* <div class="form-group row">
-            <label asp-for="IdPrethDokumenta" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-1">
-                <input asp-for="IdPrethDokumenta" readonly="readonly" class="form-control" data-autocomplete-placeholder="dokument" />
-            </div>
-            <div class="col-sm-3">
-                <input class="form-control" data-autocomplete="dokument" value="@Model.NazPrethodnogDokumenta" />
-            </div>
-            <label asp-for="IznosDokumenta" class="col-sm-1 col-form-label"></label>
-            <label class="col-sm-2 col-form-label">@Model.IznosDokumenta.ToString("C2")</label>
-
-        </div> *@
-
-
 
         
             <table class="table table-striped" id="table-zadatci">
@@ -160,6 +142,7 @@
                                 <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdZadatak" value="@zadatak.IdZadatak" />
                                 <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdZahtjev" value="@zadatak.IdZahtjev" />
                                 <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdStatus" value="@zadatak.IdStatus" />
+                                <input type="hidden" name="Zadatci[@zadatak.IdZadatak].IdStatusNavigation" value="@zadatak.IdStatusNavigation" />
 
                             </td>
                             <td class="text-center col-sm-1">
@@ -194,7 +177,7 @@
                             </td>
 
                             <td>
-                                @{counter++;}
+                                @{counter = counter + 1;}
                             
                                  <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
                             </td>
@@ -214,7 +197,7 @@
                         </td>
                         <td class="text-center col-sm-1">
                         <select style=" width:fit-content" name="zadatak-status" id="zadatak-status" class="form-control" asp-items="ViewBag.ZadatciStatusi">
-                                <option value=""></option> <!-- Provide a default option -->
+                                <option id="naziv-statusa" value=""></option> <!-- Provide a default option -->
                             </select>
                         </td>
                         <td class="text-right col-sm-1">
@@ -224,14 +207,15 @@
                         </td>
                         <td class="text-right col-sm-1">
                             <div>
-                                <input id="zadatak-kraj" type="datetime-local" data-val="true" />
+                                <input id="zadatak-ockraj" type="datetime-local" data-val="true" />
                             </div>
                         </td>
                         <td class="text-right col-sm-1">
                             <div>
-                                <input id="zadatak-ockraj" type="datetime-local" data-val="true" />
+                                <input id="zadatak-kraj" type="datetime-local" data-val="true" />
                             </div>
                         </td>
+                        
                             <td class="text-left" colspan="3">
                                 <button id="zadatak-dodaj" class="btn btn-sm btn-secondary" title="Dodaj"><i class="fas fa-plus"></i>+</button>
                         </td>
@@ -247,27 +231,27 @@
     <tr>
         <td class="text-left col-sm-4">
             <input type="hidden" name="Zadatci.Index" value="--sifra--" />
-            <input type="hidden" name="Zadatci[--sifra--].IdZahtjev" value="--zahtjev--" />
-            <select style="font-size:small; width:fit-content" name="Zadatci[--sifra--].Oibnositelj" class="form-control" asp-items="ViewBag.ZadatciSuradnici">
-                <option value="--oib--"></option>
+            <input type="hidden" name="Zadatci[--sifra--].IdZahtjev" value="@Model.zahtjev.IdZahtjev" />
+            <select style="font-size:small; width:fit-content" name="Zadatci[--sifra--].Oibnositelj" class="form-control" class="dynamic-oib" value="" asp-items="ViewBag.ZadatciSuradnici">
+                <option selected value="--oib--">--oib--</option>
             </select>
         </td>
         <td class="text-center col-sm-1">
             <input name="Zadatci[--sifra--].Vrsta" class="form-control" value="--naziv--" />
         </td>
         <td>
-            <select style=" width:fit-content" name="Zadatci[--sifra--].IdStatus" class="form-control" asp-items="ViewBag.ZadatciStatusi">
-                <option value="--status--"></option> <!-- Provide a default option -->
+            <select style=" width:fit-content" name="Zadatci[--sifra--].NazivStatus" class="form-control"  asp-items="ViewBag.ZadatciStatusi">
+                <option  value="--status--">--status--</option> <!-- Provide a default option -->
             </select>
         </td>
         <td class="text-right col-sm-1">
-            <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[--sifra--].VrKPoc" value="--vrpoc--" />
-        </td>
-        <td class="text-right col-sm-1">
-            <input class="form-control" type="datetime-local" data-val="true" name="Zadatci[--sifra--].VrKraj" value="--vrkraj--" />
+            <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[--sifra--].VrPoc" value="--vrpoc--" />
         </td>
         <td class="text-right col-sm-1">
             <input class="form-control" type="datetime-local" data-val="true" data-val-required="Potrebno je odabrati datum " name="Zadatci[--sifra--].VrKrajOcekivano" value="--vrockraj--" />
+        </td>
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="datetime-local" data-val="true" name="Zadatci[--sifra--].VrKraj" value="--vrkraj--" />
         </td>
         <td>
             <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fas fa-minus"></i></button>
