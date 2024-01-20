@@ -189,7 +189,7 @@ namespace RPPP_WebApp.Controllers
                     }
 
                     worksheet.Cells[1, 1, karticaTransakcije.Count + 1, 4].AutoFitColumns();
-                    
+
                 }
                 content = excel.GetAsByteArray();
                 return File(content, ExcelContentType, "master(ProjektnaKartica)-detail(Transakcija).xlsx");
@@ -664,7 +664,8 @@ namespace RPPP_WebApp.Controllers
                 });
             })
             //fix za linux https://github.com/VahidN/PdfReport.Core/issues/40
-            .DefaultFonts(fonts => {
+            .DefaultFonts(fonts =>
+            {
                 fonts.Path(Path.Combine(environment.WebRootPath, "fonts", "verdana.ttf"),
                            Path.Combine(environment.WebRootPath, "fonts", "tahoma.ttf"));
                 fonts.Size(9);
@@ -695,103 +696,7 @@ namespace RPPP_WebApp.Controllers
         }
         #endregion
 
-    //Export u excel zahtjev
-        public async Task<IActionResult> ZahtjevExcel()
-        {
-            var zahtjevi = await ctx.Zahtjev
-                                  .AsNoTracking()
-                                  .OrderBy(d => d.IdZahtjev)
-                                  .ToListAsync();
-
-            var vrste = await ctx.Zahtjev.AsNoTracking().OrderBy(d => d.IdZahtjev)
-                                  .Select(d => d.IdVrstaNavigation.NazivVrsta)
-                                  .ToListAsync();
-
-            var projekti = await ctx.Zahtjev.AsNoTracking().OrderBy(d => d.IdZahtjev)
-                                  .Select(d => d.IdProjektNavigation.Naziv)
-                                  .ToListAsync();
-
-            byte[] content;
-            using (ExcelPackage excel = new ExcelPackage())
-            {
-                excel.Workbook.Properties.Title = "Popis zahtjeva";
-                excel.Workbook.Properties.Author = "RPPP05";
-                var worksheet = excel.Workbook.Worksheets.Add("Zahtjevi");
-
-                //First add the headers
-                worksheet.Cells[1, 1].Value = "ID zahtjeva";
-                worksheet.Cells[1, 2].Value = "ID Projekta";
-                worksheet.Cells[1, 3].Value = "Naziv Vrste";
-                worksheet.Cells[1, 4].Value = "Opis";
-                worksheet.Cells[1, 5].Value = "Prioritet";
-                worksheet.Cells[1, 6].Value = "Vrijeme početka";
-                worksheet.Cells[1, 7].Value = "Vrijeme kraja";
-
-                for (int i = 0; i < zahtjevi.Count; i++)
-                {
-                    worksheet.Cells[i + 2, 1].Value = zahtjevi[i].IdZahtjev;
-                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[i + 2, 2].Value = projekti[i];
-                    worksheet.Cells[i + 2, 3].Value = vrste[i];
-                    worksheet.Cells[i + 2, 4].Value = zahtjevi[i].Opis;
-                    worksheet.Cells[i + 2, 5].Value = zahtjevi[i].Prioritet;
-                    worksheet.Cells[i + 2, 6].Value = zahtjevi[i].VrPocetak.ToString("g");
-                    worksheet.Cells[i + 2, 7].Value = zahtjevi[i].VrKraj.HasValue ? zahtjevi[i].VrKraj.Value.ToString("g") : "" ;
-
-                }
-
-                worksheet.Cells[1, 1, zahtjevi.Count + 1, 7].AutoFitColumns();
-
-                content = excel.GetAsByteArray();
-            }
-            return File(content, ExcelContentType, "Zahtjevi.xlsx");
-        }
-
-        public async Task<IActionResult> ZadatakExcel()
-        {
-            var zadatci = await ctx.Zadatak
-                                  .AsNoTracking()
-                                  .OrderBy(d => d.IdZadatak)
-                                  .ToListAsync();
-
-            var statusi = await ctx.Zadatak.AsNoTracking().OrderBy(d => d.IdZahtjev)
-                                  .Select(d => d.IdStatusNavigation.NazivStatus)
-                                  .ToListAsync();
-
-            byte[] content;
-            using (ExcelPackage excel = new ExcelPackage())
-            {
-                excel.Workbook.Properties.Title = "Popis Zadataka";
-                excel.Workbook.Properties.Author = "RPPP05";
-                var worksheet = excel.Workbook.Worksheets.Add("Zadatci");
-
-                //First add the headers
-                worksheet.Cells[1, 1].Value = "ID zadatka";
-                worksheet.Cells[1, 2].Value = "Naziv";
-                worksheet.Cells[1, 3].Value = "OIB nositelja";
-                worksheet.Cells[1, 4].Value = "Status zadatka";
-                worksheet.Cells[1, 5].Value = "Vrijeme početka";
-                worksheet.Cells[1, 6].Value = "Vrijeme kraja";
-                worksheet.Cells[1, 7].Value = "Vrijeme očekivanog kraja";
-
-                for (int i = 0; i < zadatci.Count; i++)
-                {
-                    worksheet.Cells[i + 2, 1].Value = zadatci[i].IdZadatak;
-                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    worksheet.Cells[i + 2, 2].Value = zadatci[i].Vrsta;
-                    worksheet.Cells[i + 2, 3].Value = zadatci[i].Oibnositelj;
-                    worksheet.Cells[i + 2, 5].Value = statusi[i];
-                    worksheet.Cells[i + 2, 5].Value = zadatci[i].VrPoc;
-                    worksheet.Cells[i + 2, 6].Value = zadatci[i].VrKraj;
-                    worksheet.Cells[i + 2, 7].Value = zadatci[i].VrKrajOcekivano;
-                }
-
-                worksheet.Cells[1, 1, zadatci.Count + 1, 7].AutoFitColumns();
-
-                content = excel.GetAsByteArray();
-            }
-            return File(content, ExcelContentType, "Zadatci.xlsx");
-        }
+        //Export u excel zahtjev
     }
 
 
