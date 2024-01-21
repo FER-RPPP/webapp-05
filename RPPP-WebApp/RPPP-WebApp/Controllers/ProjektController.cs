@@ -346,7 +346,7 @@ namespace RPPP_WebApp.Controllers
                                           IdVrstaDok = s.IdVrstaDok,
                                           NazivDatoteka = s.NazivDatoteka,
                                           URLdokument = s.URLdokument,
-                                          VrstaDok = s.IdVrstaDokNavigation.NazivVrstaDok
+                                          NazivVrstaDok = s.IdVrstaDokNavigation.NazivVrstaDok
                                       })
                                       .ToListAsync();
 
@@ -385,7 +385,6 @@ namespace RPPP_WebApp.Controllers
 		public async Task<IActionResult> Update(MDprojektViewModel model, int page = 1, int sort = 1, bool ascending = true)
 		{
 
-            Console.WriteLine("Ovo je model: " + model);
             
 			if(ModelState.IsValid)
 			{

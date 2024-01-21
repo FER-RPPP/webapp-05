@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using RPPP_WebApp.Models;
 using RPPP_WebApp.Extensions;
 using RPPP_WebApp.Exstensions;
+using RPPP_WebApp.ViewModels;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using PdfRpt.ColumnsItemsTemplates;
@@ -19,6 +20,8 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using static iTextSharp.text.pdf.AcroFields;
+using RPPP_WebApp.ViewModels.PD_viewModels;
+
 //using OfficeOpenXml;
 
 namespace RPPP_WebApp.Controllers
@@ -2076,6 +2079,7 @@ namespace RPPP_WebApp.Controllers
             #endregion
 
             #region Postavljanje izvora podataka i stupaca
+
             report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(poslovi));
 
             report.MainTableColumns(columns =>
@@ -2087,11 +2091,13 @@ namespace RPPP_WebApp.Controllers
                     column.IsVisible(true);
                     column.Order(0);
                     column.Width(1);
+
                     column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
                 });
 
                 columns.AddColumn(column =>
                 {
+
                     column.PropertyName(nameof(Suradnik.IdSuradnik));
                     column.CellsHorizontalAlignment(HorizontalAlignment.Center);
                     column.IsVisible(true);
@@ -2162,7 +2168,8 @@ namespace RPPP_WebApp.Controllers
                     column.Width(2);
                     column.HeaderCell("Kvalifikacija");
                 });
-            });
+                });
+               
 
             #endregion
 
@@ -2170,7 +2177,7 @@ namespace RPPP_WebApp.Controllers
 
             if (pdf != null)
             {
-                Response.Headers.Add("content-disposition", "inline; filename=partneri.pdf");
+                Response.Headers.Add("content-disposition", "inline; filename=suradnici.pdf");
                 return File(pdf, "application/pdf");
                 //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
             }
@@ -2193,8 +2200,6 @@ namespace RPPP_WebApp.Controllers
                           PredVrTrajanjaDani = s.PredVrTrajanjaDani
                       })
                       .ToListAsync();
-
-
             PdfReport report = CreateReport(naslov);
             #region Podnožje i zaglavlje
             report.PagesFooter(footer =>
@@ -2215,6 +2220,7 @@ namespace RPPP_WebApp.Controllers
             #region Postavljanje izvora podataka i stupaca
             report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(poslovi));
 
+
             report.MainTableColumns(columns =>
             {
                 columns.AddColumn(column =>
@@ -2226,7 +2232,6 @@ namespace RPPP_WebApp.Controllers
                     column.Width(1);
                     column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Right);
                 });
-
                 columns.AddColumn(column =>
                 {
                     column.PropertyName(nameof(Posao.IdPosao));
@@ -2263,10 +2268,8 @@ namespace RPPP_WebApp.Controllers
                     column.Width(3);
                     column.HeaderCell("Predvideno vrijeme trajanja u danima");
                 });
-            });
-
-            #endregion
-
+                });
+                #endregion
             byte[] pdf = report.GenerateAsByteArray();
 
             if (pdf != null)
@@ -2281,10 +2284,351 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        public async Task<IActionResult> ProjektExcel()
+        {
+            var projekti = await ctx.Projekt
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdProjekt)
+                                  .ToListAsync();
+
+            var vrste = await ctx.Projekt.AsNoTracking().OrderBy(d => d.IdProjekt)
+                                  .Select(d => d.IdTipNavigation.NazivTip)
+                                  .ToListAsync();
+
+            byte[] content;
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                excel.Workbook.Properties.Title = "Popis projekata";
+                excel.Workbook.Properties.Author = "RPPP05";
+                var worksheet = excel.Workbook.Worksheets.Add("Projekti");
+
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "ID Projekta";
+                worksheet.Cells[1, 2].Value = "Vrsta projekta";
+                worksheet.Cells[1, 3].Value = "Opis";
+                worksheet.Cells[1, 4].Value = "Vrijeme pocetka";
+                worksheet.Cells[1, 5].Value = "Vrijeme Kraja";
+                worksheet.Cells[1, 6].Value = "Naziv";
+               
 
 
+                for (int i = 0; i < projekti.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = projekti[i].IdProjekt;
+                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 2, 2].Value = vrste[i];
+                    worksheet.Cells[i + 2, 3].Value = projekti[i].Opis;
+                    worksheet.Cells[i + 2, 4].Value = projekti[i].VrPocetak.ToString("g");
+                    worksheet.Cells[i + 2, 5].Value = projekti[i].VrKraj.HasValue ? projekti[i].VrKraj.Value.ToString("g") : "";
+                    worksheet.Cells[i + 2, 6].Value = projekti[i].Naziv;
+                    
 
+                }
+
+                worksheet.Cells[1, 1, projekti.Count + 1, 6].AutoFitColumns();
+
+                content = excel.GetAsByteArray();
+            }
+            return File(content, ExcelContentType, "Projekti.xlsx");
+        }
+
+        public async Task<IActionResult> DokumentExcel()
+        {
+            var dokumenti = await ctx.Dokument
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdDokument)
+                                  .ToListAsync();
+
+            var vrste = await ctx.Dokument.AsNoTracking().OrderBy(d => d.IdDokument)
+                                  .Select(d => d.IdVrstaDokNavigation.NazivVrstaDok)
+                                  .ToListAsync();
+
+            byte[] content;
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                excel.Workbook.Properties.Title = "Popis Dokumenata";
+                excel.Workbook.Properties.Author = "RPPP05";
+                var worksheet = excel.Workbook.Worksheets.Add("Dokumenti");
+
+                //First add the headers
+                worksheet.Cells[1, 1].Value = "ID dokument";
+                worksheet.Cells[1, 2].Value = "Ekstenzija";
+                worksheet.Cells[1, 3].Value = "Velicina dokumenta";
+                worksheet.Cells[1, 4].Value = "Pripadni projekt";
+                worksheet.Cells[1, 5].Value = "Vrsta dokumenta";
+                worksheet.Cells[1, 6].Value = "Naziv dokumenta";
+                worksheet.Cells[1, 7].Value = "Lokacija dokumenta";
+
+                for (int i = 0; i < dokumenti.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = dokumenti[i].IdDokument;
+                    worksheet.Cells[i + 2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[i + 2, 2].Value = dokumenti[i].TipDokument;
+                    worksheet.Cells[i + 2, 3].Value = dokumenti[i].VelicinaDokument;
+                    worksheet.Cells[i + 2, 4].Value = dokumenti[i].IdProjekt;
+                    worksheet.Cells[i + 2, 5].Value = vrste[i];
+                    worksheet.Cells[i + 2, 6].Value = dokumenti[i].NazivDatoteka;
+                    worksheet.Cells[i + 2, 7].Value = dokumenti[i].URLdokument;
+                }
+
+                worksheet.Cells[1, 1, dokumenti.Count + 1, 7].AutoFitColumns();
+
+                content = excel.GetAsByteArray();
+            }
+            return File(content, ExcelContentType, "Dokumenti.xlsx");
+        }
+
+    
+
+        public async Task<IActionResult> ProjektPDF()
+        {
+            string naslov = "Popis projekata";
+
+            var projekti = await ctx.Projekt.AsNoTracking().Select(
+                s => new ProjektPomocni
+                {
+                    IdProjekt = s.IdProjekt,
+                    VrPocetak = s.VrPocetak,
+                    VrKraj = s.VrKraj,
+                    Opis = s.Opis,
+                    Naziv = s.Naziv,
+                    IdTip = s.IdTip,
+                    NazivTip = s.IdTipNavigation.NazivTip
+                }).ToListAsync();
+            PdfReport report = CreateReport(naslov);
+            #region Podnožje i zaglavlje
+            report.PagesFooter(footer =>
+            {
+                footer.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+            })
+            .PagesHeader(header =>
+            {
+                header.CacheHeader(cache: true); // It's a default setting to improve the performance.
+                header.DefaultHeader(defaultHeader =>
+                {
+                    defaultHeader.RunDirection(PdfRunDirection.LeftToRight);
+                    defaultHeader.Message(naslov);
+                });
+            });
+            #endregion
+
+            #region Postavljanje izvora podataka i stupaca
+            column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Left);
+            report.MainTableColumns(columns =>
+            {
+                columns.AddColumn(column =>
+                {
+                    column.IsRowNumber(true);
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Right);
+                    column.IsVisible(true);
+                    column.Order(0);
+                    column.Width(1);
+                    column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Left);
+                });
+                columns.AddColumn(column =>
+                {
+                        column.PropertyName(nameof(Projekt.IdProjekt));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(1);
+                    column.Width(1);
+                    column.HeaderCell("ID Projekta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Projekt.VrPocetak));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(2);
+                    column.Width(2);
+                    column.HeaderCell("Vrijeme pocetka projekta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Projekt.VrKraj));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(3);
+                    column.Width(2);
+                    column.HeaderCell("Vrijeme kraja projekta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Projekt.Opis));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(4);
+                    column.Width(2);
+                    column.HeaderCell("Opis");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Projekt.Naziv));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(5);
+                    column.Width(2);
+                    column.HeaderCell("Naziv");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Projekt.IdTipNavigation.NazivTip));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(6);
+                    column.Width(2);
+                    column.HeaderCell("Tip projekta");
+                });
+                });
+
+            #endregion
+
+            byte[] pdf = report.GenerateAsByteArray();
+
+            if (pdf != null)
+            
+                Response.Headers.Add("content-disposition", "inline; filename=zahtjevi.pdf");
+                return File(pdf, "application/pdf");
+                //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+         public async Task<IActionResult> DokumentPDF()
+        {
+            string naslov = "Popis dokumenata";
+
+            var dokumenti = await ctx.Dokument.AsNoTracking().Select(
+                               s => new DokPomViewModel
+                               {
+                                   IdDokument = s.IdDokument,
+                                      IdProjekt = s.IdProjekt,
+                                      TipDokument = s.TipDokument,
+                                      VelicinaDokument = s.VelicinaDokument,
+                                      IdVrstaDok = s.IdVrstaDok,
+                                      NazivDatoteka = s.NazivDatoteka,
+                                      URLdokument = s.URLdokument,
+                                      NazivVrstaDok = s.IdVrstaDokNavigation.NazivVrstaDok,
+                                      
+                                 }).ToListAsync();
+
+            PdfReport report = CreateReport(naslov);
+            #region Podnožje i zaglavlje
+            report.PagesFooter(footer =>
+            {
+                footer.DefaultFooter(DateTime.Now.ToString("dd.MM.yyyy."));
+            })
+            .PagesHeader(header =>
+            {
+                header.CacheHeader(cache: true); // It's a default setting to improve the performance.
+                header.DefaultHeader(defaultHeader =>
+                {
+                    defaultHeader.RunDirection(PdfRunDirection.LeftToRight);
+                    defaultHeader.Message(naslov);
+                });
+            });
+            #endregion
+
+            #region Postavljanje izvora podataka i stupaca
+
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(dokumenti));
+
+            report.MainTableColumns(columns =>
+            {
+                columns.AddColumn(column =>
+                {
+                    column.IsRowNumber(true);
+
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Left);
+                    column.IsVisible(true);
+                    column.Order(0);
+                    column.Width(1);
+                    column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Left);
+                });
+
+                columns.AddColumn(column =>
+                {
+                        column.PropertyName(nameof(Dokument.IdDokument));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(1);
+                    column.Width(1);
+                    column.HeaderCell("ID Dokumenta");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Dokument.IdProjekt));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(2);
+                    column.Width(1);
+                    column.HeaderCell("Pripadni projekt");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Dokument.TipDokument));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(3);
+                    column.Width(1);
+                    column.HeaderCell("Ekstenzija");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Dokument.VelicinaDokument));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(4);
+                    column.Width(2);
+                    column.HeaderCell("Velicina");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Dokument.NazivDatoteka));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(5);
+                    column.Width(2);
+                    column.HeaderCell("Naziv");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Dokument.URLdokument));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(6);
+                    column.Width(4);
+                    column.HeaderCell("Lokacija");
+                });
+                columns.AddColumn(column =>
+                {
+                    column.PropertyName(nameof(Dokument.IdVrstaDokNavigation.NazivVrstaDok));
+                    column.CellsHorizontalAlignment(HorizontalAlignment.Center);
+                    column.IsVisible(true);
+                    column.Order(7);
+                    column.Width(2);
+                    column.HeaderCell("Kategorija");
+                });
+            });
+
+            #endregion
+
+            byte[] pdf = report.GenerateAsByteArray();
+
+            if (pdf != null)
+            {
+
+                Response.Headers.Add("content-disposition", "inline; filename=zahtjevi.pdf");
+                return File(pdf, "application/pdf");
+                //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
+            }
+            else
+            {
+                return NotFound();
+            }
+               
     }
-
     
 }
