@@ -179,7 +179,7 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Change(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
+        public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
         {
             try
             {
