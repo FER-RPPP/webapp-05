@@ -89,15 +89,15 @@ namespace RPPP_WebApp.Controllers
             }
             ViewBag.PosloviVrste = new SelectList(poslovi, nameof(hr.IdVrstaPosao), nameof(hr.NazivPosao));
 
-            var hrv = await ctx.Suradnik
+            var hrv = await ctx.Radi
                                   .Where(d => d.IdSuradnik == 1)
-                                  .Select(d => new { v = d.Oib + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
+                                  .Select(d => new {v =  d.Oib, d.IdSuradnik })
                                   .FirstOrDefaultAsync();
 
-            var suradnici = await ctx.Suradnik
+            var suradnici = await ctx.Radi
                                   .Where(d => d.IdSuradnik != 1)
                                   .OrderBy(d => d.Oib)
-                                  .Select(d => new {v = d.Ime + d.Prezime + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
+                                  .Select(d => new {v = d.OibNavigation.Ime + " " + d.OibNavigation.Prezime + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
                                   .ToListAsync();
             if (hrv != null)
             {
@@ -117,7 +117,7 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Posao posao, string[] selectedSuradnici)
+        public async Task<IActionResult> Create(Posao posao, Suradnik[] selectedSuradnici)
         {
             logger.LogTrace(JsonSerializer.Serialize(posao));
 
@@ -130,11 +130,11 @@ namespace RPPP_WebApp.Controllers
                     ctx.Add(posao);
                     ctx.SaveChanges();
 
-                    foreach (string oib in selectedSuradnici)
+                    foreach (Suradnik suradnik in selectedSuradnici)
                     {
                         Radi radi = new Radi
                         {
-                            Oib = oib,
+                            Oib = suradnik.Oib,
                             IdPosao = posao.IdPosao
                         };
 
