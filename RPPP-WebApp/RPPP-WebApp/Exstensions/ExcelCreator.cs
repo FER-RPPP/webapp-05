@@ -1,14 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using RPPP_WebApp.Util;
+using System;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace RPPP_WebApp.Exstensions
 {
+    /// <summary>
+    /// Razred koji sadrzi ekstenziju za stvaranje Excel iz baze podataka
+    /// </summary>
     public static class ExcelCreator
     {
+        /// <summary>
+        /// Stvara Exceliz baze podataka
+        /// </summary>
+        /// <typeparam name="T">Tip podataka u kolekciji</typeparam>
+        /// <param name="data">Kolekcija podataka</param>
+        /// <param name="worksheetName">Ime radnog lista</param>
+        /// <returns>Excel datoteka</returns>
         public static ExcelPackage CreateExcel<T>(this IEnumerable<T> data, string worksheetName)
         {
             ExcelPackage excel = new ExcelPackage();
