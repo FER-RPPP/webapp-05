@@ -33,6 +33,9 @@
                 <div>
                     IBAN: @Model.partner.Ibanpartner
                 </div>
+                <div>
+                    Projekt: @ViewBag.Projektic
+                </div>
             </h5>
         </div>
         <div class="col-sm-2">
@@ -60,6 +63,13 @@
             OIB: @Model.partner.Oib
         </div>
        
+        <div class="col-sm-1 text-right">
+            <a asp-action="Update"
+               asp-route-id="@Model.partner.IdPartner"
+               target="_blank"
+               class="btn btn-warning btn-sm" title="Ažuriraj"><i class="fas fa-edit">Uredi</i></a>
+        </div>
+
         <div class="col-sm-1 text-center">
             <a class="btn btn-sm btn-primary cancel"
                asp-action="Index"

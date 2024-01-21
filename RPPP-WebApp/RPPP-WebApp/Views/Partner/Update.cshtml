@@ -1,0 +1,255 @@
+﻿@model PartnerSuradnikViewModel
+@{
+    ViewBag.Title = "Izmjena";
+}
+
+<div style="padding-left:3%;" class="text-center">
+    <h4>Partner br: @Model.partner.IdPartner</h4>
+</div>
+<hr />
+
+<div class="container">
+    <form id="partner_form" method="post"
+          asp-action="Update"
+          asp-route-page="@ViewBag.Page"
+          asp-route-sort="@ViewBag.Sort"
+          asp-route-ascending="@ViewBag.Ascending"
+          asp-route-filter="@ViewBag.Filter"
+          asp-route-position="@ViewBag.Position">
+        <input type="hidden" asp-for="partner.IdPartner" />
+        <div asp-validation-summary="All" class="form-group row"></div>
+
+        <div style="padding-bottom:5px;  padding-left:4%;" class="form-group row  text-center">
+            <label asp-for="TipPartnera" class="col-sm-2 col-form-label">Tip</label>
+            <div class="col-sm-2">
+                @* <select class="form-control" asp-for="NazVrsta">
+                <option disabled selected value=""></option>
+                <option value="R">R-1</option>
+                <option value="O">O</option>
+                </select> *@
+                <select class="form-control" asp-for="partner.IdTipPartnera" asp-items="ViewBag.PartneriTipovi">
+                    <option disabled selected value="">@Model.TipPartnera</option>
+                </select>
+            </div>
+            <label asp-for="partner.Oib" class="col-sm-1 col-form-label">OIB</label>
+            <div class="col-sm-1">
+                <input asp-for="partner.Oib" class="form-control" />
+            </div>
+            <label asp-for="partner.EmailPartner" class="col-sm-1 col-form-label">Email</label>
+            <div class="col-sm-5">
+                <input asp-for="partner.EmailPartner" class="form-control" />
+            </div>
+        </div>
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center col-sm-15 ">
+
+            <label asp-for="TipPartnera" class="col-sm-2 col-form-label">Projekt</label>
+            <div class="col-sm-2">
+                @* <select class="form-control" asp-for="NazVrsta">
+                <option disabled selected value=""></option>
+                <option value="R">R-1</option>
+                <option value="O">O</option>
+                </select> *@
+                <select class="form-control" asp-for="partner.IdProjekt" asp-items="ViewBag.ProjektiPopis">
+                    <option disabled selected value="">@Model.partner.IdProjekt</option>
+                </select>
+            </div>
+            <label asp-for="partner.AdresaPartner" class="col-sm-2 col-form-label">Adresa</label>
+            <div class="col-sm-2">
+                <input asp-for="partner.AdresaPartner" class="form-control" />
+            </div>
+            <label asp-for="partner.Ibanpartner" class="col-sm-2 col-form-label">IBAN</label>
+            <div class="col-sm-2">
+                <input class="form-control" asp-for="@Model.partner.Ibanpartner" />
+            </div>
+        </div>
+
+
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center ">
+
+            <label asp-for="partner.NazivPartner" class="col-sm-2 col-form-label">Naziv partnera</label>
+            <div class="col-sm-2">
+                <input asp-for="@Model.partner.NazivPartner" class="form-control" />
+            </div>
+
+            <div class="col-sm-3 text-right">
+                @* <button hx-include="closest tr"
+                hx-encoding="multipart/form-data"
+                hx-post="@Url.Action(nameof(ZahtjevController.Update))"
+                class="btn btn-sm btn-primary" title="Spremi">
+                <i class="fas fa-save"></i>
+                </button> *@
+                <button id="save" type="submit" class="btn btn-sm btn-primary save" title="Spremi"><i class="fas fa-save"></i>Spremi</button>
+
+
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Update"
+                   asp-route-id="@Model.partner.IdPartner"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   asp-route-position="@ViewBag.Position"
+                   title="Osvježi">
+                    <i class="fas fa-sync-alt">Osvježi</i>
+                </a>
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Show"
+                   asp-route-id="@Model.partner.IdPartner"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   title="Odustani">
+                    <i class="fas fa-undo-alt">Odustani</i>
+                </a>
+
+
+
+            </div>
+
+
+            <table class="table table-striped" id="table-suradnici">
+                <thead>
+                    <tr>
+                        @{
+                            string[] nazivi = { "OIB", "Broj mobitela", "Kvalifikacija", "Ime", "Prezime", "Email", "Stranka" };
+                            for (int i = 0; i < nazivi.Length; i++)
+                            {
+                                <th class="text-center">
+                                    @nazivi[i]
+                                </th>
+                            }
+                        }
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 0;
+                    }
+                    @foreach (var suradnik in Model.Suradnici)
+                    {
+                        <tr>
+                            <input type="hidden" name="Suradnici.Index" value="@suradnik.IdSuradnik" />
+
+                            <td style="width:fit-content !important;" class="text-center col-sm-2">
+                                <input type="hidden" name="Suradnici[@suradnik.IdSuradnik].IdSuradnik" value="@suradnik.IdSuradnik" />
+                                <input type="hidden" name="Suradnici[@suradnik.IdSuradnik].IdPartner" value="@suradnik.IdPartner" />
+                                <input type="hidden" name="Suradnici[@suradnik.IdSuradnik].IdKvalifikacija" value="@suradnik.IdKvalifikacija" />
+                                <input type="hidden" name="Suradnici[@suradnik.IdSuradnik].IdKvalifikacijaNavigation" value="@suradnik.IdKvalifikacijaNavigation" />
+
+                            </td>
+                            <td class="text-center col-sm-1">
+                                <input name="Suradnici[@suradnik.IdSuradnik].Vrsta" class="form-control" value="@suradnik.Oib" />
+                            </td>
+                            <td class="text-right col-sm-1">
+                                <select name="Suradnici[@suradnik.IdSuradnik].NazivKvalifikacija" class="form-control" asp-for="@suradnik.NazivKvalifikacija" asp-items="ViewBag.SuradniciKvalifikacije">
+                                    <option value="">@suradnik.NazivKvalifikacija</option> <!-- Provide a default option -->
+
+                                </select>
+                            </td>
+
+                            <td class="text-right col-sm-1">
+                                <div>
+                                    <input class="form-control" data-val="true" data-val-required="Potrebno je unjeti ime" id="Suradnici[@suradnik.IdSuradnik].Ime" name="Suradnici[@suradnik.IdSuradnik].VrPoc" value="@suradnik.Ime" />
+                                </div>
+
+                            </td>
+                            <td class="text-right col-sm-1">
+                                <input class="form-control" data-val="true" data-val-required="Potrebno je unjeti prezime" name="Suradnici[@suradnik.IdSuradnik].Prezime" value="@suradnik.Prezime" />
+                            </td>
+                            <td class="text-right col-sm-1">
+                                <input class="form-control" data-val="true" data-val-required="Potrebno je unjeti broj mobitela" name="Suradnici[@suradnik.IdSuradnik].Mobitel" value="@suradnik.Mobitel" />
+                            </td>
+
+                            <td>
+                                @{
+                                    counter = counter + 1;
+                                }
+
+                                <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td class="text-center col-sm-1 hidden">
+                            <input id="suradnik-sifra" type="hidden" value=@counter />
+                            <input id="suradnik-zahtjev" type="hidden" value=@Model.partner.IdPartner />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <input id="suradnik-oib" type="text" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <select style=" width:fit-content" name="suradnik-kvalifikacija" id="suradnik-kvalifikacija" class="form-control" asp-items="ViewBag.SuradniciKvalifikacije">
+                                <option id="naziv-kvalifikacije" value=""></option> <!-- Provide a default option -->
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-1">
+                            <div>
+                                <input id="suradnik-ime" type="text" data-val="true" />
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-1">
+                            <div>
+                                <input id="suradnik-prezime" type="text" data-val="true" />
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-1">
+                            <div>
+                                <input id="suradnik-mobitel" type="text" data-val="true" />
+                            </div>
+                        </td>
+
+                        <td class="text-left" colspan="3">
+                            <button id="suradnik-dodaj" class="btn btn-sm btn-secondary" title="Dodaj"><i class="fas fa-plus"></i>+</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+    </form>
+</div>
+
+<table id="template" style="visibility:hidden">
+    <tr>
+        <td class="text-left col-sm-4">
+            <input type="hidden" name="Suradnici.Index" value="--sifra--" />
+            <input type="hidden" name="Suradnici[--sifra--].IdPartner" value="@Model.partner.IdPartner" />
+        </td>
+        <td class="text-center col-sm-1">
+            <input name="Suradnici[--sifra--].Oib" class="form-control" value="--oib--" />
+        </td>
+        <td>
+            <select style=" width:fit-content" name="Suradnici[--sifra--].NazivKvlifikacija" class="form-control" asp-items="ViewBag.SuradniciKvalifikacije">
+                <option value="--kvalifikacija--">--kvalifikacija--</option> <!-- Provide a default option -->
+            </select>
+        </td>
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="text" data-val="true" data-val-required="Potrebno je unjeti ime" name="Suradnici[--sifra--].Ime" value="--ime--" />
+        </td>
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="text" data-val="true" data-val-required="Potrebno je unjeti prezime" name="Suradnici[--sifra--].Prezime" value="--prezime--" />
+        </td>
+        <td class="text-right col-sm-1">
+            <input class="form-control" type="text" data-val="true" name="Suradnici[--sifra--].Mobitel" value="--mobitel--" />
+        </td>
+        <td>
+            <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fas fa-minus"></i></button>
+        </td>
+    </tr>
+</table>
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/jqueryui/themes/base/jquery-ui.css" />
+}
+
+@section scripts {
+    <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
+    <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
+
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script src="~/js/zahtjevi.js" asp-append-version="true"></script>
+}
