@@ -26,24 +26,40 @@ using RPPP_WebApp.ViewModels.PD_viewModels;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za izvjesca u pdf/excel
+    /// </summary>
     public class ReportController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly IWebHostEnvironment environment;
         private const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
+        /// <summary>
+        /// Inicijalizira novu instancu ReportController-a
+        /// </summary>
+        /// <param name="ctx">Kontekst podataka baze podataka</param>
+        /// <param name="environment">Okolina</param>
         public ReportController(RPPP05Context ctx, IWebHostEnvironment environment)
         {
             this.ctx = ctx;
             this.environment = environment;
         }
 
+        /// <summary>
+        /// Prikazuje pocetni prikaz izvjestaja
+        /// </summary>
+        /// <returns>Rezultat akcije za prikaz pocetnog prikaza</returns>
         public IActionResult Index()
         {
             return View();
         }
 
         #region Export u Excel Projektne kartice
+        /// <summary>
+        /// Izvozi projektne kartice u Excel formatu
+        /// </summary>
+        /// <returns>Excel datoteka sa Projektnim karticama</returns>
         public async Task<IActionResult> ProjektneKarticeExcel()
         {
             var kartice = await ctx.ProjektnaKartica
@@ -90,7 +106,10 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
         #region Export u Excel Transakcije
-
+        /// <summary>
+        /// Izvozi transakcije u Excel formatu
+        /// </summary>
+        /// <returns>Excel datoteka sa Transakcijama</returns>
         public async Task<IActionResult> TransakcijeExcel()
         {
             var transakcije = await ctx.Transakcija
@@ -152,7 +171,10 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
         #region Export u Excel M-D forma
-
+        /// <summary>
+        /// Izvozi M-D formu (Master-Detail) u Excelu
+        /// </summary>
+        /// <returns>Excel datoteka M-D forme</returns>
         public async Task<IActionResult> ProjektnaKarticaTransakcijeExcel()
         {
             var kartice = await ctx.ProjektnaKartica
@@ -251,6 +273,11 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
         #region Import iz Excel Projektne kartice
+        /// <summary>
+        /// Uvozi projektne kartice iz Excel datoteke
+        /// </summary>
+        /// <param name="importFile">Datoteka koja se uvozi</param>
+        /// <returns>Excel datoteka s rezultatima uvoza</returns>
         public async Task<IActionResult> ImportProjektneKartice(IFormFile importFile)
         {
             ExcelPackage result = new ExcelPackage();
@@ -309,8 +336,11 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
 
-
         #region PDF Projektne kartice
+        /// <summary>
+        /// Generira PDF izvjestaj s projektnim karticama
+        /// </summary>
+        /// <returns>PDF izvjestaja s projektima</returns>
         public async Task<IActionResult> ProjektneKarticePDF()
         {
             string naslov = "Popis projektnih kartica";
@@ -415,6 +445,10 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
         #region PDF Transakcije
+        /// <summary>
+        /// Generira PDF izvjestaj s transakcijama
+        /// </summary>
+        /// <returns>PDF izvjestaja s transakcijama</returns>
         public async Task<IActionResult> TransakcijePDF()
         {
             string naslov = "Popis transakcija";
@@ -537,21 +571,12 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
         #region PDF M-D forma
+        /// <summary>
+        /// Generira PDF izvjsštaj M-D forme (Master-Detail) s projektima i transakcijama
+        /// </summary>
+        /// <returns>PDF izvjestaja M-D forme</returns>
         public async Task<IActionResult> ProjektnaKarticaTransakcijePDF()
         {
-            /*var kartice = await ctx.ProjektnaKartica
-                                  .Select(u => new ProjektnaKarticaDenorm
-                                  {
-                                      subjektIBAN = u.SubjektIban,
-                                      Saldo = (int)u.Saldo,
-                                      valuta = u.Valuta,
-                                      vrijemeOtvaranja = u.VrijemeOtvaranja,
-                                      //idProjekt = u.IdProjektNavigation.Naziv,
-                                      idProjekt = u.IdProjekt
-                                      
-                                  })
-                                  .OrderBy(u => u.subjektIBAN)
-                                  .ToListAsync();*/
             var transakcije =  await ctx.Transakcija
                                   .Select(u => new ProjektnaKarticaDenorm
                                   {
@@ -563,9 +588,6 @@ namespace RPPP_WebApp.Controllers
                                       vrijednost = u.Vrijednost
 
                                   })
-                                  .OrderBy(u => u.idProjekt)
-                                  .ThenBy(u => u.idTransakcija)
-                                  .ThenBy(u=>u.primateljIBAN)
                                   .ToListAsync();
 
             string title = $"M-D form ProjektneKarticeTransakcije";
@@ -721,12 +743,15 @@ namespace RPPP_WebApp.Controllers
             else
                 return NotFound();
         }
-       
 
         #endregion
 
 
         #region CreateReport funkcija
+        /// <summary>
+        /// Stvara novi PDF izvjestaj s postavkama
+        /// </summary>
+        /// <param name="naslov">Naslov dokumenta.</param>
         private PdfReport CreateReport(string naslov)
         {
             var pdf = new PdfReport();
@@ -781,15 +806,29 @@ namespace RPPP_WebApp.Controllers
         #endregion
 
         #region Master-detail header
+        /// <summary>
+        /// Implementacija IPageHeader sucelja za prikaz zaglavlja u M-D (Master-Detail) izvjestajima
+        /// </summary>
         public class MasterDetailsHeaders : IPageHeader
         {
             private readonly string title;
+            /// <summary>
+            /// Inicijalizira novu instancu MasterDetailsHeaders klasea
+            /// </summary>
+            /// <param name="title">Naslov izvjestaja</param>
             public MasterDetailsHeaders(string title)
             {
                 this.title = title;
             }
+
+            /// <summary>
+            /// Postavlja font za PDF izvjestaj
+            /// </summary>
             public IPdfFont PdfRptFont { set; get; }
 
+            /// <summary>
+            /// Renderira grupno zaglavlje stranice
+            /// </summary>
             public PdfGrid RenderingGroupHeader(iTextSharp.text.Document pdfDoc, PdfWriter pdfWriter, IList<CellData> newGroupInfo, IList<SummaryCellData> summaryData)
             {
                 var subjektIBAN = newGroupInfo.GetSafeStringValueOf(nameof(ProjektnaKarticaDenorm.subjektIBAN));
@@ -900,6 +939,9 @@ namespace RPPP_WebApp.Controllers
                 return table.AddBorderToTable(borderColor: BaseColor.LightGray, spacingBefore: 5f);
             }
 
+            /// <summary>
+            /// Renderira zaglavlje izvjestaja
+            /// </summary>
             public PdfGrid RenderingReportHeader(iTextSharp.text.Document pdfDoc, PdfWriter pdfWriter, IList<SummaryCellData> summaryData)
             {
                 var table = new PdfGrid(numColumns: 1) { WidthPercentage = 100 };
@@ -914,7 +956,6 @@ namespace RPPP_WebApp.Controllers
                 return table.AddBorderToTable();
             }
         }
-
 
         #endregion
 

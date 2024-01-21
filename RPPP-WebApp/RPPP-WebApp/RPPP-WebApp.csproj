@@ -8,6 +8,7 @@
 
 	<PropertyGroup>
 		<UserSecretsId>RPPP</UserSecretsId>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

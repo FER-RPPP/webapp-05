@@ -13,6 +13,9 @@ using RPPP_WebApp.Exstensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za Projektne kartice
+    /// </summary>
     public class ProjektnaKarticaController : Controller
     {
 
@@ -20,6 +23,12 @@ namespace RPPP_WebApp.Controllers
         private readonly ILogger<ProjektnaKarticaController> logger;
         private readonly AppSettings appSettings;
 
+        /// <summary>
+        /// Inicijalizira novu instancu klase ProjektnaKarticaController/>.
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public ProjektnaKarticaController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ProjektnaKarticaController> logger)
         {
             this.ctx = ctx;
@@ -27,7 +36,13 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
-        // GET: ProjektnaKartica
+        /// <summary>
+        /// Prikazuje popis projektnih kartica s mogucnoscu stranicenja i sortiranja
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s popisom projektnih kartica</returns>
         [HttpGet]
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
@@ -85,13 +100,19 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Priprema padajuce liste projektna kartice
+        /// </summary>
+        /// <returns>Task zadatak za asinkrono izvođenje</returns>
         private async Task PrepareDropDownLists()
         {
             //TODO: napisat funkciju
         }
 
-
-        // GET: ProjektnaKartica/Create
+        /// <summary>
+        /// Prikazuje formu za stvaranje nove projektna kartice
+        /// </summary>
+        /// <returns>Task zadatak za asinkrono izvođenje</returns>
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -99,7 +120,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
-        // POST: ProjektnaKartica/Create
+        /// <summary>
+        /// Sprema novu projektnu karticu u bazu podataka
+        /// </summary>
+        /// <param name="proj_kartica">Nova projektna kartica</param>
+        /// <returns>Rezultat akcije</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjektnaKartica proj_kartica)
@@ -132,8 +157,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-        
-        // GET: ProjektnaKartica/Edit/5
+
+        /// <summary>
+        /// Prikazuje formu za uredivanje postojece projektna kartice
+        /// </summary>
+        /// <param name="id">Identifikator projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -154,7 +186,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Sprema azurirane podatke o projektnoj kartici u bazu podataka
+        /// </summary>
+        /// <param name="id">Id projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="opis">Opis projektna kartice</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
@@ -205,7 +245,14 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-        // GET: ProjektnaKartica/Delete/5
+        /// <summary>
+        /// Brise projektnu karticu iz baze podataka
+        /// </summary>
+        /// <param name="subjektIBAN">IBAN subjekta</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Rezultat akcije</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string subjektIBAN, int page = 1, int sort = 1, bool ascending = true)
@@ -240,12 +287,16 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-
-
-
-
-
         //TREBA DOVRSIT
+        /// <summary>
+        /// Prikazuje M-D formu projektna kartice i povezane transakcije.
+        /// </summary>
+        /// <param name="id">Identifikator projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="viewName">Ime pogleda</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
             /*if (iban == null)
@@ -379,6 +430,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        //TREBA DOVRSIT
+        /// <summary>
+        /// Prikazuje formu za azuriranje M-D formu projektna kartice
+        /// </summary>
+        /// <param name="id">Identifikator projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpGet]
         public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -389,110 +449,6 @@ namespace RPPP_WebApp.Controllers
 
             return result;
         }
-
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(ProjektnaKarticaTransakcijaViewModel model, int page = 1, int sort = 1, bool ascending = true)
-        {
-            ViewBag.ViewName = "Update";
-            //if (model.Zadatci == null)
-            //{
-            //    return NotFound("Nema poslanih podataka");
-            //}
-            //else
-            //{
-            //    return NotFound(model.Zadatci);
-            //}
-
-            //await PrepareDropDownLists();
-
-            ViewBag.Page = page;
-            ViewBag.Sort = sort;
-            ViewBag.Ascending = ascending;
-            if (ModelState.IsValid)
-            {
-                var kart = await ctx.ProjektnaKartica
-                                        .Include(d => d.Transakcija)
-                                        .Where(d => d.SubjektIban == model.kartica.SubjektIban)
-                                        .FirstOrDefaultAsync();
-                if (kart == null)
-                {
-                    return NotFound("Ne postoji zahtjev s IBAN-om: " + model.kartica.SubjektIban);
-                }
-
-                kart.SubjektIban = model.kartica.SubjektIban;
-                
-
-                List<string>  = model.transakcije
-                                          .Where(s => s.subjektIBAN != null)
-                                          .Select(s => s.subjektIBAN)
-                                          .ToList();
-
-                //if (model.Zadatci == null)
-                //    {
-                //        return NotFound("Nema poslanih podataka");
-                //    }
-                //    else
-                //    {
-                //        return NotFound(model.Zadatci);
-                //    }
-                //izbaci sve koje su nisu više u modelu
-                ctx.RemoveRange(kart.Transakcija.Where(s => !subjektIBAN.Contains(s.SubjektIban)));
-
-
-                foreach (var stavka in model.Zadatci)
-                {
-                    //ažuriraj postojeće i dodaj nove
-                    Zadatak novaStavka; // potpuno nova ili dohvaćena ona koju treba izmijeniti
-                    if (stavka.IdZadatak > 0)
-                    {
-                        novaStavka = zahtjev.Zadatak.First(s => s.IdZadatak == stavka.IdZadatak);
-                    }
-                    else
-                    {
-                        novaStavka = new Zadatak();
-                        zahtjev.Zadatak.Add(novaStavka);
-                    }
-                    novaStavka.Oibnositelj = stavka.Oibnositelj;
-                    novaStavka.Vrsta = stavka.Vrsta;
-                    novaStavka.IdStatus = stavka.IdStatus;
-                    novaStavka.VrPoc = stavka.VrPoc;
-                    novaStavka.VrKraj = stavka.VrKraj;
-                    novaStavka.VrKrajOcekivano = stavka.VrKrajOcekivano;
-                    novaStavka.IdZahtjev = stavka.IdZahtjev;
-
-                }
-
-                //dokument.IznosDokumenta = (1 + dokument.PostoPorez) * model.Stavke.Sum(s => s.IznosArtikla);
-                //eventualno umanji iznos za dodatni popust za kupca i sl... nešto što bi bilo poslovno pravilo
-                try
-                {
-
-                    await ctx.SaveChangesAsync();
-
-                    TempData[Constants.Message] = $"Zahtjev {zahtjev.IdZahtjev} uspješno ažuriran.";
-                    TempData[Constants.ErrorOccurred] = false;
-                    return RedirectToAction(nameof(Show), new
-                    {
-                        id = zahtjev.IdZahtjev,
-                        page,
-                        sort,
-                        ascending
-                    });
-
-                }
-                catch (Exception exc)
-                {
-                    ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
-                    return View(model);
-                }
-            }
-            else
-            {
-                return View(model);
-            }
-        }*/
-
 
     }
 }
