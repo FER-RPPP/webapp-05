@@ -1,0 +1,277 @@
+﻿@model PartnerSuradnikViewModel
+@{
+    ViewBag.Title = "Izmjena partnera";
+}
+
+<div style="padding-left:3%;" class="text-center">
+    <h4>Partner br: @Model.partner.IdPartner</h4>
+</div>
+<hr />
+
+<div class="container">
+    <form id="partner_form" method="post"
+          asp-action="Update"
+          asp-route-page="@ViewBag.Page"
+          asp-route-sort="@ViewBag.Sort"
+          asp-route-ascending="@ViewBag.Ascending"
+          asp-route-filter="@ViewBag.Filter"
+          asp-route-position="@ViewBag.Position">
+        <input type="hidden" asp-for="partner.IdPartner" />
+        <div asp-validation-summary="All" class="form-group row"></div>
+
+        <div style="padding-bottom:5px;  padding-left:4%;" class="form-group row  text-center">
+
+            <div class="col-sm-2">
+                <label asp-for="partner.IdTipPartnera"></label>
+                <select class="form-control" asp-for="partner.IdTipPartnera" asp-items="ViewBag.Tipovi">
+                </select>
+            </div>
+            <label asp-for="partner.NazivPartner" class="col-sm-1 col-form-label">Naziv partnera</label>
+            <div class="col-sm-1">
+                <input asp-for="partner.NazivPartner" class="form-control" />
+            </div>
+            <label asp-for="partner.Oib" class="col-sm-1 col-form-label">OIB</label>
+            <div class="col-sm-5">
+                <input asp-for="partner.Oib" class="form-control" />
+            </div>
+        </div>
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center col-sm-15 ">
+
+            <label asp-for="partner.AdresaPartner" class="col-sm-2 col-form-label">Adresa</label>
+            <div class="col-sm-2">
+                <input asp-for="partner.AdresaPartner" class="form-control" />
+            </div>
+            <label asp-for="partner.Ibanpartner" class="col-sm-2 col-form-label">IBAN</label>
+            <div class="col-sm-2">
+                <input class="form-control" asp-for="partner.Ibanpartner" />
+            </div>
+        </div>
+
+
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center ">
+
+            <div class="col-sm-3 text-right">
+                @* <button hx-include="closest tr"
+                hx-encoding="multipart/form-data"
+                hx-post="@Url.Action(nameof(ZahtjevController.Update))"
+                class="btn btn-sm btn-primary" title="Spremi">
+                <i class="fas fa-save"></i>
+                </button> *@
+                <button id="save" type="submit" class="btn btn-sm btn-primary save" title="Spremi"><i class="fas fa-save"></i>Spremi</button>
+
+
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Update"
+                   asp-route-id="@Model.partner.IdPartner"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   asp-route-position="@ViewBag.Position"
+                   title="Osvježi">
+                    <i class="fas fa-sync-alt">Osvježi</i>
+                </a>
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Show"
+                   asp-route-id="@Model.partner.IdPartner"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   title="Odustani">
+                    <i class="fas fa-undo-alt">Odustani</i>
+                </a>
+            </div>
+
+
+
+
+
+        </div>
+
+        @* <div class="form-group row">
+        <label asp-for="IdPrethDokumenta" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-1">
+        <input asp-for="IdPrethDokumenta" readonly="readonly" class="form-control" data-autocomplete-placeholder="dokument" />
+        </div>
+        <div class="col-sm-3">
+        <input class="form-control" data-autocomplete="dokument" value="@Model.NazPrethodnogDokumenta" />
+        </div>
+        <label asp-for="IznosDokumenta" class="col-sm-1 col-form-label"></label>
+        <label class="col-sm-2 col-form-label">@Model.IznosDokumenta.ToString("C2")</label>
+
+        </div> *@
+
+
+
+
+        <table class="table table-striped" id="table-suradnici">
+            <thead>
+                <tr>
+                    @{
+                        string[] nazivi = { "Ime", "Prezime", "OIB", "Broj mobitela", "Email", "Stranka" };
+                        for (int i = 0; i < nazivi.Length; i++)
+                        {
+                            <th class="text-center">
+                                @nazivi[i]
+                            </th>
+                        }
+                    }
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var suradnik in Model.Suradnici)
+                {
+                    <tr>
+
+                        <td class="text-left col-sm-3">
+                            <input type="hidden" name="Suradnici.Index" value="@suradnik.IdSuradnik" />
+                            <input type="hidden" name="Suradnici[@suradnik.IdSuradnik].IdPartner" value="@suradnik.IdPartner" />
+                            <input type="hidden" name="Suradnici[@suradnik.IdSuradnik].idSuradnik" value="@suradnik.IdSuradnik" />
+                            <input name="Suradnici[@suradnik.IdSuradnik].Oib" class="form-control" value="@suradnik.Oib" />
+
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <input name="Suradnici[@suradnik.IdSuradnik].Ime" class="form-control" value="@suradnik.Ime" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <input name="Suradnici[@suradnik.IdSuradnik].prezime" class="form-control" value="@suradnik.Prezime" />
+                        </td>
+
+                        <td class="text-center col-sm-1">
+
+                            <select class="form-control" asp-for="@suradnik.IdKvalifikacija" asp-items="ViewBag.vrste" name="Suradnici[@suradnik.IdSuradnik].IdKvalifikacija">
+                            </select>
+
+                        </td>
+                        <td class="text-center col-sm-3">
+                            <input name="Suradnici[@suradnik.IdSuradnik].Mobitel" class="form-control" value="@suradnik.Mobitel" />
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="text-left col-sm-3">
+                        <input id="suradnik-oib" type="text" />
+                    </td>
+                    <td class="text-center col-sm-1">
+                        <input id="suradnik-ime" type="text" />
+                    </td>
+                    <td class="text-center col-sm-1">
+                        <input id="suradnik-prezime" type="text" />
+                    </td>
+                    <td class="text-center col-sm-3">
+                        <select id="suradnik-kvalifikacija" class="form-control" asp-items="ViewBag.vrste">
+                            <option disabled selected value="">Odaberite kvalifikaciju</option>
+                        </select>
+                    </td>
+                    <td class="text-center col-sm-5">
+                        <input id="suradnik-mobitel" type="text" />
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-success addrow" title="Dodaj"><i class="fa fa-plus"></i>+</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </form>
+
+    <table id="template" style="visibility:hidden">
+        <tr>
+            <td class="text-left col-sm-3">
+                <input type="hidden" name="Suradnici.Index" value="--id--" />
+                <input type="hidden" name="Suradnici[--id--].IdPartner" value="@Model.partner.IdPartner" />
+
+                <input name="Suradnici[--id--].Ime" class="form-control" value="--ime--" />
+
+            </td>
+            <td class="text-center col-sm-1">
+                <input name="Suradnici[--id--].Prezime" class="form-control" value="--prezime--" />
+            </td>
+            <td class="text-center col-sm-1">
+                <input name="Suradnici[--id--].Oib" class="form-control" value="--oib--" />
+            </td>
+
+            <td class="text-center col-sm-1">
+                <select class="form-control" asp-items="ViewBag.vrste" name="Suradnici[--id--].IdKvalifikacija">
+                    <option value="--kvalifikacija--">--nazivKvalifikacija--</option>
+                </select>
+            </td>
+            <td class="text-center col-sm-5">
+                <input name="Suradnici[--id--].Mobitel" class="form-control" value="--mobitel--" />
+            </td>
+            <td>
+                <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section styles{
+    <link rel="stylesheet" href="~/lib/jqueryui/themes/base/jquery-ui.css" />
+}
+
+@section scripts{
+    <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
+    <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
+
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Function to add a new document row
+            $(document).on('click', '.addrow', function () {
+
+                event.preventDefault();
+
+
+                console.log($('#suradnik-kvalifikacija').val());
+
+                var newRow = $('#template').html();
+                var newIndex = Date.now();
+
+                newRow = newRow.replace(/--id--/g, newIndex);
+                newRow = newRow.replace(/--oib--/g, $('#suradnik-oib').val());
+                newRow = newRow.replace(/--ime--/g, $('#suradnik-ime').val());
+                newRow = newRow.replace(/--prezime--/g, $('#suradnik-prezime').val());
+
+                var selectedVrsta = $('#suradnik-kvalifikacija').val();
+                newRow = newRow.replace(/--kvalifikacija--/g, selectedVrsta);
+
+                var nazivVrsta = $('#suradnik-kvalifikacija option:selected').text();
+                newRow = newRow.replace(/--nazivKvalifikacija--/g, nazivVrsta);
+
+                newRow = newRow.replace(/--mobitel--/g, $('#suradnik-mobitel').val());
+
+                $(newRow).find('tr').insertBefore('#table-suradnici tbody tr:last');
+
+
+                $('#suradnik-oib').val('');
+                $('#dsuradnik-ime').val('');
+                $('#suradnik-prezime').val('');
+                $('#suradnik-kvalifikacija').val('');
+                $('#suradnik-mobitel').val('');
+
+                $('#table-suradnici tbody tr:last select').val(selectedVrsta);
+
+            });
+
+            // Function to remove a document row
+            $(document).on('click', '.deleterow', function (event) {
+                event.preventDefault();
+                var tr = $(this).parents('tr');
+                tr.remove();
+            });
+        });
+    </script>
+
+}
+ 

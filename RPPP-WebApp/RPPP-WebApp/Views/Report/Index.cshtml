@@ -25,6 +25,16 @@
     <li>
         <a asp-action="ZahtjeviZadatciExcel">Popis master(Zahtjev)-detail(Zadatak)</a>
     </li>
+    <r1>Niko Vidovic</r1>
+    <li>
+        <a asp-action="PartnerExcel">Popis svih partnera</a>
+    </li>
+    <li>
+        <a asp-action="SuradnikDetailExcel">Popis svih suradnika</a>
+    </li>
+    <li>
+        <a asp-action="PartneriSuradniciExcel">Popis master(Partner)-detail(Suradnik)</a>
+    </li>
     Bruno Mikulan
     <li>
         <a asp-action="ProjektExcel">Projekt Excel</a>
@@ -53,6 +63,13 @@
     <li>
         <a asp-action="ZadatakPDF">Zadatak PDF</a>
     </li>
+    Niko Vidovic
+    <li>
+        <a asp-action="PartnerPDF">Partner PDF</a>
+    </li>
+    <li>
+        <a asp-action="SuradnikDetailPDF">Suradnik PDF</a>
+    </li>
     Bruno Mikulan
     <li>
         <a asp-action="ProjektPDF">Projekt PDF</a>
@@ -66,7 +83,7 @@
     <form class="form-inline" asp-action="ImportProjektneKartice" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="form-group col-xs-6 col-md-3 ">
-                <label for="importFile">Uvoz podataka u excel formatu za opremu i uređaje</label>
+                <label for="importFile">Uvoz podataka u excel formatu za projektnu karticu</label>
                 <input type="file" class="form-control" id="importFile" name="importFile" data-save="">
             </div>
             <div class="form-group">
