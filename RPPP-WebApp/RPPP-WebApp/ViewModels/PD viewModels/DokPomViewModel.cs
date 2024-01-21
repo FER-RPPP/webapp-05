@@ -34,6 +34,6 @@ namespace RPPP_WebApp.ViewModels
         public virtual Projekt IdProjektNavigation { get; set; }
         public virtual VrstaDokumenta IdVrstaDokNavigation { get; set; }
 
-        public string VrstaDok { get; set; }
+        public string NazivVrstaDok { get; set; }
     }
 }
