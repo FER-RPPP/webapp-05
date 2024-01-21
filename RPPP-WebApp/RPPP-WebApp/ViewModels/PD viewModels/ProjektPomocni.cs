@@ -53,5 +53,7 @@ namespace RPPP_WebApp.ViewModels.PD_viewModels
 
 
         public string NazivTip { get; set; }
+
+        public IEnumerable<DokPomViewModel> dokumenti { get; set;}
     }
 }

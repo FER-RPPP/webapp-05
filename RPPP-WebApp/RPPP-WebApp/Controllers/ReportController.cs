@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Hosting;
 using static iTextSharp.text.pdf.AcroFields;
 using RPPP_WebApp.ViewModels.PD_viewModels;
 
+
 //using OfficeOpenXml;
 
 namespace RPPP_WebApp.Controllers
@@ -1865,7 +1866,7 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-
+        //bruno
         public async Task<IActionResult> ProjektPDF()
         {
             string naslov = "Popis projekata";
@@ -2123,6 +2124,147 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+
+        public async Task<IActionResult> MDprojekt()
+        {
+            string naslov = "Popis projekata MD view";
+
+            var projekti = await ctx.Projekt.AsNoTracking().Select(
+                s => new ProjektPomocni
+                {
+                    IdProjekt = s.IdProjekt,
+                    VrPocetak = s.VrPocetak,
+                    VrKraj = s.VrKraj,
+                    Opis = s.Opis,
+                    Naziv = s.Naziv,
+                    IdTip = s.IdTip,
+                    NazivTip = s.IdTipNavigation.NazivTip,
+                    dokumenti = s.Dokument.Select(d => new DokPomViewModel
+                    {
+                        IdDokument = d.IdDokument,
+                        IdProjekt = d.IdProjekt,
+                        TipDokument = d.TipDokument,
+                        VelicinaDokument = d.VelicinaDokument,
+                        IdVrstaDok = d.IdVrstaDok,
+                        NazivDatoteka = d.NazivDatoteka,
+                        URLdokument = d.URLdokument,
+                        NazivVrstaDok = d.IdVrstaDokNavigation.NazivVrstaDok
+                    }).ToList()
+                }).ToListAsync();
+
+            PdfReport report = CreateReport(naslov);
+
+            MemoryStream ms = new MemoryStream();
+
+            Document doc = new Document(PageSize.A4, 25, 25, 30, 30);
+            PdfWriter writer = PdfWriter.GetInstance(doc, ms);
+            doc.Open();
+
+            foreach (var projekt in projekti)
+            {
+
+                doc.NewPage();
+                // Master Data
+                Paragraph masterData = new Paragraph();
+                masterData.SpacingAfter = 10f; // Add spacing after the paragraph
+                masterData.Alignment = Element.ALIGN_LEFT; // Align the paragraph to the left
+
+                // Styling for project name
+                masterData.Add(new Chunk("Projekt naziv: ", GetBoldFont()));
+                masterData.Add(new Chunk($"{projekt.Naziv}\n"));
+
+                // Styling for description
+                masterData.Add(new Chunk("Opis: ", GetBoldFont()));
+                masterData.Add(new Chunk($"{projekt.Opis}\n"));
+
+                // Styling for start date
+                masterData.Add(new Chunk("Pocetak: ", GetBoldFont()));
+                masterData.Add(new Chunk($"{projekt.VrPocetak}\n"));
+
+                // Styling for end date
+                masterData.Add(new Chunk("Kraj: ", GetBoldFont()));
+                masterData.Add(new Chunk($"{projekt.VrKraj}\n"));
+
+                // Styling for project type
+                masterData.Add(new Chunk("Tip projekta: ", GetBoldFont()));
+                masterData.Add(new Chunk($"{projekt.NazivTip}\n"));
+
+                doc.Add(masterData);
+
+                if (projekt.dokumenti.Count() > 0)
+                {
+                    
+                    PdfPTable table = new PdfPTable(7);
+                    table.WidthPercentage = 100;
+                    table.SpacingBefore = 10f; 
+
+                    // Table Header
+                    table.AddCell(GetCell("ID", true));
+                    //table.AddCell(GetCell("Project ID", true));
+                    table.AddCell(GetCell("Ekstenzija", true));
+                    table.AddCell(GetCell("velicina", true));
+                    table.AddCell(GetCell("Naziv", true));
+                    PdfPCell urlHeaderCell = GetCell("Lokacija", true);
+                    urlHeaderCell.Colspan = 2; 
+                    table.AddCell(urlHeaderCell);
+                    table.AddCell(GetCell("Vrsta", true));
+
+                    // Table Data
+                    foreach (var dokument in projekt.dokumenti)
+                    {
+                        table.AddCell(GetCell(dokument.IdDokument.ToString()));
+                        //table.AddCell(GetCell(dokument.IdProjekt.ToString()));
+                        table.AddCell(GetCell(dokument.TipDokument));
+                        table.AddCell(GetCell(dokument.VelicinaDokument.ToString()));
+                        table.AddCell(GetCell(dokument.NazivDatoteka));
+
+                        PdfPCell urlCell = GetCell(dokument.URLdokument);
+                        urlCell.Colspan = 2; 
+                        table.AddCell(urlCell);
+
+                        
+                        table.AddCell(GetCell(dokument.NazivVrstaDok));
+                    }
+
+                    doc.Add(table);
+                }
+
+                doc.Add(new Paragraph("\n"));
+            }
+
+            doc.Close();
+
+            ms.Position = 0;
+            return new FileStreamResult(ms, "application/pdf")
+            {
+                FileDownloadName = "MDprojekt.pdf"
+            };
+        }
+
+        
+        private PdfPCell GetCell(string content, bool isHeader = false)
+        {
+            PdfPCell cell = new PdfPCell(new Phrase(content));
+
+            
+            cell.Padding = 8f;
+
+            
+            if (isHeader)
+            {
+                cell.BackgroundColor = new BaseColor(200, 200, 200);
+            }
+
+            return cell;
+        }
+
+        private Font GetBoldFont()
+        {
+            Font font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
+            return font;
+        }
+
+
         public async Task<IActionResult> ProjektExcel()
         {
             var projekti = await ctx.Projekt
@@ -2216,6 +2358,157 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Dokumenti.xlsx");
         }
+
+        public async Task<IActionResult> ProjektDokumentExcel()
+        {
+            var projekti = await ctx.Projekt
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdProjekt)
+                                  .ToListAsync();
+
+            var vrste = await ctx.Projekt.AsNoTracking().OrderBy(d => d.IdProjekt)
+                                  .Select(d => d.IdTipNavigation.NazivTip)
+                                  .ToListAsync();
+
+            var dokumenti = await ctx.Dokument
+                                  .AsNoTracking()
+                                  .OrderBy(d => d.IdDokument)
+                                  .ToListAsync();
+
+            
+
+            byte[] content;
+
+            using (ExcelPackage excel = new ExcelPackage())
+            {
+                for (int i = 0; i < projekti.Count; i++)
+                {
+                    var projekt = projekti[i];
+
+                    // Create a worksheet for each kartica
+                    var worksheet = excel.Workbook.Worksheets.Add($"Projekt_{i + 1}");
+
+
+                    //First add the headers
+                    worksheet.Cells[1, 1].Value = "ID Projekta";
+                    worksheet.Cells[1, 2].Value = "Vrsta projekta";
+                    worksheet.Cells[1, 3].Value = "Opis";
+                    worksheet.Cells[1, 4].Value = "Vrijeme pocetka";
+                    worksheet.Cells[1, 5].Value = "Vrijeme Kraja";
+                    worksheet.Cells[1, 6].Value = "Naziv";
+
+
+
+                    
+                        worksheet.Cells[2, 1].Value = projekt.IdProjekt;
+                        worksheet.Cells[2, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[2, 2].Value = vrste[i];
+                        worksheet.Cells[2, 3].Value = projekt.Opis;
+                        worksheet.Cells[2, 4].Value = projekt.VrPocetak.ToString("g");
+                        worksheet.Cells[2, 5].Value = projekt.VrKraj.HasValue ? projekti[i].VrKraj.Value.ToString("g") : "";
+                        worksheet.Cells[2, 6].Value = projekt.Naziv;
+
+
+
+                    // Add headers to the worksheet
+                    worksheet.Cells[4, 1].Value = "ID dokument";
+                    worksheet.Cells[4, 2].Value = "Ekstenzija";
+                    worksheet.Cells[4, 3].Value = "Velicina dokumenta";
+                    
+                    worksheet.Cells[4, 4].Value = "Vrsta dokumenta";
+                    worksheet.Cells[4, 5].Value = "Naziv dokumenta";
+                    worksheet.Cells[4, 6].Value = "Lokacija dokumenta";
+
+                    // Filter transakcije for the current kartica
+                    var doc = dokumenti.Where(t => t.IdProjekt == projekt.IdProjekt).ToList();
+
+                    for (int j = 0; j < doc.Count; j++)
+                    {
+
+                        var vrstaDoc = ctx.Dokument.AsNoTracking().Where(d => d.IdDokument == doc[j].IdDokument)
+                                                            .Select(d => d.IdVrstaDokNavigation.NazivVrstaDok).FirstOrDefault();
+
+
+                        worksheet.Cells[j + 5, 1].Value = dokumenti[j].IdDokument;
+                        worksheet.Cells[j + 5, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[j + 5, 2].Value = dokumenti[j].TipDokument;
+                        worksheet.Cells[j + 5, 3].Value = dokumenti[j].VelicinaDokument;
+                       
+                        worksheet.Cells[j + 5, 4].Value = vrstaDoc;
+                        worksheet.Cells[j + 5, 5].Value = dokumenti[j].NazivDatoteka;
+                        worksheet.Cells[j + 5, 6].Value = dokumenti[j].URLdokument;
+                    }
+
+                    worksheet.Cells[1, 1, dokumenti.Count + 1, 6].AutoFitColumns();
+
+                }
+                content = excel.GetAsByteArray();
+                return File(content, ExcelContentType, "master(Projekt)-detail(Dokument).xlsx");
+            }
+        }
+
+        public async Task<IActionResult> ImportProjekt(IFormFile importFile)
+        {
+            ExcelPackage result = new ExcelPackage();
+
+            await using (var ms = new MemoryStream())
+            {
+                await importFile.CopyToAsync(ms);
+                using (ExcelPackage import = new ExcelPackage(ms))
+                {
+                    ExcelWorksheet worksheet = import.Workbook.Worksheets[0];
+                    int rowCount = worksheet.Dimension.Rows;
+
+                    worksheet.Cells[1, 7].Value = "Status";
+                    var tipProjekti = ctx.TipProjekta.AsNoTracking().ToList();
+
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+
+                        
+                        foreach (var tipProjekt in tipProjekti)
+                        {
+                            if (tipProjekt.NazivTip == worksheet.Cells[row, 2].Value.ToString())
+                            {
+                                worksheet.Cells[row, 2].Value = tipProjekt.IdTip;
+                            }
+                        }
+
+                        var projekt = new Projekt
+                        {
+                            IdTip = int.Parse(worksheet.Cells[row, 2].Value.ToString()),
+                            Opis = worksheet.Cells[row, 3].Value.ToString(),
+                            VrPocetak = DateTime.Parse(worksheet.Cells[row, 4].Value.ToString()),
+                            VrKraj = DateTime.Parse(worksheet.Cells[row, 5].Value.ToString()),
+                            Naziv = worksheet.Cells[row, 6].Value.ToString()
+                        };
+
+                        try
+                        {
+                            ctx.Add(projekt);
+                            await ctx.SaveChangesAsync();
+
+                            
+                            worksheet.Cells[row, 7].Value = "ADDED";
+                        }
+                        catch (Exception exc)
+                        {
+                            worksheet.Cells[row, 7].Value = "ERROR";
+                            
+                            ModelState.AddModelError(string.Empty, exc.Message);
+                        }
+                    }
+
+                    result.Workbook.Worksheets.Add("StatusiDodavanjaProjektneKartice", worksheet);
+
+                }
+            }
+            return File(result.GetAsByteArray(), ExcelContentType, "StatusiDodavanja.xlsx");
+        }
+
+        //end bruno
+
+
 
     }
 
