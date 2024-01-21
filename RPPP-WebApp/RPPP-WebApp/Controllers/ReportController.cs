@@ -562,7 +562,11 @@ namespace RPPP_WebApp.Controllers
                                       vrsta = u.Vrsta,
                                       vrijednost = u.Vrijednost
 
-                                  }).ToListAsync();
+                                  })
+                                  .OrderBy(u => u.idProjekt)
+                                  .ThenBy(u => u.idTransakcija)
+                                  .ThenBy(u=>u.primateljIBAN)
+                                  .ToListAsync();
 
             string title = $"M-D form ProjektneKarticeTransakcije";
 
@@ -1863,7 +1867,6 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
-
 
 
         public async Task<IActionResult> ProjektPDF()
