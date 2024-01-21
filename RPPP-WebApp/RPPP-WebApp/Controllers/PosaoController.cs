@@ -57,9 +57,9 @@ namespace RPPP_WebApp.Controllers
                          .ToList();
 
             var suradnici = poslovi
-                               .Select(posao => string.Join(",", ctx.Suradnik
-                                .Where(z => z.IdPosao.Contains(posao))
-                                .Select(z => z.IdSuradnik)))
+                               .Select(posao => string.Join(",", ctx.Radi
+                               .Where(z => z.IdPosao == posao.IdPosao)
+                               .Select(z => z.IdSuradnik)))
                                 .ToList();
 
             var model = new PosaoViewModel
@@ -104,7 +104,7 @@ namespace RPPP_WebApp.Controllers
                 suradnici.Insert(0, hrv);
             }
 
-            ViewBag.SuradniciPopis = new MultiSelectList(suradnici, nameof(hrv.IdSuradnik), nameof(hrv.v));
+            ViewBag.SuradniciPopis = new SelectList(suradnici, nameof(hrv.IdSuradnik), nameof(hrv.v));
 
         }
 
@@ -117,23 +117,44 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Posao posao)
+        public async Task<IActionResult> Create(Posao posao, string[] selectedSuradnici)
         {
             logger.LogTrace(JsonSerializer.Serialize(posao));
+
             if (ModelState.IsValid)
             {
+                using var transaction = ctx.Database.BeginTransaction();
+
                 try
                 {
                     ctx.Add(posao);
                     ctx.SaveChanges();
-                    logger.LogInformation(new EventId(1000), $"Posao {posao.IdPosao} dodan.");
 
-                    TempData[Constants.Message] = $"Posao  {posao.IdPosao} dodan.";
+                    foreach (string oib in selectedSuradnici)
+                    {
+                        Radi radi = new Radi
+                        {
+                            Oib = oib,
+                            IdPosao = posao.IdPosao
+                        };
+
+                        ctx.Add(radi);
+                    }
+
+                    ctx.SaveChanges();
+
+                    transaction.Commit();
+
+                    logger.LogInformation(new EventId(1000), $"Posao {posao.IdPosao} dodan.");
+                    TempData[Constants.Message] = $"Posao {posao.IdPosao} dodan.";
                     TempData[Constants.ErrorOccurred] = false;
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
                 {
+                    transaction.Rollback();
+
                     logger.LogError("Pogreška prilikom dodavanje novog posla: {0}", exc.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
                     await PrepareDropDownLists();
@@ -144,7 +165,6 @@ namespace RPPP_WebApp.Controllers
             else
             {
                 await PrepareDropDownLists();
-
                 return View(posao);
             }
         }
