@@ -1,0 +1,275 @@
+﻿ @model RPPP_WebApp.ViewModels.MDSuradniciViewModel
+@{
+    ViewBag.Title = "Izmjena suradnika";
+}
+
+<div style="padding-left:3%;" class="text-center">
+    <h4>Suradnik br: @Model.suradnik.IdSuradnik</h4>
+</div>
+<hr />
+
+<div class="container">
+    <form id="projekt_form" method="post"
+          asp-action="Update"
+          asp-route-page="@ViewBag.Page"
+          asp-route-sort="@ViewBag.Sort"
+          asp-route-ascending="@ViewBag.Ascending"
+          asp-route-filter="@ViewBag.Filter"
+          asp-route-position="@ViewBag.Position">
+        <input type="hidden" asp-for="suradnik.IdSuradnik" />
+        <div asp-validation-summary="All" class="form-group row"></div>
+
+        <div style="padding-bottom:5px;  padding-left:4%;" class="form-group row  text-center">
+
+            <div class="col-sm-2">
+                <label asp-for="suradnik.IdKvalifikacija">Kvalifikacija</label>
+                <select class="form-control" asp-for="suradnik.IdKvalifikacija" asp-items="ViewBag.kvalifikacije">
+                </select>
+            </div>
+            <label asp-for="suradnik.Ime" class="col-sm-1 col-form-label">Ime</label>
+            <div class="col-sm-1">
+                <input asp-for="suradnik.Ime" class="form-control" />
+            </div>
+            <label asp-for="suradnik.Prezime" class="col-sm-1 col-form-label">Prezime</label>
+            <div class="col-sm-5">
+                <input asp-for="suradnik.Prezime" class="form-control" />
+            </div>
+        </div>
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center col-sm-15 ">
+
+            <label asp-for="suradnik.Oib" class="col-sm-2 col-form-label">Oib</label>
+            <div class="col-sm-2">
+                <input asp-for="suradnik.Oib" class="form-control" />
+            </div>
+            <label asp-for="suradnik.Mail" class="col-sm-2 col-form-label">Email adresa</label>
+            <div class="col-sm-2">
+                <input class="form-control" asp-for="suradnik.Mail" />
+            </div>
+            <label asp-for="suradnik.Mobitel" class="col-sm-2 col-form-label">Broj mobitela</label>
+            <div class="col-sm-2">
+                <input class="form-control" asp-for="suradnik.Mobitel" />
+            </div>
+            <label asp-for="suradnik.Stranka" class="col-sm-2 col-form-label">Stranka</label>
+            <div class="col-sm-2">
+                <input class="form-control" asp-for="suradnik.Stranka" />
+            </div>
+        </div>
+
+
+
+        <div style="padding-bottom:5px; padding-left:4%;" class="form-group row text-center ">
+
+            <div class="col-sm-3 text-right">
+                @* <button hx-include="closest tr"
+                hx-encoding="multipart/form-data"
+                hx-post="@Url.Action(nameof(ZahtjevController.Update))"
+                class="btn btn-sm btn-primary" title="Spremi">
+                <i class="fas fa-save"></i>
+                </button> *@
+                <button id="save" type="submit" class="btn btn-sm btn-primary save" title="Spremi"><i class="fas fa-save"></i>Spremi</button>
+
+
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Update"
+                   asp-route-id="@Model.suradnik.IdSuradnik"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   asp-route-position="@ViewBag.Position"
+                   title="Osvježi">
+                    <i class="fas fa-sync-alt">Osvježi</i>
+                </a>
+                <a class="btn btn-sm btn-primary cancel"
+                   asp-action="Show"
+                   asp-route-id="@Model.suradnik.IdSuradnik"
+                   asp-route-page="@ViewBag.Page"
+                   asp-route-sort="@ViewBag.Sort"
+                   asp-route-ascending="@ViewBag.Ascending"
+                   asp-route-filter="@ViewBag.Filter"
+                   title="Odustani">
+                    <i class="fas fa-undo-alt">Odustani</i>
+                </a>
+            </div>
+
+
+
+
+
+        </div>
+
+        @* <div class="form-group row">
+        <label asp-for="IdPrethDokumenta" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-1">
+        <input asp-for="IdPrethDokumenta" readonly="readonly" class="form-control" data-autocomplete-placeholder="dokument" />
+        </div>
+        <div class="col-sm-3">
+        <input class="form-control" data-autocomplete="dokument" value="@Model.NazPrethodnogDokumenta" />
+        </div>
+        <label asp-for="IznosDokumenta" class="col-sm-1 col-form-label"></label>
+        <label class="col-sm-2 col-form-label">@Model.IznosDokumenta.ToString("C2")</label>
+
+        </div> *@
+
+
+
+
+        <table class="table table-striped" id="table-dokumenti">
+            <thead>
+                <tr>
+                    @{
+                        string[] nazivi = { "Opis posla", "Predvideno vrijeme trajanja", "Vrsta posla", "Uloga" };
+                        for (int i = 0; i < nazivi.Length; i++)
+                        {
+                            <th class="text-center">
+                                @nazivi[i]
+                            </th>
+                        }
+                    }
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var posao in Model.Poslovi)
+                {
+                    <tr>
+
+                        <td class="text-left col-sm-3">
+                            <input type="hidden" name="Poslovi.Index" value="@posao.IdPosao" />
+                            <input type="hidden" name="Poslovi[@posao.IdPosao].Suradnik" value="@posao.Suradnik" />
+                            <input type="hidden" name="Poslovi[@posao.IdPosao].Suradnik" value="@posao.IdPosao" />
+                            <input name="Dokumenti[@posao.IdPosao].Opis" class="form-control" value="@posao.Opis" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <input name="Poslovi[@posao.IdPosao].PredVrTrajanjaDani" class="form-control" value="@posao.PredVrTrajanjaDani" />
+                        </td>
+                        <td class="text-center col-sm-1">
+                            <select class="form-control" asp-for="@posao.IdVrstaPosaoNavigation.NazivPosao" asp-items="ViewBag.vrste" name="Poslovi[@posao.IdPosao].IdVrstaPosaoNavigation.NazivPosao">
+                            </select>
+                        </td>
+
+                        <td class="text-center col-sm-1">
+
+                            <input name="Poslovi[@posao.IdPosao].Uloga" class="form-control" value="@posao.Uloga" />
+
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td class="text-center col-sm-1">
+                        <input id="posao-opis" type="text" />
+                    </td>
+                    <td class="text-center col-sm-1">
+                        <input id="posao-predvrtrajanja" type="text" />
+                    </td>
+                    <td class="text-center col-sm-3">
+                        <select id="posao-vrsta" class="form-control" asp-items="ViewBag.vrste">
+                            <option disabled selected value="">Odaberite vrstu posla</option>
+                        </select>
+                    </td>
+                    <td class="text-center col-sm-5">
+                        <input id="posao-uloga" type="text" />
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-success addrow" title="Dodaj"><i class="fa fa-plus"></i>+</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </form>
+
+    <table id="template" style="visibility:hidden">
+        <tr>
+            <td class="text-left col-sm-3">
+                <input type="hidden" name="Poslovi.Index" value="--id--" />
+                <input type="hidden" name="Poslovi[--id--].IdPosao" value="@Model.suradnik.IdSuradnik" />
+
+            </td>
+            <td class="text-center col-sm-1">
+                <input name="Poslovi[--id--].Opis" class="form-control" value="--opis--" />
+            </td>
+            <td class="text-center col-sm-1">
+                <input name="Poslovi[--id--].PredVrTrajanjaDani" class="form-control" value="--predvrtrajanja--" />
+            </td>
+
+            <td class="text-center col-sm-1">
+                <select class="form-control" asp-items="ViewBag.vrste" name="Poslovi[--id--].IdVrstaPosao">
+                    <option value="--vrsta--">--nazivVrsta--</option>
+                </select>
+            </td>
+            <td class="text-center col-sm-5">
+                <input name="Poslovi[--id--].Uloga" class="form-control" value="--uloga--" />
+            </td>
+            <td>
+                <button class="btn btn-sm btn-danger deleterow" title="Izbaci"><i class="fa fa-minus"></i>-</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+@section styles{
+    <link rel="stylesheet" href="~/lib/jqueryui/themes/base/jquery-ui.css" />
+}
+
+@section scripts{
+    <script asp-src-include="~/lib/jquery-validate/**/jquery.validate.min.js"></script>
+    <script asp-src-include="~/lib/jquery-validation-unobtrusive/**/*.min.js"></script>
+
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Function to add a new document row
+            $(document).on('click', '.addrow', function () {
+
+                event.preventDefault();
+
+
+                console.log($('#posao-vrsta').val());
+
+                var newRow = $('#template').html();
+                var newIndex = Date.now();
+
+                newRow = newRow.replace(/--id--/g, newIndex);
+                newRow = newRow.replace(/--opis--/g, $('#posao-opis').val());
+                newRow = newRow.replace(/--predvrtrajanja--/g, $('#dok-predvrtrajanja').val());
+
+                var selectedVrsta = $('#posao-vrsta').val();
+                newRow = newRow.replace(/--vrsta--/g, selectedVrsta);
+
+                var nazivVrsta = $('#posao-vrsta option:selected').text();
+                newRow = newRow.replace(/--nazivVrsta--/g, nazivVrsta);
+
+                newRow = newRow.replace(/--uloga--/g, $('#posao-uloga').val());
+
+                $(newRow).find('tr').insertBefore('#table-poslovi tbody tr:last');
+
+                $('#posao-opis').val('');
+                $('#posao-predvrtrajanja').val('');
+                $('#posao-vrsta').val('');
+                $('#posao-uloga').val('');
+
+                $('#table-poslovi tbody tr:last select').val(selectedVrsta);
+
+            });
+
+            // Function to remove a document row
+            $(document).on('click', '.deleterow', function (event) {
+                event.preventDefault();
+                var tr = $(this).parents('tr');
+                tr.remove();
+            });
+        });
+    </script>
+
+
+}
