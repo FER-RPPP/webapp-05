@@ -38,7 +38,10 @@ function dodajZadatak() {
         var vrpoc = ($("#zadatak-pocetak").val());
         var vrkraj = ($("#zadatak-kraj").val());
         var vrockraj = ($("#zadatak-ockraj").val());
-        var nazivstatusa = ($("#naziv-statusa").val());
+        var nazivstatusa = ($("#zadatak-status option:selected").text());
+        var punioib = ($("#zadatak-oibnositelj option:selected").text());
+
+
 
 
         var template = $('#template').html();
@@ -46,7 +49,7 @@ function dodajZadatak() {
         //Alternativa ako su hr postavke sa zarezom //http://haacked.com/archive/2011/03/19/fixing-binding-to-decimals.aspx/
         //ili ovo http://intellitect.com/custom-model-binding-in-asp-net-core-1-0/
 
-        
+        var newIndex = Date.now();
 
         template = template.replace(/--sifra--/g, sifra)
             .replace(/--status--/g, status)
@@ -57,6 +60,7 @@ function dodajZadatak() {
             .replace(/--vrkraj--/g, vrkraj)
             .replace(/--vrockraj--/g, vrockraj)
             .replace(/--nazivstatus--/g, nazivstatusa)
+            .replace(/--punioib--/g, punioib)
                     
 
         $(template).find('.dynamic-oib').val(oib);
