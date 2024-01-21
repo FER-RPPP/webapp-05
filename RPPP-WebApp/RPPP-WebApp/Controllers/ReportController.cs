@@ -2168,8 +2168,8 @@ namespace RPPP_WebApp.Controllers
                     column.Width(2);
                     column.HeaderCell("Kvalifikacija");
                 });
-                });
-               
+            });
+
 
             #endregion
 
@@ -2268,8 +2268,8 @@ namespace RPPP_WebApp.Controllers
                     column.Width(3);
                     column.HeaderCell("Predvideno vrijeme trajanja u danima");
                 });
-                });
-                #endregion
+            });
+            #endregion
             byte[] pdf = report.GenerateAsByteArray();
 
             if (pdf != null)
@@ -2309,7 +2309,7 @@ namespace RPPP_WebApp.Controllers
                 worksheet.Cells[1, 4].Value = "Vrijeme pocetka";
                 worksheet.Cells[1, 5].Value = "Vrijeme Kraja";
                 worksheet.Cells[1, 6].Value = "Naziv";
-               
+
 
 
                 for (int i = 0; i < projekti.Count; i++)
@@ -2321,7 +2321,7 @@ namespace RPPP_WebApp.Controllers
                     worksheet.Cells[i + 2, 4].Value = projekti[i].VrPocetak.ToString("g");
                     worksheet.Cells[i + 2, 5].Value = projekti[i].VrKraj.HasValue ? projekti[i].VrKraj.Value.ToString("g") : "";
                     worksheet.Cells[i + 2, 6].Value = projekti[i].Naziv;
-                    
+
 
                 }
 
@@ -2378,7 +2378,7 @@ namespace RPPP_WebApp.Controllers
             return File(content, ExcelContentType, "Dokumenti.xlsx");
         }
 
-    
+
 
         public async Task<IActionResult> ProjektPDF()
         {
@@ -2413,7 +2413,8 @@ namespace RPPP_WebApp.Controllers
             #endregion
 
             #region Postavljanje izvora podataka i stupaca
-            column.HeaderCell("#", horizontalAlignment: HorizontalAlignment.Left);
+            report.MainTableDataSource(dataSource => dataSource.StronglyTypedList(projekti));
+
             report.MainTableColumns(columns =>
             {
                 columns.AddColumn(column =>
@@ -2427,7 +2428,7 @@ namespace RPPP_WebApp.Controllers
                 });
                 columns.AddColumn(column =>
                 {
-                        column.PropertyName(nameof(Projekt.IdProjekt));
+                    column.PropertyName(nameof(Projekt.IdProjekt));
                     column.CellsHorizontalAlignment(HorizontalAlignment.Center);
                     column.IsVisible(true);
                     column.Order(1);
@@ -2479,15 +2480,15 @@ namespace RPPP_WebApp.Controllers
                     column.Width(2);
                     column.HeaderCell("Tip projekta");
                 });
-                });
+            });
 
             #endregion
 
             byte[] pdf = report.GenerateAsByteArray();
 
             if (pdf != null)
-            
-                Response.Headers.Add("content-disposition", "inline; filename=zahtjevi.pdf");
+            {
+                Response.Headers.Add("content-disposition", "inline; filename=projekti.pdf");
                 return File(pdf, "application/pdf");
                 //return File(pdf, "application/pdf", "drzave.pdf"); //Otvara save as dialog
             }
@@ -2496,7 +2497,7 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
-         public async Task<IActionResult> DokumentPDF()
+        public async Task<IActionResult> DokumentPDF()
         {
             string naslov = "Popis dokumenata";
 
@@ -2504,15 +2505,15 @@ namespace RPPP_WebApp.Controllers
                                s => new DokPomViewModel
                                {
                                    IdDokument = s.IdDokument,
-                                      IdProjekt = s.IdProjekt,
-                                      TipDokument = s.TipDokument,
-                                      VelicinaDokument = s.VelicinaDokument,
-                                      IdVrstaDok = s.IdVrstaDok,
-                                      NazivDatoteka = s.NazivDatoteka,
-                                      URLdokument = s.URLdokument,
-                                      NazivVrstaDok = s.IdVrstaDokNavigation.NazivVrstaDok,
-                                      
-                                 }).ToListAsync();
+                                   IdProjekt = s.IdProjekt,
+                                   TipDokument = s.TipDokument,
+                                   VelicinaDokument = s.VelicinaDokument,
+                                   IdVrstaDok = s.IdVrstaDok,
+                                   NazivDatoteka = s.NazivDatoteka,
+                                   URLdokument = s.URLdokument,
+                                   NazivVrstaDok = s.IdVrstaDokNavigation.NazivVrstaDok,
+
+                               }).ToListAsync();
 
             PdfReport report = CreateReport(naslov);
             #region Podnožje i zaglavlje
@@ -2550,7 +2551,7 @@ namespace RPPP_WebApp.Controllers
 
                 columns.AddColumn(column =>
                 {
-                        column.PropertyName(nameof(Dokument.IdDokument));
+                    column.PropertyName(nameof(Dokument.IdDokument));
                     column.CellsHorizontalAlignment(HorizontalAlignment.Center);
                     column.IsVisible(true);
                     column.Order(1);
@@ -2628,7 +2629,7 @@ namespace RPPP_WebApp.Controllers
             {
                 return NotFound();
             }
-               
+        }
     }
-    
 }
+    
