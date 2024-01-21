@@ -47,5 +47,6 @@ namespace RPPP_WebApp.Models
         public virtual ICollection<Suradnik> Suradnik { get; set; }
 
         public virtual ICollection<Projekt> IdProjekt { get; set; }
+
     }
 }

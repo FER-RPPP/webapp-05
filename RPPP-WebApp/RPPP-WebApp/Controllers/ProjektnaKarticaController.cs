@@ -8,9 +8,14 @@ using RPPP_WebApp.ViewModels;
 using System.Text;
 using RPPP_WebApp.Extensions.Selectors;
 using System.Text.Json;
+using RPPP_WebApp.Extensions;
+using RPPP_WebApp.Exstensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za Projektne kartice
+    /// </summary>
     public class ProjektnaKarticaController : Controller
     {
 
@@ -18,6 +23,12 @@ namespace RPPP_WebApp.Controllers
         private readonly ILogger<ProjektnaKarticaController> logger;
         private readonly AppSettings appSettings;
 
+        /// <summary>
+        /// Inicijalizira novu instancu klase ProjektnaKarticaController/>.
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public ProjektnaKarticaController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ProjektnaKarticaController> logger)
         {
             this.ctx = ctx;
@@ -25,7 +36,13 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
-        // GET: ProjektnaKartica
+        /// <summary>
+        /// Prikazuje popis projektnih kartica s mogucnoscu stranicenja i sortiranja
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s popisom projektnih kartica</returns>
         [HttpGet]
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
@@ -83,13 +100,19 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Priprema padajuce liste projektna kartice
+        /// </summary>
+        /// <returns>Task zadatak za asinkrono izvođenje</returns>
         private async Task PrepareDropDownLists()
         {
             //TODO: napisat funkciju
         }
 
-
-        // GET: ProjektnaKartica/Create
+        /// <summary>
+        /// Prikazuje formu za stvaranje nove projektna kartice
+        /// </summary>
+        /// <returns>Task zadatak za asinkrono izvođenje</returns>
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -97,7 +120,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
-        // POST: ProjektnaKartica/Create
+        /// <summary>
+        /// Sprema novu projektnu karticu u bazu podataka
+        /// </summary>
+        /// <param name="proj_kartica">Nova projektna kartica</param>
+        /// <returns>Rezultat akcije</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjektnaKartica proj_kartica)
@@ -130,8 +157,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-        
-        // GET: ProjektnaKartica/Edit/5
+
+        /// <summary>
+        /// Prikazuje formu za uredivanje postojece projektna kartice
+        /// </summary>
+        /// <param name="id">Identifikator projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -152,7 +186,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Sprema azurirane podatke o projektnoj kartici u bazu podataka
+        /// </summary>
+        /// <param name="id">Id projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="opis">Opis projektna kartice</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
@@ -203,7 +245,14 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-        // GET: ProjektnaKartica/Delete/5
+        /// <summary>
+        /// Brise projektnu karticu iz baze podataka
+        /// </summary>
+        /// <param name="subjektIBAN">IBAN subjekta</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Rezultat akcije</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string subjektIBAN, int page = 1, int sort = 1, bool ascending = true)
@@ -238,16 +287,26 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-
-
-
-
-
         //TREBA DOVRSIT
-        public async Task<IActionResult> Show(string iban, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
+        /// <summary>
+        /// Prikazuje M-D formu projektna kartice i povezane transakcije.
+        /// </summary>
+        /// <param name="id">Identifikator projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="viewName">Ime pogleda</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
+        public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
+            /*if (iban == null)
+            {
+                iban = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).SubjektIban;
+
+            }
 
             var numbers = new StringBuilder();
+
             foreach (char c in iban)
             {
                 if (char.IsDigit(c))
@@ -256,18 +315,16 @@ namespace RPPP_WebApp.Controllers
                 }
             }
             string nums = numbers.ToString();
-            int.TryParse(nums, out int id);
+            int.TryParse(nums, out int id);*/
 
-
-
-            /*if (id == 0)
+            if (id == 0)
             {
-                id = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).SubjektIban;
+                id = (await ctx.ProjektnaKartica.FirstOrDefaultAsync()).IdProjekt;
 
-            }*/
+            }
 
             var kartica = await ctx.ProjektnaKartica
-                                    .Where(d => d.SubjektIban == iban)
+                                    .Where(d => d.IdProjekt == id)
                                     .Select(d => new ProjektnaKartica
                                     {
                                         SubjektIban = d.SubjektIban,
@@ -307,19 +364,19 @@ namespace RPPP_WebApp.Controllers
                 List<ProjektnaKartica> svekartice = await ctx.ProjektnaKartica./*ApplySort(sort, ascending).*/ToListAsync();
                 int index = svekartice.FindIndex(p => p.SubjektIban == kartica.SubjektIban);
 
-                /*
+                
                 int idprethodnog = -1;
                 int idsljedeceg = -1;
-                */
+                
 
-                /*if (index != 0)
+                if (index != 0)
                 {
-                    idprethodnog = svekartice[index - 1].id;
+                    idprethodnog = svekartice[index - 1].IdProjekt;
                 }
                 if (index != svekartice.Count - 1)
                 {
-                    idsljedeceg = svekartice[index + 1].id;
-                }*/
+                    idsljedeceg = svekartice[index + 1].IdProjekt;
+                }
                 
 
                 //učitavanje transakcije
@@ -339,7 +396,7 @@ namespace RPPP_WebApp.Controllers
                                       .ToListAsync();
 
                 var trans = ctx.Transakcija.AsNoTracking()
-                         .Where(d => d.SubjektIban == iban)
+                         .Where(d => d.SubjektIban == kartica.SubjektIban)
                          .Select(m => m.IdTransakcijeNavigation.NazivTransakcije)
                          .ToList();
 
@@ -355,10 +412,10 @@ namespace RPPP_WebApp.Controllers
                 {
                     kartica = kartica,
                     //NazVrsta = NazVrste,
-                    /*
-                     * IdPrethKartica = idprethodnog,
-                     * IdSljedKartica = idsljedeceg,
-                    */
+                    
+                    IdPrethKartica = idprethodnog,
+                    IdSljedKartica = idsljedeceg,
+                    
                     transakcije = model
 
                 };
@@ -373,6 +430,25 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        //TREBA DOVRSIT
+        /// <summary>
+        /// Prikazuje formu za azuriranje M-D formu projektna kartice
+        /// </summary>
+        /// <param name="id">Identifikator projektna kartice</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        {
+            ViewBag.ViewName = "Update";
+            //await PrepareDropDownLists();
+
+            var result = await Show(id, page, sort, ascending, viewName: nameof(Update));
+
+            return result;
+        }
 
     }
 }

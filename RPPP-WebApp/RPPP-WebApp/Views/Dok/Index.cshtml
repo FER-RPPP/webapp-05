@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Dokument Management";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/jTable/lib/themes/metro/blue/jtable.min.css" />
+}
+
+<script asp-src-include="~/lib/jquery/jquery.min.js"></script>
+
+<!-- Create a container for jTable -->
+<div id="dokTableContainer"></div>
+
+<script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="lib/jqueryui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="lib/jtable/lib/jquery.jtable.min.js"></script>
+
+
+<!-- Initialize jTable in JavaScript -->
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#dokTableContainer').jtable({
+                title: 'Dokument Table',
+                paging: true,
+                pageSize: 10,
+                actions: {
+                    listAction: '/api/Dok',      // API endpoint for listing data
+                    createAction: '/api/Dok',   // API endpoint for creating data
+                    updateAction: '/api/Dok',   // API endpoint for updating data
+                    deleteAction: '/api/Dok'    // API endpoint for deleting data
+                },
+                fields: {
+                    IdDokument: {
+                        key: true,
+                        list: false
+                    },
+                    Naziv: {
+                        title: 'Naziv'
+                    },
+                    Opis: {
+                        title: 'Opis'
+                    }
+                }
+            });
+
+            // Load data into jTable
+            $('#dokTableContainer').jtable('load');
+        });
+    </script>
+}
+
+

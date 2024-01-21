@@ -60,12 +60,12 @@
             </div>
         }
          <div class="col-sm-1 text-right">
-            <a asp-action="Edit"
+            <a asp-action="Update"
                asp-route-id="@Model.projekt.IdProjekt"
                asp-route-page="@ViewBag.CurrentPage"
                asp-route-sort="@ViewBag.Sort"
                asp-route-ascending="@ViewBag.Ascending"
-               class="btn btn-sm" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
+               class="btn btn-sm btn-warning" title="Ažuriraj"><i class="fas fa-edit"></i>Uredi</a>
 
             <form asp-action="Delete" method="post"
                   asp-route-id="@Model.projekt.IdProjekt"
@@ -113,17 +113,15 @@
                 </tr>
             </thead>
             <tbody>
-                @{
-                    int counter = 0;
-                }
-                @foreach (var dokument in Model.dokumenti.Dokumenti)
+                
+                @foreach (var dokument in Model.Dokumenti)
                 {
                     <tr>
                         <td class="text-left">@dokument.IdDokument</td>
                         <td class="text-left">@dokument.NazivDatoteka</td>
                         <td class="text-left">@dokument.TipDokument</td>
                         <td class="text-left">@dokument.VelicinaDokument</td>
-                        <td class="text-left">@Model.dokumenti.VrstaDokumenta[counter++]</td>
+                        <td class="text-left">@dokument.NazivVrstaDok</td>
                         <td class="text-left">@dokument.URLdokument</td>
                     </tr>
                 }

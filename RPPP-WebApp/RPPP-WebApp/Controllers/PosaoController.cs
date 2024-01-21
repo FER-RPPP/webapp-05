@@ -57,9 +57,9 @@ namespace RPPP_WebApp.Controllers
                          .ToList();
 
             var suradnici = poslovi
-                               .Select(posao => string.Join(",", ctx.Suradnik
-                                .Where(z => z.IdPosao.Contains(posao))
-                                .Select(z => z.IdSuradnik)))
+                               .Select(posao => string.Join(",", ctx.Radi
+                               .Where(z => z.IdPosao == posao.IdPosao)
+                               .Select(z => z.IdSuradnik)))
                                 .ToList();
 
             var model = new PosaoViewModel
@@ -89,22 +89,22 @@ namespace RPPP_WebApp.Controllers
             }
             ViewBag.PosloviVrste = new SelectList(poslovi, nameof(hr.IdVrstaPosao), nameof(hr.NazivPosao));
 
-            var hrv = await ctx.Suradnik
+            var hrv = await ctx.Radi
                                   .Where(d => d.IdSuradnik == 1)
-                                  .Select(d => new { v = d.Oib + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
+                                  .Select(d => new {v =  d.Oib, d.IdSuradnik })
                                   .FirstOrDefaultAsync();
 
-            var suradnici = await ctx.Suradnik
+            var suradnici = await ctx.Radi
                                   .Where(d => d.IdSuradnik != 1)
                                   .OrderBy(d => d.Oib)
-                                  .Select(d => new {v = d.Ime + d.Prezime + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
+                                  .Select(d => new {v = d.OibNavigation.Ime + " " + d.OibNavigation.Prezime + " (id: " + d.IdSuradnik + ")", d.IdSuradnik })
                                   .ToListAsync();
             if (hrv != null)
             {
                 suradnici.Insert(0, hrv);
             }
 
-            ViewBag.SuradniciPopis = new MultiSelectList(suradnici, nameof(hrv.IdSuradnik), nameof(hrv.v));
+            ViewBag.SuradniciPopis = new SelectList(suradnici, nameof(hrv.IdSuradnik), nameof(hrv.v));
 
         }
 
@@ -117,23 +117,44 @@ namespace RPPP_WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Posao posao)
+        public async Task<IActionResult> Create(Posao posao, Suradnik[] selectedSuradnici)
         {
             logger.LogTrace(JsonSerializer.Serialize(posao));
+
             if (ModelState.IsValid)
             {
+                using var transaction = ctx.Database.BeginTransaction();
+
                 try
                 {
                     ctx.Add(posao);
                     ctx.SaveChanges();
-                    logger.LogInformation(new EventId(1000), $"Posao {posao.IdPosao} dodan.");
 
-                    TempData[Constants.Message] = $"Posao  {posao.IdPosao} dodan.";
+                    foreach (Suradnik suradnik in selectedSuradnici)
+                    {
+                        Radi radi = new Radi
+                        {
+                            Oib = suradnik.Oib,
+                            IdPosao = posao.IdPosao
+                        };
+
+                        ctx.Add(radi);
+                    }
+
+                    ctx.SaveChanges();
+
+                    transaction.Commit();
+
+                    logger.LogInformation(new EventId(1000), $"Posao {posao.IdPosao} dodan.");
+                    TempData[Constants.Message] = $"Posao {posao.IdPosao} dodan.";
                     TempData[Constants.ErrorOccurred] = false;
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception exc)
                 {
+                    transaction.Rollback();
+
                     logger.LogError("Pogreška prilikom dodavanje novog posla: {0}", exc.Message);
                     ModelState.AddModelError(string.Empty, exc.Message);
                     await PrepareDropDownLists();
@@ -144,7 +165,6 @@ namespace RPPP_WebApp.Controllers
             else
             {
                 await PrepareDropDownLists();
-
                 return View(posao);
             }
         }

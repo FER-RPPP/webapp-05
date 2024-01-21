@@ -8,6 +8,9 @@ using System.Reflection.Metadata.Ecma335;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using RPPP_WebApp.Extensions.Selectors;
+using RPPP_WebApp.ViewModels;
+using RPPP_WebApp.Extensions;
+using Org.BouncyCastle.Security;
 
 namespace RPPP_WebApp.Controllers
 {
@@ -58,8 +61,8 @@ namespace RPPP_WebApp.Controllers
                                 .ToList();
 
             var listaposlova = suradnici
-                               .Select(suradnik => string.Join(",", ctx.Posao
-                                .Where(z => z.IdSuradnik.Contains(suradnik))
+                               .Select(suradnik => string.Join(",", ctx.Radi
+                                .Where(z => z.Oib == suradnik.Oib)
                                 .Select(z => z.IdPosao)))
                                 .ToList();
 
@@ -263,7 +266,7 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-        public async Task<IActionResult> Show(int id, int idPartner, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
+        public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
 
             if (id == 0)
@@ -326,43 +329,29 @@ namespace RPPP_WebApp.Controllers
                     idsljedeceg = svisuradnici[index + 1].IdSuradnik;
                 }
 
-                var poslovi = await ctx.Posao
-                                      .Where(s => s.IdSuradnik.Contains(suradnik))
-                                      .OrderBy(s => s.IdPosao)
-                                      .Select(s => new Posao
-                                      {
-                                          IdPosao = s.IdPosao,
-                                          IdVrstaPosao = s.IdVrstaPosao,
-                                          Opis = s.Opis,
-                                          PredVrTrajanjaDani = s.PredVrTrajanjaDani,
-                                          Uloga = s.Uloga,
-                                      })
-                                      .ToListAsync();
+                var poslovi = await ctx.Radi
+                    .Where(radi => radi.Oib == suradnik.Oib)
+                    .OrderBy(posao => posao.IdPosao)
+                    .Select(s => new PosaoPomocniViewModel
+                    {
+                        IdPosao = s.IdPosao,
+                        IdVrstaPosao = s.IdPosaoNavigation.IdVrstaPosao,
+                        Opis = s.IdPosaoNavigation.Opis,
+                        PredVrTrajanjaDani = s.IdPosaoNavigation.PredVrTrajanjaDani,
+                        Uloga = s.IdPosaoNavigation.Uloga,
+                        NazivPosao = s.IdPosaoNavigation.IdVrstaPosaoNavigation.NazivPosao
+                    })
+                    .ToListAsync();
 
-                var vrstaposla = ctx.Posao.AsNoTracking()
-                         .Where(d => suradnik.IdPosao.Contains(d))
-                         .Select(m => m.IdVrstaPosaoNavigation.NazivPosao)
-                         .ToList();
-
-                var model = new PosaoViewModel
-                {
-                    poslovi = poslovi,
-                    vrstaPosla = vrstaposla,
-                    PagingInfo = pagingInfo,
-                };
-
-
-                var CIJELAPREDAJA = new SuradnikPosaoViewModel
+                var CIJELAPREDAJA = new MDSuradniciViewModel
                 {
                     suradnik = suradnik,
-                    Kvalifikacija = nazivKvalifikacije,
-                    poslovi = model,
+                    kvalifikacija = nazivKvalifikacije,
+                    Poslovi = poslovi,
                     IdPrethSuradnik = idprethodnog,
                     IdSljedSuradnik = idsljedeceg,
                     PagingInfo = pagingInfo,
                 };
-
-                //await SetPreviousAndNext(position.Value, filter, sort, ascending);
 
 
                 ViewBag.Page = page;
@@ -374,6 +363,92 @@ namespace RPPP_WebApp.Controllers
 
             }
         }
-    }
+		[HttpGet]
+		public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+		{
+			await PrepareDropDownLists();
+			var vrste = await ctx.VrstaPosla.Select(d => new { d.IdVrstaPosao, d.NazivPosao }).ToListAsync();
+            var kvalifikacije = await ctx.Kvalifikacija.Select(d => new { d.IdKvalifikacija, d.NazivKvalifikacija }).ToListAsync();
+            ViewBag.kvalifikacije = new SelectList(kvalifikacije, nameof(Kvalifikacija.IdKvalifikacija), nameof(Kvalifikacija.NazivKvalifikacija));
+			ViewBag.vrste = new SelectList(vrste, nameof(VrstaPosla.IdVrstaPosao), nameof(VrstaPosla.NazivPosao));
+			return await Show(id, page, sort, ascending, nameof(Update));
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Update(MDSuradniciViewModel model, int page = 1, int sort = 1, bool ascending = true)
+		{
+
+
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					var suradnik = await ctx.Suradnik.FindAsync(model.suradnik.IdSuradnik);
+					if (suradnik == null)
+					{
+						return NotFound($"Ne postoji suradnik s oznakom {model.suradnik.IdSuradnik}");
+					}
+
+                    suradnik.IdSuradnik = model.suradnik.IdSuradnik;
+					suradnik.Oib = model.suradnik.Oib;
+					suradnik.Ime = model.suradnik.Ime;
+					suradnik.Prezime = model.suradnik.Prezime;
+					suradnik.Mail = model.suradnik.Mail;
+					suradnik.Mobitel = model.suradnik.Mobitel;
+					suradnik.Stranka = model.suradnik.Stranka;
+                    suradnik.IdKvalifikacija = model.suradnik.IdKvalifikacija;
+
+					List<int> ids = model.Poslovi
+						.Where(d => d.IdPosao > 0)
+						.Select(d => d.IdPosao)
+						.ToList();
+
+					ctx.RemoveRange(ctx.Posao.Where(d => !ids.Contains(d.IdPosao) && d.Suradnik.Contains(model.suradnik)));
+
+					foreach (var item in model.Poslovi)
+					{
+						if (item.IdPosao > 0)
+						{
+							var existing = suradnik.IdPosao.FirstOrDefault(d => d.IdPosao == item.IdPosao);
+							if (existing != null)
+							{
+                                existing.IdPosao = item.IdPosao;
+								existing.IdVrstaPosao = item.IdVrstaPosao;
+								existing.Opis = item.Opis;
+								existing.PredVrTrajanjaDani = item.PredVrTrajanjaDani;
+								existing.Uloga = item.Uloga;
+							}
+						}
+						else
+						{
+							suradnik.IdPosao.Add(new Posao
+							{
+								IdPosao = item.IdPosao,
+								IdVrstaPosao = item.IdVrstaPosao,
+								Opis = item.Opis,
+								PredVrTrajanjaDani = item.PredVrTrajanjaDani,
+								Uloga = item.Uloga
+							});
+						}
+					}
+
+					await ctx.SaveChangesAsync();
+					TempData[Constants.Message] = $"Suradnik {model.suradnik.Ime} {model.suradnik.Prezime} uspješno ažuriran.";
+					TempData[Constants.ErrorOccurred] = false;
+					return RedirectToAction(nameof(Update), new { id = model.suradnik.IdSuradnik, page = page, sort = sort, ascending = ascending });
+				}
+				catch (Exception exc)
+				{
+					ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+					return View(nameof(Update), model);
+				}
+			}
+			else
+			{
+				return View(nameof(Update), model);
+			}
+		}
+	}
 
 }

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Drawing.Printing;
 using RPPP_WebApp.Extensions.Selectors;
 using RPPP_WebApp.ViewModels;
+using RPPP_WebApp.Extensions;
 
 
 namespace RPPP_WebApp.Controllers
@@ -332,7 +333,7 @@ namespace RPPP_WebApp.Controllers
                 var suradnici = await ctx.Suradnik
                                       .Where(s => s.IdPartner == partner.IdPartner)
                                       .OrderBy(s => s.IdSuradnik)
-                                      .Select(s => new Suradnik
+                                      .Select(s => new SuradnikDetailPomocniViewModel
                                       {
                                           Oib = s.Oib,
                                           Mobitel = s.Mobitel,
@@ -342,21 +343,12 @@ namespace RPPP_WebApp.Controllers
                                           Stranka = s.Stranka,
                                           IdPartner = s.IdPartner,
                                           IdSuradnik = s.IdSuradnik,
-                                          IdKvalifikacija = s.IdKvalifikacija
+                                          IdKvalifikacija = s.IdKvalifikacija,
+                                          NazivKvalifikacija = s.IdKvalifikacijaNavigation.NazivKvalifikacija
                                       })
                                       .ToListAsync();
 
-                var kvalifikacije = ctx.Suradnik.AsNoTracking()
-                         .Where(d => d.IdPartner == id)
-                         .Select(m => m.IdKvalifikacijaNavigation.NazivKvalifikacija)
-                         .ToList();
-
-                var model = new SuradnikDetailViewModel
-                {
-                    suradnici = suradnici,
-                    nazivKvalifikacije = kvalifikacije,
-                    PagingInfo = pagingInfo,
-                };
+               
 
 
                 var CIJELAPREDAJA = new PartnerSuradnikViewModel
@@ -365,7 +357,8 @@ namespace RPPP_WebApp.Controllers
                     TipPartnera = NazVrste,
                     IdPrethPartner = idprethodnog,
                     IdSljedPartner = idsljedeceg,
-                    suradnici = model
+                    PagingInfo = pagingInfo,
+                    Suradnici = suradnici
 
                 };
 
@@ -380,6 +373,95 @@ namespace RPPP_WebApp.Controllers
                 return View(viewName, CIJELAPREDAJA);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+        {
+            await PrepareDropDownLists();
+            var kvalifikacije = await ctx.Kvalifikacija.Select(d => new { d.IdKvalifikacija, d.NazivKvalifikacija }).ToListAsync();
+            ViewBag.kvalifikacije = new SelectList(kvalifikacije, nameof(Kvalifikacija.IdKvalifikacija), nameof(Kvalifikacija.NazivKvalifikacija));
+            return await Show(id, page, sort, ascending, nameof(Update));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(PartnerSuradnikViewModel model, int page = 1, int sort = 1, bool ascending = true)
+        {
+
+            Console.WriteLine("Ovo je model: " + model);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var partner = await ctx.Partner.FindAsync(model.partner.IdPartner);
+                    if (partner == null)
+                    {
+                        return NotFound($"Ne postoji partner s oznakom {model.partner.IdPartner}");
+                    }
+
+                    partner.NazivPartner = model.partner.NazivPartner;
+                    partner.Oib = model.partner.Oib;
+                    partner.AdresaPartner = model.partner.AdresaPartner;
+                    partner.Ibanpartner = model.partner.Ibanpartner;
+                    partner.EmailPartner = model.partner.EmailPartner;
+                    partner.IdTipPartnera = model.partner.IdTipPartnera;
+
+                    List<int> ids = model.Suradnici
+                        .Where(d => d.IdSuradnik > 0)
+                        .Select(d => d.IdSuradnik)
+                        .ToList();
+
+                    ctx.RemoveRange(ctx.Suradnik.Where(d => !ids.Contains(d.IdSuradnik) && d.IdPartner == model.partner.IdPartner));
+
+                    foreach (var item in model.Suradnici)
+                    {
+                        if (item.IdSuradnik > 0)
+                        {
+                            var existing = partner.Suradnik.FirstOrDefault(d => d.IdSuradnik == item.IdSuradnik);
+                            if (existing != null)
+                            {
+                                existing.IdKvalifikacija = item.IdKvalifikacija;
+                                existing.Ime = item.Ime;
+                                existing.Prezime = item.Prezime;
+                                existing.Oib = item.Oib;
+                                existing.Mobitel = item.Mobitel;
+                                existing.Mail = item.Mail;
+                                existing.Stranka = item.Stranka;
+                            }
+                        }
+                        else
+                        {
+                            partner.Suradnik.Add(new Suradnik
+                            {
+                                IdKvalifikacija = item.IdKvalifikacija,
+                                Ime = item.Ime,
+                                Prezime = item.Prezime,
+                                Oib = item.Oib,
+                                Mobitel = item.Mobitel,
+                                Mail = item.Mail,
+                                Stranka = item.Stranka
+                            });
+                        }
+                    }
+
+                    await ctx.SaveChangesAsync();
+                    TempData[Constants.Message] = $"Partner {model.partner.IdPartner} uspješno ažuriran.";
+                    TempData[Constants.ErrorOccurred] = false;
+                    return RedirectToAction(nameof(Update), new { id = model.partner.IdPartner, page = page, sort = sort, ascending = ascending });
+                }
+                catch (Exception exc)
+                {
+                    ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    return View(nameof(Update), model);
+                }
+            }
+            else
+            {
+                return View(nameof(Update), model);
+            }
+        }
+
     }
 }
 

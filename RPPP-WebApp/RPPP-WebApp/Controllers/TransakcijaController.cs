@@ -8,9 +8,13 @@ using RPPP_WebApp.ViewModels;
 using RPPP_WebApp.Extensions.Selectors;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using RPPP_WebApp.Exstensions.Selectors;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za transakcie
+    /// </summary>
     public class TransakcijaController : Controller
     {
 
@@ -18,6 +22,12 @@ namespace RPPP_WebApp.Controllers
         private readonly ILogger<TransakcijaController> logger;
         private readonly AppSettings appSettings;
 
+        /// <summary>
+        /// Inicijalizira nove instance klase TransakcijaController/>.
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za bilježenje dogadaja</param>
         public TransakcijaController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<TransakcijaController> logger)
         {
             this.ctx = ctx;
@@ -25,7 +35,14 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
-        // GET: Transakcija
+
+        /// <summary>
+        /// Prikazuje popis transakcija uz mogucnost stranicenja i sortiranja
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s popisom transakcija</returns>
         [HttpGet]
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
@@ -78,6 +95,10 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Priprema padajuce liste
+        /// </summary>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         private async Task PrepareDropDownLists()
         {
             //TODO: napisati funkciju
@@ -113,9 +134,10 @@ namespace RPPP_WebApp.Controllers
             ViewBag.TransakcijePopis = new SelectList(kartice, nameof(hrv.Valuta), nameof(hrv.v));
         }
 
-
-
-        // GET: Transakcija/Create
+        /// <summary>
+        /// Prikazuje formu za stvaranje nove transakcije
+        /// </summary>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpGet]
         public async Task<IActionResult> CreateAsync()
         {
@@ -123,8 +145,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
-
-        // POST: Transakcija/Create
+        /// <summary>
+        /// Sprema novu transakciju u bazu podataka
+        /// </summary>
+        /// <param name="transakcija">Nova instanca objekta transakcija</param>
+        /// <returns>Rezultat akcije.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Transakcija transakcija)
@@ -158,8 +183,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-        
-        // GET: ProjektnaKartica/Edit/5
+
+        /// <summary>
+        /// Prikazuje formu za uredivanje postojece transakcije
+        /// </summary>
+        /// <param name="id">Id transakcije</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -179,7 +211,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Sprema uredivane podatke o transakciji u bazu podataka
+        /// </summary>
+        /// <param name="id">Id transakcije</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="opis">Opis transakcije</param>
+        /// <returns>Task zadatak za asinkrono izvodenje</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
@@ -230,7 +270,14 @@ namespace RPPP_WebApp.Controllers
         }
 
 
-        // GET: ProjektnaKartica/Delete/5
+        /// <summary>
+        /// Brisanje transakcije iz baze podataka.
+        /// </summary>
+        /// <param name="primateljIBAN">IBAN primatelja transakcije</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Rezultat akcije</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string primateljIBAN, int page = 1, int sort = 1, bool ascending = true)

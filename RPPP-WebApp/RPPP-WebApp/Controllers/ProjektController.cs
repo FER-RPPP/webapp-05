@@ -148,7 +148,7 @@ namespace RPPP_WebApp.Controllers
 
 		[HttpPost, ActionName("Edit")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+		public async Task<IActionResult> Change(int id, int page = 1, int sort = 1, bool ascending = true)
 		{
 			try
 			{
@@ -269,6 +269,7 @@ namespace RPPP_WebApp.Controllers
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
 
+        [HttpGet]
         public async Task<IActionResult> MD(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(MD))
         {
 
@@ -331,11 +332,12 @@ namespace RPPP_WebApp.Controllers
                 }
 
 
-                //učitavanje dokumenata
-                var dokumenti = await ctx.Dokument
+                //dokument using DokPomViewModel
+
+                var testDocs = await ctx.Dokument
                                       .Where(s => s.IdProjekt == projekt.IdProjekt)
                                       .OrderBy(s => s.IdDokument)
-                                      .Select(s => new Dokument
+                                      .Select(s => new DokPomViewModel
                                       {
                                           IdDokument = s.IdDokument,
                                           TipDokument = s.TipDokument,
@@ -344,20 +346,9 @@ namespace RPPP_WebApp.Controllers
                                           IdVrstaDok = s.IdVrstaDok,
                                           NazivDatoteka = s.NazivDatoteka,
                                           URLdokument = s.URLdokument,
+                                          NazivVrstaDok = s.IdVrstaDokNavigation.NazivVrstaDok
                                       })
                                       .ToListAsync();
-
-                var vrste = ctx.Dokument.AsNoTracking()
-                         .Where(d => d.IdProjekt == id)
-                         .Select(m => m.IdVrstaDokNavigation.NazivVrstaDok)
-                         .ToList();
-
-                var docs = new DokumentiViewModel
-                {
-                    Dokumenti = dokumenti,
-                    VrstaDokumenta = vrste,
-                    PagingInfo = pagingInfo,
-                };
 
 
                 var ProjektDokumenti = new MDprojektViewModel
@@ -366,7 +357,8 @@ namespace RPPP_WebApp.Controllers
                     TipProjekta = nazivTip,
                     IdPrethProjekt = idprethodnog,
                     IdSljedProjekt = idsljedeceg,
-                    dokumenti = docs
+                    PagingInfo = pagingInfo,
+                    Dokumenti = testDocs
                 };
 
 
@@ -378,6 +370,88 @@ namespace RPPP_WebApp.Controllers
                 return View(viewName, ProjektDokumenti);
             }
         }
+
+		[HttpGet]
+		public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
+		{
+            await PrepareDropdownListProjekt();
+            var vrste = await ctx.VrstaDokumenta.Select(d => new { d.IdVrstaDok, d.NazivVrstaDok }).ToListAsync();
+            ViewBag.vrste = new SelectList(vrste, nameof(VrstaDokumenta.IdVrstaDok), nameof(VrstaDokumenta.NazivVrstaDok));
+            return await MD(id, page, sort, ascending, nameof(Update));
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Update(MDprojektViewModel model, int page = 1, int sort = 1, bool ascending = true)
+		{
+
+            
+			if(ModelState.IsValid)
+			{
+                try
+				{
+                    var projekt = await ctx.Projekt.FindAsync(model.projekt.IdProjekt);
+                    if(projekt == null)
+					{
+                        return NotFound($"Ne postoji projekt s oznakom {model.projekt.IdProjekt}");
+                    }
+
+                    projekt.Naziv = model.projekt.Naziv;
+                    projekt.Opis = model.projekt.Opis;
+                    projekt.VrPocetak = model.projekt.VrPocetak;
+                    projekt.VrKraj = model.projekt.VrKraj;
+                    projekt.IdTip = model.projekt.IdTip;
+
+					List<int> ids = model.Dokumenti
+						.Where(d => d.IdDokument > 0)
+						.Select(d => d.IdDokument)
+						.ToList();
+
+					ctx.RemoveRange(ctx.Dokument.Where(d => !ids.Contains(d.IdDokument) && d.IdProjekt == model.projekt.IdProjekt));
+
+					foreach (var item in model.Dokumenti)
+					{
+						   if (item.IdDokument > 0)
+						    {
+                                 var existing = projekt.Dokument.FirstOrDefault(d => d.IdDokument == item.IdDokument);
+                                 if (existing != null)
+							     {
+                                      existing.IdVrstaDok = item.IdVrstaDok;
+                                      existing.NazivDatoteka = item.NazivDatoteka;
+                                      existing.TipDokument = item.TipDokument;
+                                      existing.VelicinaDokument = item.VelicinaDokument;
+                                      existing.URLdokument = item.URLdokument;
+                                 }
+                            }
+                            else
+						    {
+                                 projekt.Dokument.Add(new Dokument
+								 {
+                                      IdVrstaDok = item.IdVrstaDok,
+                                      NazivDatoteka = item.NazivDatoteka,
+                                      TipDokument = item.TipDokument,
+                                      VelicinaDokument = item.VelicinaDokument,
+                                      URLdokument = item.URLdokument
+                                 });
+                            }
+					}
+
+                    await ctx.SaveChangesAsync();
+					TempData[Constants.Message] = $"Projekt {model.projekt.Naziv} uspješno ažuriran.";
+					TempData[Constants.ErrorOccurred] = false;
+                    return RedirectToAction(nameof(Update), new {id = model.projekt.IdProjekt, page = page, sort = sort, ascending = ascending });
+                }
+                catch(Exception exc)
+				{
+                    ModelState.AddModelError(string.Empty, exc.CompleteExceptionMessage());
+                    return View(nameof(Update), model);
+                }
+            }
+            else
+			{
+                return View(nameof(Update), model);
+            }	
+		}
 
     }
 

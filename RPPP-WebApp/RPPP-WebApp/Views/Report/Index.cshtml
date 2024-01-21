@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "Izvještaji";
+}
+
+<h2>EXCEL</h2>
+
+<ul>
+    <r1>Baraa Yassin</r1>
+    <li>
+        <a asp-action="ProjektneKarticeExcel">Popis svih projektnih kartic</a>
+    </li>
+    <li>
+        <a asp-action="TransakcijeExcel">Popis svih transakcije</a>
+    </li>
+    <li>
+        <a asp-action="ProjektnaKarticaTransakcijeExcel">Popis master(ProjektnaKartica)-detail(Transakcija)</a>
+    </li>
+    <r1>Mia Crnolatac</r1>
+    <li>
+        <a asp-action="ZahtjevExcel">Popis svih zahtjeva</a>
+    </li>
+    <li>
+        <a asp-action="ZadatakExcel">Popis svih zadataka</a>
+    </li>
+    <li>
+        <a asp-action="ZahtjeviZadatciExcel">Popis master(Zahtjev)-detail(Zadatak)</a>
+    </li>
+    <r1>Niko Vidovic</r1>
+    <li>
+        <a asp-action="PartnerExcel">Popis svih partnera</a>
+    </li>
+    <li>
+        <a asp-action="SuradnikDetailExcel">Popis svih suradnika</a>
+    </li>
+    <li>
+        <a asp-action="PartneriSuradniciExcel">Popis master(Partner)-detail(Suradnik)</a>
+    </li>
+    <r1>Nina Kolobaric</r1>
+    <li>
+        <a asp-action="SuradnikExcel">Popis svih suradnika</a>
+    </li>
+    <li>
+        <a asp-action="PosaoExcel">Popis svih poslova</a>
+    </li>
+    <li>
+        <a asp-action="SuradniciPosloviExcel">Popis master(Suradnik)-detail(Posao)</a>
+    </li>
+    <r1>Bruno Mikulan</r1>
+    <li>
+        <a asp-action="ProjektExcel">Projekt Excel</a>
+    </li>
+    <li>
+        <a asp-action="DokumentExcel">Dokument Excel</a>
+    </li>
+    <li>
+        <a asp-action="ProjektDokumentExcel">MD Excel</a>
+    </li>
+    <li>
+        <div id="upload row">
+            <form class="form-inline" asp-action="ImportProjekt" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="form-group col-xs-6 col-md-3 ">
+                        <label for="importFile">Uvoz podataka u excel formatu za projekte</label>
+                        <input type="file" class="form-control" id="importFile" name="importFile" data-save="">
+                    </div>
+                    <div class="form-group">
+                        <label for="submit"></label>
+                        <input type="submit" id="submit" value="Uvezi">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </li>
+</ul>
+
+<h2>PDF</h2>
+<ul>
+    <r1>Baraa Yassin</r1>
+    <li>
+        <a asp-action="ProjektneKarticePDF">ProjektneKarticePDF</a>
+    </li>
+    <li>
+        <a asp-action="TransakcijePDF">TransakcijePDF</a>
+    </li>
+    <li>
+        <a asp-action="ProjektnaKarticaTransakcijePDF">Popis master(ProjektnaKartica)-detail(Transakcija) PDF</a>
+    </li>
+    Mia Crnolatac
+    <li>
+        <a asp-action="ZahtjevPDF">Zahtjev PDF</a>
+    </li>
+    <li>
+        <a asp-action="ZadatakPDF">Zadatak PDF</a>
+    </li>
+    Niko Vidovic
+    <li>
+        <a asp-action="PartnerPDF">Partner PDF</a>
+    </li>
+    <li>
+        <a asp-action="SuradnikDetailPDF">Suradnik PDF</a>
+    </li>
+    Nina Kolobaric
+    <li>
+        <a asp-action="SuradnikPDF">Suradnik PDF</a>
+    </li>
+    <li>
+        <a asp-action="PosaoPDF">Posao PDF</a>
+    </li>
+    Bruno Mikulan
+    <li>
+        <a asp-action="ProjektPDF">Projekt PDF</a>
+    </li>
+    <li>
+        <a asp-action="DokumentPDF">Dokument PDF</a>
+    </li>
+    <li>
+        <a asp-action="MDprojekt">MD PDF</a>
+    </li>
+</ul>
+
+<div id="upload row">
+    <form class="form-inline" asp-action="ImportProjektneKartice" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="form-group col-xs-6 col-md-3 ">
+                <label for="importFile">Uvoz podataka u excel formatu za projektnu karticu (Baraa Yassin)</label>
+                <input type="file" class="form-control" id="importFile" name="importFile" data-save="">
+            </div>
+            <div class="form-group">
+                <label for="submit"></label>
+                <input type="submit" id="submit" value="Uvezi">
+            </div>
+        </div>
+    </form>
+</div>
+<br /><br />
+

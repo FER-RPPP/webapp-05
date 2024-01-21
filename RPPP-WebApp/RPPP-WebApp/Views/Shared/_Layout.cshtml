@@ -16,20 +16,22 @@
 </head>
 <body>
   <partial name="_Nav" />
-    
 
-    
 
-  <div class="container body-container">
-        
-        
+
+
+    <div class="container body-container"
+    @if (ViewBag.ViewName == "Update")
+    {
+        <text>style="margin-left: 1%"</text>
+    }
+>
         @RenderBody()
-        <div>
-            <div id="tempmessage" class="alert">
-                
-            </div>
+    <div>
+        <div id="tempmessage" class="alert">
         </div>
-  </div>
+    </div>
+</div>
 
 
     

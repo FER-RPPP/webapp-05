@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row text-center">
         <div class="col-sm-2">
-            @if (Model.IdPrethKartica != (-1).ToString())
+            @if (Model.IdPrethKartica != -1)
             {
                 <a class="btn btn-sm btn-primary"
                    asp-action="Show"
@@ -25,18 +25,19 @@
 
             <h5 class="boksic">
                 <div>
-                    Prioritet:  @Model.kartica.Saldo
+                    Saldo:  @Model.kartica.Saldo
                 </div>
                 <div>
-                    Vrsta:  @Model.NazVrsta
+                    Vrijeme otvaranja: @Model.kartica.VrijemeOtvaranja
                 </div>
                 <div>
-                    Opis: @Model.kartica.Valuta
+                    ID projekt: @Model.kartica.IdProjekt
                 </div>
+                
             </h5>
         </div>
         <div class="col-sm-2">
-            @if (Model.IdSljedKartica != (-1).ToString())
+            @if (Model.IdSljedKartica != -1)
             {
                 <a class="btn btn-sm btn-primary" asp-action="Show"
                    asp-route-page="@ViewBag.Page"
@@ -53,6 +54,13 @@
     <div class="row justify-content-sm-center">
         <div class="text-center">
             Vrijeme početka: @Model.kartica.VrijemeOtvaranja.ToString("d.M.yyyy.")
+        </div>
+
+        <div class="col-sm-1 text-right">
+            <a asp-action="Update"
+               asp-route-id="@Model.kartica.IdProjekt"
+               target="_blank"
+               class="btn btn-warning btn-sm" title="Ažuriraj"><i class="fas fa-edit">Uredi</i></a>
         </div>
 
         <div class="col-sm-1 text-center">
