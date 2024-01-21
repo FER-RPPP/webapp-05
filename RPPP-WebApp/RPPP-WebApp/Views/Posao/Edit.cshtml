@@ -32,14 +32,14 @@
     <div class="form-group">
         <label asp-for="Uloga"></label>
         <div><span asp-validation-for="Uloga" class="text-danger"></span></div>
-        <input asp-for="Uloga" class="form-control"></input>
+        <input asp-for="Uloga" class="form-control"/>
     </div>
     <div class="mb-3">
-        <label asp-for="IdSuradnik" class="form-label">Suradnici koji rade na poslu</label>
-        <select class="form-control" asp-for="IdSuradnik" asp-items="ViewBag.SuradniciPopis">
+        <label asp-for="Suradnik" class="form-label">Suradnici koji rade na poslu</label>
+        <select class="form-control" asp-for="Suradnik" asp-items="ViewBag.SuradniciPopis">
             <option disabled selected value="">Odaberite suradnike</option>
         </select>
-        <div class="form-text"><span asp-validation-for="IdSuradnik" class="text-danger"></span></div>
+        <div class="form-text"><span asp-validation-for="Suradnik" class="text-danger"></span></div>
     </div>
     <div class="mb-3">
         <label asp-for="IdVrstaPosao" class="form-label">Vrsta poslova</label>

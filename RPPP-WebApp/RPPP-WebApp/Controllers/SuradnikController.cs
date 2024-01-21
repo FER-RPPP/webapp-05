@@ -58,8 +58,8 @@ namespace RPPP_WebApp.Controllers
                                 .ToList();
 
             var listaposlova = suradnici
-                               .Select(suradnik => string.Join(",", ctx.Posao
-                                .Where(z => z.IdSuradnik.Contains(suradnik))
+                               .Select(suradnik => string.Join(",", ctx.Radi
+                                .Where(z => z.Oib == suradnik.Oib)
                                 .Select(z => z.IdPosao)))
                                 .ToList();
 
@@ -326,23 +326,18 @@ namespace RPPP_WebApp.Controllers
                     idsljedeceg = svisuradnici[index + 1].IdSuradnik;
                 }
 
-                var poslovi = await ctx.Posao
-                                      .Where(s => s.IdSuradnik.Contains(suradnik))
-                                      .OrderBy(s => s.IdPosao)
-                                      .Select(s => new Posao
-                                      {
-                                          IdPosao = s.IdPosao,
-                                          IdVrstaPosao = s.IdVrstaPosao,
-                                          Opis = s.Opis,
-                                          PredVrTrajanjaDani = s.PredVrTrajanjaDani,
-                                          Uloga = s.Uloga,
-                                      })
-                                      .ToListAsync();
+                var poslovi = await ctx.Radi
+                    .Where(radi => radi.Oib == suradnik.Oib)
+                    .Select(radi => radi.IdPosaoNavigation)
+                    .OrderBy(posao => posao.IdPosao)
+                    .ToListAsync();
 
-                var vrstaposla = ctx.Posao.AsNoTracking()
-                         .Where(d => suradnik.IdPosao.Contains(d))
-                         .Select(m => m.IdVrstaPosaoNavigation.NazivPosao)
-                         .ToList();
+
+                var vrstaposla = await ctx.Radi
+                    .Where(radi => radi.Oib == suradnik.Oib)
+                    .Select(radi => radi.IdPosaoNavigation.IdVrstaPosaoNavigation.NazivPosao)
+                    .Distinct()
+                    .ToListAsync();
 
                 var model = new PosaoViewModel
                 {

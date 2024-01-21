@@ -10,7 +10,7 @@ namespace RPPP_WebApp.Models
     {
         public Suradnik()
         {
-            IdPosao = new HashSet<Posao>();
+            Posao = new HashSet<Posao>();
         }
 
         [Display(Name = "OIB")]
@@ -51,6 +51,6 @@ namespace RPPP_WebApp.Models
         public virtual Kvalifikacija IdKvalifikacijaNavigation { get; set; }
         public virtual Partner IdPartnerNavigation { get; set; }
 
-        public virtual ICollection<Posao> IdPosao { get; set; }
+        public virtual ICollection<Posao> Posao { get; set; }
     }
 }
