@@ -10,13 +10,21 @@ using RPPP_WebApp.Extensions;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Projekt controler
+    /// </summary>
 	public class ProjektController : Controller
 	{
 		private readonly RPPP05Context ctx;
 		private readonly ILogger<ProjektController> logger;
 		private readonly AppSettings appSettings;
 
-
+        /// <summary>
+        /// instanca kontrolera
+        /// </summary>
+        /// <param name="ctx">kontekst za bazu podataka</param>
+        /// <param name="options">opcije aplikacije</param>
+        /// <param name="logger">loger za događaje</param>
 		public ProjektController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ProjektController> logger)
 		{
 			this.ctx = ctx;
@@ -24,6 +32,14 @@ namespace RPPP_WebApp.Controllers
 			appSettings = options.Value;
 		}
 
+
+        /// <summary>
+        /// funkcija za dohvaćanje svih projekata
+        /// </summary>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>stranica sa svim projektima</returns>
 		public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
 		{
 			int pagesize = appSettings.PageSize;
@@ -85,6 +101,10 @@ namespace RPPP_WebApp.Controllers
 			ViewBag.Tipovi = new SelectList(tipovi, nameof(TipProjekta.IdTip), nameof(TipProjekta.NazivTip));
 		}
 
+        /// <summary>
+        /// vraca view za dodavanje novog projekta
+        /// </summary>
+        /// <returns>vraca view za nove projekte</returns>
 		[HttpGet]
 		public async Task<IActionResult> Create()
 		{
@@ -92,6 +112,11 @@ namespace RPPP_WebApp.Controllers
 			return View();
 		}
 
+        /// <summary>
+        /// dodaje novi projekt u bazu podataka
+        /// </summary>
+        /// <param name="projekt">novi projekt</param>
+        /// <returns>vraca view sa svim projektima</returns>
 		[HttpPost]
 		public async Task<IActionResult> Create(Projekt projekt)
 		{
@@ -126,6 +151,14 @@ namespace RPPP_WebApp.Controllers
 			}
 		}
 
+        /// <summary>
+        /// vraca view za uredivanje projekta
+        /// </summary>
+        /// <param name="id">oznaka projekta</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>vraca view za uredivanje projekta</returns>
 		[HttpGet]
 		public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
 		{
@@ -146,6 +179,14 @@ namespace RPPP_WebApp.Controllers
 
 		}
 
+        /// <summary>
+        /// azurira projekt u bazi podataka
+        /// </summary>
+        /// <param name="id">oznaka projekta</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>vraca view sa svim projektima i povratne informacije</returns>
 		[HttpPost, ActionName("Edit")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Change(int id, int page = 1, int sort = 1, bool ascending = true)
@@ -195,6 +236,14 @@ namespace RPPP_WebApp.Controllers
 			}
 		}
 
+        /// <summary>
+        /// brise projekt iz baze podataka
+        /// </summary>
+        /// <param name="id">projekt</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>vraca povratne informacije i pripadni view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)
@@ -269,6 +318,15 @@ namespace RPPP_WebApp.Controllers
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
 
+        /// <summary>
+        /// vraca view za MD prikaz projekta i pripadnih dokumenata
+        /// </summary>
+        /// <param name="id">ID projekta</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <param name="viewName">koji view vraca</param>
+        /// <returns>view za MD prikaz</returns>
         [HttpGet]
         public async Task<IActionResult> MD(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(MD))
         {
@@ -371,6 +429,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// vraca view za editiranje projekta i pripadnih dokumenata
+        /// </summary>
+        /// <param name="id">ID projekta</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>Update view</returns>
 		[HttpGet]
 		public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
 		{
@@ -380,6 +446,14 @@ namespace RPPP_WebApp.Controllers
             return await MD(id, page, sort, ascending, nameof(Update));
 		}
 
+        /// <summary>
+        /// kontroler za azuriranje projekta i pripadnih dokumenata
+        /// </summary>
+        /// <param name="model">Viewmodel s projektom i pripadnim dokumentima</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>vraca na isti view s odgovarajucim povratnim informacijama</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Update(MDprojektViewModel model, int page = 1, int sort = 1, bool ascending = true)

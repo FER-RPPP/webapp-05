@@ -10,13 +10,21 @@ using Microsoft.Extensions.Options;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za Zadatke
+    /// </summary>
     public class ZadatakController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<ZadatakController> logger;
         private readonly AppSettings appSettings;
 
-
+        /// <summary>
+        /// Inicijalizira novu instancu klase ZadatakController/>.
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public ZadatakController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZadatakController> logger)
         {
             this.ctx = ctx;
@@ -24,6 +32,14 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
 
         }
+        
+        /// <summary>
+        /// Prikazuje popis zadataka s mogucnoscu stranicenja i sortiranja
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s popisom zadataka</returns>
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
 
@@ -70,6 +86,10 @@ namespace RPPP_WebApp.Controllers
       
         }
 
+        /// <summary>
+        /// Priprema padajućih lista za Create i Edit metode.
+        /// </summary>
+        /// <returns>Task</returns>
         private async Task PrepareDropDownLists()
         {
             var hrc = await ctx.Suradnik
@@ -120,6 +140,11 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+
+        /// <summary>
+        /// Prikazuje formu za dodavanje novog zadatka.
+        /// </summary>
+        /// <returns>View s formom za dodavanje novog zadatka</returns>
         [HttpGet]
         public async Task<IActionResult> CreateAsync()
         {
@@ -127,6 +152,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Dodaje novi zadatak u bazu podataka.
+        /// </summary>
+        /// <param name="zadatak">Objekt Zadatak</param>
+        /// <returns>Redirekcija na Index metodu ili prikazuje grešku za kreiranje novog zadatka</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Zadatak zadatak)
@@ -162,7 +192,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Prikazuje formu za uređivanje postojećeg zadatka.
+        /// </summary>
+        /// <param name="id">ID zadatka</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s formom za uređivanje zadatka</returns>
         [HttpGet]
         public async Task <IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -182,13 +219,19 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Ažurira postojeći zadatak u bazi podataka.
+        /// </summary>
+        /// <param name="id">ID zadatka</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="opis">Opis zadatka</param>
+        /// <returns>Redirekcija na Index metodu ili prikazuje grešku za spremanje</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
         {
-            //za različite mogućnosti ažuriranja pogledati
-            //attach, update, samo id, ...
-            //https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud#update-the-edit-page
 
             try
             {
@@ -234,6 +277,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Briše zadatak iz baze podataka.
+        /// </summary>
+        /// <param name="IdZadatak">ID zadatka</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Redirekcija na Index metodu</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int IdZadatak, int page = 1, int sort = 1, bool ascending = true)
