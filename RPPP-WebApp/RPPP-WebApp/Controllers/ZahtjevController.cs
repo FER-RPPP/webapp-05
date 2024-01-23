@@ -22,13 +22,21 @@ using PdfRpt.Core.Helper;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za zahtjeve
+    /// </summary>
     public class ZahtjevController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<ZahtjevController> logger;
         private readonly AppSettings appSettings;
 
-
+        /// <summary>
+        /// Inicijalizira novu instancu klase ZahtjevController/>.
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public ZahtjevController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<ZahtjevController> logger)
         {
             this.ctx = ctx;
@@ -36,6 +44,14 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
 
         }
+
+        /// <summary>
+        /// Prikazuje popis zahtjeva s mogucnoscu stranicenja i sortiranja
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s popisom zahtjeva</returns>
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
             int pagesize = appSettings.PageSize;
@@ -86,7 +102,7 @@ namespace RPPP_WebApp.Controllers
 
             var model = new ZahtjevViewModel
             {
-                zadatci = zahtjevi,
+                zahtjevi = zahtjevi,
                 nazivVrste = vrste,
                 PagingInfo = pagingInfo,
                 popisZadataka = listazadataka
@@ -94,6 +110,10 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Priprema padajućih lista za Create, Edit i Update metode.
+        /// </summary>
+        /// <returns>Task</returns>
         private async Task PrepareDropDownLists()
         {
 
@@ -158,7 +178,10 @@ namespace RPPP_WebApp.Controllers
             ViewBag.ZadatciSuradnici = new SelectList(suradnici, nameof(hrc.Oib), nameof(hrc.S));
         }
 
-
+        /// <summary>
+        /// Prikazuje formu za stvaranje novog zahtjeva.
+        /// </summary>
+        /// <returns>View za stvaranje zahtjeva</returns>
         [HttpGet]
         public async Task<IActionResult>  Create()
         {
@@ -166,6 +189,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Dodaje novi zahtjev u bazu podataka.
+        /// </summary>
+        /// <param name="zahtjev">Objekt zahtjev</param>
+        /// <returns>Redirekcija na popis zahtjeva ili View s greškama</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Zahtjev zahtjev)
@@ -199,7 +227,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Prikazuje formu za uređivanje postojećeg zahtjeva.
+        /// </summary>
+        /// <param name="id">Identifikator zahtjeva</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View za uređivanje zahtjeva</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -220,14 +255,19 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Ažurira postojeći zahtjev u bazi podataka.
+        /// </summary>
+        /// <param name="id">Identifikator zahtjeva</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="opis">Opis zahtjeva (opcionalno)</param>
+        /// <returns>Redirekcija na popis zahtjeva ili View s greškama</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis ="opis")
         {
-            //za različite mogućnosti ažuriranja pogledati
-            //attach, update, samo id, ...
-            //https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud#update-the-edit-page
-
             try
             {
                 Zahtjev zahtjev = await ctx.Zahtjev
@@ -272,6 +312,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Briše zahtjev iz baze.
+        /// </summary>
+        /// <param name="id">Identifikator zahtjeva</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Redirekcija na popis zahtjeva ili poruka o grešci</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)
@@ -309,6 +357,15 @@ namespace RPPP_WebApp.Controllers
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
 
+        /// <summary>
+        /// Prikazuje detalje o određenom zahtjevu, uključujući informacije o zadacima vezanim uz taj zahtjev.
+        /// </summary>
+        /// <param name="id">Identifikator zahtjeva</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="viewName">Naziv pogleda</param>
+        /// <returns>View s detaljima o zahtjevu</returns>
         public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
 
@@ -446,6 +503,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Prikazuje formu za ažuriranje podataka o zahtjevu, uključujući i njegove zadatke.
+        /// </summary>
+        /// <param name="id">Identifikator zahtjeva</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View za ažuriranje zahtjeva</returns>
         [HttpGet]
         public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -457,19 +522,20 @@ namespace RPPP_WebApp.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Ažurira podatke o zahtjevu i njegovim zadacima na temelju podataka iz obrasca. U obrascu mogu biti novi zadatci ili informacija da su neki obrisani.
+        /// </summary>
+        /// <param name="model">ViewModel koji sadrži podatke o zahtjevu i zadacima</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View s detaljima o zahtjevu i zadatcima nakon ažuriranja</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(ZahtjevZadatakViewModel model, int page = 1, int sort = 1, bool ascending = true)
         {
             ViewBag.ViewName = "Update";
-            //if (model.Zadatci == null)
-            //{
-            //    return NotFound("Nema poslanih podataka");
-            //}
-            //else
-            //{
-            //    return NotFound(model.Zadatci);
-            //}
+
 
             await PrepareDropDownLists();
 
@@ -500,14 +566,7 @@ namespace RPPP_WebApp.Controllers
                                           .Select(s => s.IdZadatak)
                                           .ToList();
 
-                //if (model.Zadatci == null)
-                //    {
-                //        return NotFound("Nema poslanih podataka");
-                //    }
-                //    else
-                //    {
-                //        return NotFound(model.Zadatci);
-                //    }
+
                     //izbaci sve koje su nisu više u modelu
                 ctx.RemoveRange(zahtjev.Zadatak.Where(s => !idZadataka.Contains(s.IdZadatak)));
 
