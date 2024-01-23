@@ -560,6 +560,7 @@ namespace RPPP_WebApp.Controllers
                 zahtjev.VrPocetak = model.zahtjev.VrPocetak;
                 zahtjev.VrKrajOcekivano = model.zahtjev.VrKrajOcekivano;
                 zahtjev.VrKraj = model.zahtjev.VrKraj;
+                zahtjev.IdProjekt = model.zahtjev.IdProjekt;
 
                 List<int> idZadataka = model.Zadatci
                                           .Where(s => s.IdZadatak > 0)
