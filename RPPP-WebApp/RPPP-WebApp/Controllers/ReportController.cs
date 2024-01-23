@@ -2333,7 +2333,12 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+        //bruno
 
+        /// <summary>
+        /// Funkcija za kreiranje izvještaja oblika Master-Detail (Master: Projekt, Detail: Dokumenti)
+        /// </summary>
+        /// <returns>PDF</returns>
         public async Task<IActionResult> MDprojekt()
         {
             string naslov = "Popis projekata MD view";
@@ -2450,7 +2455,12 @@ namespace RPPP_WebApp.Controllers
             };
         }
 
-        
+        /// <summary>
+        /// pomocna funkcija za kreiranje izvještaja, koristi se u MDprojekt
+        /// </summary>
+        /// <param name="content">sto ce se zapisati u celiju</param>
+        /// <param name="isHeader">ako je postavljeno oboja pozadinu</param>
+        /// <returns>vraca formatiranu celiju</returns>
         private PdfPCell GetCell(string content, bool isHeader = false)
         {
             PdfPCell cell = new PdfPCell(new Phrase(content));
@@ -2467,13 +2477,20 @@ namespace RPPP_WebApp.Controllers
             return cell;
         }
 
+        /// <summary>
+        /// funkcija za font
+        /// </summary>
+        /// <returns>vraca boldani font</returns>
         private Font GetBoldFont()
         {
             Font font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
             return font;
         }
 
-
+        /// <summary>
+        /// funkcija za kreiranje excel izvještaja za projekte
+        /// </summary>
+        /// <returns>excel dokument svih projekata</returns>
         public async Task<IActionResult> ProjektExcel()
         {
             var projekti = await ctx.Projekt
@@ -2522,6 +2539,10 @@ namespace RPPP_WebApp.Controllers
             return File(content, ExcelContentType, "Projekti.xlsx");
         }
 
+        /// <summary>
+        /// funcija za kreira excel izvještaj za dokumente
+        /// </summary>
+        /// <returns>excel dokument svih dokumenata</returns>
         public async Task<IActionResult> DokumentExcel()
         {
             var dokumenti = await ctx.Dokument
@@ -2568,7 +2589,10 @@ namespace RPPP_WebApp.Controllers
             return File(content, ExcelContentType, "Dokumenti.xlsx");
         }
 
-
+        /// <summary>
+        /// funkcija za kreiranje pdf izvještaja za projekte
+        /// </summary>
+        /// <returns>PDF svih projekata</returns>
         public async Task<IActionResult> ProjektPDF()
         {
             string naslov = "Popis projekata";
@@ -2686,6 +2710,11 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
+
+        /// <summary>
+        /// funkcija za kreiranje pdf izvještaja za dokumente
+        /// </summary>
+        /// <returns>PDF svih dokumanata</returns>
         public async Task<IActionResult> DokumentPDF()
         {
             string naslov = "Popis dokumenata";
@@ -2819,6 +2848,10 @@ namespace RPPP_WebApp.Controllers
             }
       }
 
+        /// <summary>
+        /// funkcija za kreiranje excel izvještaja za projekte i dokumente u obliku master-detail
+        /// </summary>
+        /// <returns>Excel dokument MD za projekte i dokumente</returns>
         public async Task<IActionResult> ProjektDokumentExcel()
         {
             var projekti = await ctx.Projekt
@@ -2907,6 +2940,12 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// funkcija za import projekata iz excel datoteke
+        /// </summary>
+        /// <param name="importFile">datoeka u istom obliku kao sto je export projekata
+        /// prvi stupac ostaviti prazno za ID(to ne postavlja user)</param>
+        /// <returns>ista excel tablica s dokdatnim stupcom Status koji oznacava je li uspjela operaciaj</returns>
         public async Task<IActionResult> ImportProjekt(IFormFile importFile)
         {
             ExcelPackage result = new ExcelPackage();
