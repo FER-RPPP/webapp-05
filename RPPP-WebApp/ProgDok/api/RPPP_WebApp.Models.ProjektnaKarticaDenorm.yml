@@ -1,0 +1,751 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  commentId: T:RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  id: ProjektnaKarticaDenorm
+  parent: RPPP_WebApp.Models
+  children:
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja
+  - RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta
+  langs:
+  - csharp
+  - vb
+  name: ProjektnaKarticaDenorm
+  nameWithType: ProjektnaKarticaDenorm
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  type: Class
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: ProjektnaKarticaDenorm
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 8
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Denormalizirani pogled projektnih kartica
+  example: []
+  syntax:
+    content: public class ProjektnaKarticaDenorm
+    content.vb: Public Class ProjektnaKarticaDenorm
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN
+  id: subjektIBAN
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: subjektIBAN
+  nameWithType: ProjektnaKarticaDenorm.subjektIBAN
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: subjektIBAN
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 13
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja IBAN subjekta
+  example: []
+  syntax:
+    content: public string subjektIBAN { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property subjektIBAN As String
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo
+  id: Saldo
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: Saldo
+  nameWithType: ProjektnaKarticaDenorm.Saldo
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: Saldo
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 18
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja saldo
+  example: []
+  syntax:
+    content: public int Saldo { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Saldo As Integer
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta
+  id: valuta
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: valuta
+  nameWithType: ProjektnaKarticaDenorm.valuta
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: valuta
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 23
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja valutu
+  example: []
+  syntax:
+    content: public string valuta { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property valuta As String
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja
+  id: vrijemeOtvaranja
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: vrijemeOtvaranja
+  nameWithType: ProjektnaKarticaDenorm.vrijemeOtvaranja
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: vrijemeOtvaranja
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 28
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja vrijeme otvaranja
+  example: []
+  syntax:
+    content: public DateTime vrijemeOtvaranja { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property vrijemeOtvaranja As Date
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt
+  id: idProjekt
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: idProjekt
+  nameWithType: ProjektnaKarticaDenorm.idProjekt
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: idProjekt
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 33
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja identifikator projekta
+  example: []
+  syntax:
+    content: public int idProjekt { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property idProjekt As Integer
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl
+  id: KarticaUrl
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: KarticaUrl
+  nameWithType: ProjektnaKarticaDenorm.KarticaUrl
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: KarticaUrl
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 38
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja URL projektnih kartica
+  example: []
+  syntax:
+    content: public string KarticaUrl { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property KarticaUrl As String
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN
+  id: primateljIBAN
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: primateljIBAN
+  nameWithType: ProjektnaKarticaDenorm.primateljIBAN
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: primateljIBAN
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 43
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja IBAN primatelja
+  example: []
+  syntax:
+    content: public string primateljIBAN { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property primateljIBAN As String
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis
+  id: opis
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: opis
+  nameWithType: ProjektnaKarticaDenorm.opis
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: opis
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 48
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja opis transakcije
+  example: []
+  syntax:
+    content: public string opis { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property opis As String
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta
+  id: vrsta
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: vrsta
+  nameWithType: ProjektnaKarticaDenorm.vrsta
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: vrsta
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 53
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja vrstu transakcije
+  example: []
+  syntax:
+    content: public string vrsta { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property vrsta As String
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija
+  id: idTransakcija
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: idTransakcija
+  nameWithType: ProjektnaKarticaDenorm.idTransakcija
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: idTransakcija
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 58
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja identifikator transakcije
+  example: []
+  syntax:
+    content: public int idTransakcija { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property idTransakcija As Integer
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija*
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost
+  commentId: P:RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost
+  id: vrijednost
+  parent: RPPP_WebApp.Models.ProjektnaKarticaDenorm
+  langs:
+  - csharp
+  - vb
+  name: vrijednost
+  nameWithType: ProjektnaKarticaDenorm.vrijednost
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: vrijednost
+    path: ../RPPP-WebApp/ModelsPartial/ProjektnaKarticaDenorm.cs
+    startLine: 63
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  summary: Dohvaca ili postavlja vrijednost transakcije
+  example: []
+  syntax:
+    content: public int vrijednost { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property vrijednost As Integer
+  overload: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost*
+references:
+- uid: RPPP_WebApp.Models
+  commentId: N:RPPP_WebApp.Models
+  href: RPPP_WebApp.html
+  name: RPPP_WebApp.Models
+  nameWithType: RPPP_WebApp.Models
+  fullName: RPPP_WebApp.Models
+  spec.csharp:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Models
+    name: Models
+    href: RPPP_WebApp.Models.html
+  spec.vb:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Models
+    name: Models
+    href: RPPP_WebApp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_subjektIBAN
+  name: subjektIBAN
+  nameWithType: ProjektnaKarticaDenorm.subjektIBAN
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.subjektIBAN
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_Saldo
+  name: Saldo
+  nameWithType: ProjektnaKarticaDenorm.Saldo
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.Saldo
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_valuta
+  name: valuta
+  nameWithType: ProjektnaKarticaDenorm.valuta
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.valuta
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_vrijemeOtvaranja
+  name: vrijemeOtvaranja
+  nameWithType: ProjektnaKarticaDenorm.vrijemeOtvaranja
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijemeOtvaranja
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_idProjekt
+  name: idProjekt
+  nameWithType: ProjektnaKarticaDenorm.idProjekt
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idProjekt
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_KarticaUrl
+  name: KarticaUrl
+  nameWithType: ProjektnaKarticaDenorm.KarticaUrl
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.KarticaUrl
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_primateljIBAN
+  name: primateljIBAN
+  nameWithType: ProjektnaKarticaDenorm.primateljIBAN
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.primateljIBAN
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_opis
+  name: opis
+  nameWithType: ProjektnaKarticaDenorm.opis
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.opis
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_vrsta
+  name: vrsta
+  nameWithType: ProjektnaKarticaDenorm.vrsta
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrsta
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_idTransakcija
+  name: idTransakcija
+  nameWithType: ProjektnaKarticaDenorm.idTransakcija
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.idTransakcija
+- uid: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost*
+  commentId: Overload:RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost
+  href: RPPP_WebApp.Models.ProjektnaKarticaDenorm.html#RPPP_WebApp_Models_ProjektnaKarticaDenorm_vrijednost
+  name: vrijednost
+  nameWithType: ProjektnaKarticaDenorm.vrijednost
+  fullName: RPPP_WebApp.Models.ProjektnaKarticaDenorm.vrijednost

@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.Extensions
+  commentId: N:RPPP_WebApp.Extensions
+  id: RPPP_WebApp.Extensions
+  children:
+  - RPPP_WebApp.Extensions.ExceptionExtensions
+  langs:
+  - csharp
+  - vb
+  name: RPPP_WebApp.Extensions
+  nameWithType: RPPP_WebApp.Extensions
+  fullName: RPPP_WebApp.Extensions
+  type: Namespace
+  assemblies:
+  - RPPP-WebApp
+references:
+- uid: RPPP_WebApp.Extensions.ExceptionExtensions
+  commentId: T:RPPP_WebApp.Extensions.ExceptionExtensions
+  href: RPPP_WebApp.Extensions.ExceptionExtensions.html
+  name: ExceptionExtensions
+  nameWithType: ExceptionExtensions
+  fullName: RPPP_WebApp.Extensions.ExceptionExtensions

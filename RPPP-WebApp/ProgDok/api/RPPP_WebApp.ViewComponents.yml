@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.ViewComponents
+  commentId: N:RPPP_WebApp.ViewComponents
+  id: RPPP_WebApp.ViewComponents
+  children:
+  - RPPP_WebApp.ViewComponents.NavigationViewComponent
+  langs:
+  - csharp
+  - vb
+  name: RPPP_WebApp.ViewComponents
+  nameWithType: RPPP_WebApp.ViewComponents
+  fullName: RPPP_WebApp.ViewComponents
+  type: Namespace
+  assemblies:
+  - RPPP-WebApp
+references:
+- uid: RPPP_WebApp.ViewComponents.NavigationViewComponent
+  commentId: T:RPPP_WebApp.ViewComponents.NavigationViewComponent
+  href: RPPP_WebApp.ViewComponents.NavigationViewComponent.html
+  name: NavigationViewComponent
+  nameWithType: NavigationViewComponent
+  fullName: RPPP_WebApp.ViewComponents.NavigationViewComponent

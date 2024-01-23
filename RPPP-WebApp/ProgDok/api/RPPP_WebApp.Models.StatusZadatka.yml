@@ -1,0 +1,565 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.Models.StatusZadatka
+  commentId: T:RPPP_WebApp.Models.StatusZadatka
+  id: StatusZadatka
+  parent: RPPP_WebApp.Models
+  children:
+  - RPPP_WebApp.Models.StatusZadatka.#ctor
+  - RPPP_WebApp.Models.StatusZadatka.IdStatus
+  - RPPP_WebApp.Models.StatusZadatka.NazivStatus
+  - RPPP_WebApp.Models.StatusZadatka.Zadatak
+  langs:
+  - csharp
+  - vb
+  name: StatusZadatka
+  nameWithType: StatusZadatka
+  fullName: RPPP_WebApp.Models.StatusZadatka
+  type: Class
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/Models/StatusZadatka.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: StatusZadatka
+    path: ../RPPP-WebApp/Models/StatusZadatka.cs
+    startLine: 7
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  syntax:
+    content: public class StatusZadatka
+    content.vb: Public Class StatusZadatka
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: RPPP_WebApp.Models.StatusZadatka.#ctor
+  commentId: M:RPPP_WebApp.Models.StatusZadatka.#ctor
+  id: '#ctor'
+  parent: RPPP_WebApp.Models.StatusZadatka
+  langs:
+  - csharp
+  - vb
+  name: StatusZadatka()
+  nameWithType: StatusZadatka.StatusZadatka()
+  fullName: RPPP_WebApp.Models.StatusZadatka.StatusZadatka()
+  type: Constructor
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/Models/StatusZadatka.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: .ctor
+    path: ../RPPP-WebApp/Models/StatusZadatka.cs
+    startLine: 9
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  syntax:
+    content: public StatusZadatka()
+    content.vb: Public Sub New()
+  overload: RPPP_WebApp.Models.StatusZadatka.#ctor*
+  nameWithType.vb: StatusZadatka.New()
+  fullName.vb: RPPP_WebApp.Models.StatusZadatka.New()
+  name.vb: New()
+- uid: RPPP_WebApp.Models.StatusZadatka.IdStatus
+  commentId: P:RPPP_WebApp.Models.StatusZadatka.IdStatus
+  id: IdStatus
+  parent: RPPP_WebApp.Models.StatusZadatka
+  langs:
+  - csharp
+  - vb
+  name: IdStatus
+  nameWithType: StatusZadatka.IdStatus
+  fullName: RPPP_WebApp.Models.StatusZadatka.IdStatus
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/Models/StatusZadatka.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: IdStatus
+    path: ../RPPP-WebApp/Models/StatusZadatka.cs
+    startLine: 14
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  syntax:
+    content: public int IdStatus { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property IdStatus As Integer
+  overload: RPPP_WebApp.Models.StatusZadatka.IdStatus*
+- uid: RPPP_WebApp.Models.StatusZadatka.NazivStatus
+  commentId: P:RPPP_WebApp.Models.StatusZadatka.NazivStatus
+  id: NazivStatus
+  parent: RPPP_WebApp.Models.StatusZadatka
+  langs:
+  - csharp
+  - vb
+  name: NazivStatus
+  nameWithType: StatusZadatka.NazivStatus
+  fullName: RPPP_WebApp.Models.StatusZadatka.NazivStatus
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/Models/StatusZadatka.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: NazivStatus
+    path: ../RPPP-WebApp/Models/StatusZadatka.cs
+    startLine: 15
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  syntax:
+    content: public string NazivStatus { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property NazivStatus As String
+  overload: RPPP_WebApp.Models.StatusZadatka.NazivStatus*
+- uid: RPPP_WebApp.Models.StatusZadatka.Zadatak
+  commentId: P:RPPP_WebApp.Models.StatusZadatka.Zadatak
+  id: Zadatak
+  parent: RPPP_WebApp.Models.StatusZadatka
+  langs:
+  - csharp
+  - vb
+  name: Zadatak
+  nameWithType: StatusZadatka.Zadatak
+  fullName: RPPP_WebApp.Models.StatusZadatka.Zadatak
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/Models/StatusZadatka.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: Zadatak
+    path: ../RPPP-WebApp/Models/StatusZadatka.cs
+    startLine: 17
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Models
+  syntax:
+    content: public virtual ICollection<Zadatak> Zadatak { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{RPPP_WebApp.Models.Zadatak}
+    content.vb: Public Overridable Property Zadatak As ICollection(Of Zadatak)
+  overload: RPPP_WebApp.Models.StatusZadatka.Zadatak*
+references:
+- uid: RPPP_WebApp.Models
+  commentId: N:RPPP_WebApp.Models
+  href: RPPP_WebApp.html
+  name: RPPP_WebApp.Models
+  nameWithType: RPPP_WebApp.Models
+  fullName: RPPP_WebApp.Models
+  spec.csharp:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Models
+    name: Models
+    href: RPPP_WebApp.Models.html
+  spec.vb:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Models
+    name: Models
+    href: RPPP_WebApp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: RPPP_WebApp.Models.StatusZadatka.#ctor*
+  commentId: Overload:RPPP_WebApp.Models.StatusZadatka.#ctor
+  href: RPPP_WebApp.Models.StatusZadatka.html#RPPP_WebApp_Models_StatusZadatka__ctor
+  name: StatusZadatka
+  nameWithType: StatusZadatka.StatusZadatka
+  fullName: RPPP_WebApp.Models.StatusZadatka.StatusZadatka
+  nameWithType.vb: StatusZadatka.New
+  fullName.vb: RPPP_WebApp.Models.StatusZadatka.New
+  name.vb: New
+- uid: RPPP_WebApp.Models.StatusZadatka.IdStatus*
+  commentId: Overload:RPPP_WebApp.Models.StatusZadatka.IdStatus
+  href: RPPP_WebApp.Models.StatusZadatka.html#RPPP_WebApp_Models_StatusZadatka_IdStatus
+  name: IdStatus
+  nameWithType: StatusZadatka.IdStatus
+  fullName: RPPP_WebApp.Models.StatusZadatka.IdStatus
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: RPPP_WebApp.Models.StatusZadatka.NazivStatus*
+  commentId: Overload:RPPP_WebApp.Models.StatusZadatka.NazivStatus
+  href: RPPP_WebApp.Models.StatusZadatka.html#RPPP_WebApp_Models_StatusZadatka_NazivStatus
+  name: NazivStatus
+  nameWithType: StatusZadatka.NazivStatus
+  fullName: RPPP_WebApp.Models.StatusZadatka.NazivStatus
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: RPPP_WebApp.Models.StatusZadatka.Zadatak*
+  commentId: Overload:RPPP_WebApp.Models.StatusZadatka.Zadatak
+  href: RPPP_WebApp.Models.StatusZadatka.html#RPPP_WebApp_Models_StatusZadatka_Zadatak
+  name: Zadatak
+  nameWithType: StatusZadatka.Zadatak
+  fullName: RPPP_WebApp.Models.StatusZadatka.Zadatak
+- uid: System.Collections.Generic.ICollection{RPPP_WebApp.Models.Zadatak}
+  commentId: T:System.Collections.Generic.ICollection{RPPP_WebApp.Models.Zadatak}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<Zadatak>
+  nameWithType: ICollection<Zadatak>
+  fullName: System.Collections.Generic.ICollection<RPPP_WebApp.Models.Zadatak>
+  nameWithType.vb: ICollection(Of Zadatak)
+  fullName.vb: System.Collections.Generic.ICollection(Of RPPP_WebApp.Models.Zadatak)
+  name.vb: ICollection(Of Zadatak)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: RPPP_WebApp.Models.Zadatak
+    name: Zadatak
+    href: RPPP_WebApp.Models.Zadatak.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: RPPP_WebApp.Models.Zadatak
+    name: Zadatak
+    href: RPPP_WebApp.Models.Zadatak.html
+  - name: )
+- uid: System.Collections.Generic.ICollection`1
+  commentId: T:System.Collections.Generic.ICollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<T>
+  nameWithType: ICollection<T>
+  fullName: System.Collections.Generic.ICollection<T>
+  nameWithType.vb: ICollection(Of T)
+  fullName.vb: System.Collections.Generic.ICollection(Of T)
+  name.vb: ICollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

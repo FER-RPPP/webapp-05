@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.ViewModels.PD_viewModels
+  commentId: N:RPPP_WebApp.ViewModels.PD_viewModels
+  id: RPPP_WebApp.ViewModels.PD_viewModels
+  children:
+  - RPPP_WebApp.ViewModels.PD_viewModels.ProjektPomocni
+  langs:
+  - csharp
+  - vb
+  name: RPPP_WebApp.ViewModels.PD_viewModels
+  nameWithType: RPPP_WebApp.ViewModels.PD_viewModels
+  fullName: RPPP_WebApp.ViewModels.PD_viewModels
+  type: Namespace
+  assemblies:
+  - RPPP-WebApp
+references:
+- uid: RPPP_WebApp.ViewModels.PD_viewModels.ProjektPomocni
+  commentId: T:RPPP_WebApp.ViewModels.PD_viewModels.ProjektPomocni
+  href: RPPP_WebApp.ViewModels.PD_viewModels.ProjektPomocni.html
+  name: ProjektPomocni
+  nameWithType: ProjektPomocni
+  fullName: RPPP_WebApp.ViewModels.PD_viewModels.ProjektPomocni

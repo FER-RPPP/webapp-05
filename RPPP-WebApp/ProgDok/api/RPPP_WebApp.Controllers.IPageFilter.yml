@@ -1,0 +1,51 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.Controllers.IPageFilter
+  commentId: T:RPPP_WebApp.Controllers.IPageFilter
+  id: IPageFilter
+  parent: RPPP_WebApp.Controllers
+  children: []
+  langs:
+  - csharp
+  - vb
+  name: IPageFilter
+  nameWithType: IPageFilter
+  fullName: RPPP_WebApp.Controllers.IPageFilter
+  type: Interface
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/Controllers/IPageFilter.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: IPageFilter
+    path: ../RPPP-WebApp/Controllers/IPageFilter.cs
+    startLine: 2
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.Controllers
+  syntax:
+    content: public interface IPageFilter
+    content.vb: Public Interface IPageFilter
+references:
+- uid: RPPP_WebApp.Controllers
+  commentId: N:RPPP_WebApp.Controllers
+  href: RPPP_WebApp.html
+  name: RPPP_WebApp.Controllers
+  nameWithType: RPPP_WebApp.Controllers
+  fullName: RPPP_WebApp.Controllers
+  spec.csharp:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Controllers
+    name: Controllers
+    href: RPPP_WebApp.Controllers.html
+  spec.vb:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Controllers
+    name: Controllers
+    href: RPPP_WebApp.Controllers.html

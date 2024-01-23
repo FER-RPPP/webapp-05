@@ -1,0 +1,1001 @@
+### YamlMime:ManagedReference
+items:
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper
+  commentId: T:RPPP_WebApp.TagHelpers.PagerTagHelper
+  id: PagerTagHelper
+  parent: RPPP_WebApp.TagHelpers
+  children:
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.#ctor(Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory)
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  - RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext
+  langs:
+  - csharp
+  - vb
+  name: PagerTagHelper
+  nameWithType: PagerTagHelper
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper
+  type: Class
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: PagerTagHelper
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 26
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  summary: >-
+    Tag helper za kreiranje vlastitih poveznica na stranice u rezultatu nekog upravljača
+
+    Upotrebljava se kao atribut HTML oznake *pager* koju mijenja u div
+
+    <example>
+
+    Primjer upotrebe
+
+    ```
+
+    <pager page-info="@Model.PagingInfo" page-action="Index" page-title="Unesite željenu stranicu" class="float-end">
+
+    </pager>
+
+    ```
+
+    U datoteku *_ViewImports.cshtml* potrebno dodati `@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers`  
+
+    te u pogled uključiti vlastitu javascript datoteku *gotopage.js*
+
+    </example>
+  example: []
+  syntax:
+    content: >-
+      [HtmlTargetElement(Attributes = "page-info")]
+
+      public class PagerTagHelper : TagHelper, ITagHelper, ITagHelperComponent
+    content.vb: >-
+      <HtmlTargetElement(Attributes:="page-info")>
+
+      Public Class PagerTagHelper Inherits TagHelper Implements ITagHelper, ITagHelperComponent
+  inheritance:
+  - System.Object
+  - Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  implements:
+  - Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper
+  - Microsoft.AspNetCore.Razor.TagHelpers.ITagHelperComponent
+  inheritedMembers:
+  - Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Init(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext)
+  - Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.ProcessAsync(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  - Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Order
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  attributes:
+  - type: Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElementAttribute
+    ctor: Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElementAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Attributes
+      type: System.String
+      value: page-info
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.#ctor(Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory)
+  commentId: M:RPPP_WebApp.TagHelpers.PagerTagHelper.#ctor(Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory)
+  id: '#ctor(Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory)'
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: PagerTagHelper(IUrlHelperFactory)
+  nameWithType: PagerTagHelper.PagerTagHelper(IUrlHelperFactory)
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PagerTagHelper(Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory)
+  type: Constructor
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: .ctor
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 32
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  syntax:
+    content: public PagerTagHelper(IUrlHelperFactory helperFactory)
+    parameters:
+    - id: helperFactory
+      type: Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory
+    content.vb: Public Sub New(helperFactory As IUrlHelperFactory)
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.#ctor*
+  nameWithType.vb: PagerTagHelper.New(IUrlHelperFactory)
+  fullName.vb: RPPP_WebApp.TagHelpers.PagerTagHelper.New(Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory)
+  name.vb: New(IUrlHelperFactory)
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext
+  commentId: P:RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext
+  id: ViewContext
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: ViewContext
+  nameWithType: PagerTagHelper.ViewContext
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: ViewContext
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 38
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  syntax:
+    content: >-
+      [ViewContext]
+
+      [HtmlAttributeNotBound]
+
+      public ViewContext ViewContext { get; set; }
+    parameters: []
+    return:
+      type: Microsoft.AspNetCore.Mvc.Rendering.ViewContext
+    content.vb: >-
+      <ViewContext>
+
+      <HtmlAttributeNotBound>
+
+      Public Property ViewContext As ViewContext
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext*
+  attributes:
+  - type: Microsoft.AspNetCore.Mvc.ViewFeatures.ViewContextAttribute
+    ctor: Microsoft.AspNetCore.Mvc.ViewFeatures.ViewContextAttribute.#ctor
+    arguments: []
+  - type: Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeNotBoundAttribute
+    ctor: Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeNotBoundAttribute.#ctor
+    arguments: []
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo
+  commentId: P:RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo
+  id: PageInfo
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: PageInfo
+  nameWithType: PagerTagHelper.PageInfo
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: PageInfo
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 45
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  summary: Serijalizirani string koji sadrži informacije o trenutnoj i ukupnom broju stranicu
+  example: []
+  syntax:
+    content: public PagingInfo PageInfo { get; set; }
+    parameters: []
+    return:
+      type: RPPP_WebApp.Controllers.PagingInfo
+    content.vb: Public Property PageInfo As PagingInfo
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo*
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter
+  commentId: P:RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter
+  id: PageFilter
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: PageFilter
+  nameWithType: PagerTagHelper.PageFilter
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: PageFilter
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 50
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  summary: Serijalizirani string kojim se prenose informacije o aktivnom filtriranju podataka
+  example: []
+  syntax:
+    content: public IPageFilter PageFilter { get; set; }
+    parameters: []
+    return:
+      type: RPPP_WebApp.Controllers.IPageFilter
+    content.vb: Public Property PageFilter As IPageFilter
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter*
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction
+  commentId: P:RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction
+  id: PageAction
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: PageAction
+  nameWithType: PagerTagHelper.PageAction
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: PageAction
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 55
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  summary: Akcija na koju poveznica treba voditi
+  example: []
+  syntax:
+    content: public string PageAction { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PageAction As String
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction*
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle
+  commentId: P:RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle
+  id: PageTitle
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: PageTitle
+  nameWithType: PagerTagHelper.PageTitle
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle
+  type: Property
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: PageTitle
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 60
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  summary: Tekst za tooltip za trenutni broj stranice i unos ciljane stranice
+  example: []
+  syntax:
+    content: public string PageTitle { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property PageTitle As String
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle*
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  commentId: M:RPPP_WebApp.TagHelpers.PagerTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  id: Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  parent: RPPP_WebApp.TagHelpers.PagerTagHelper
+  langs:
+  - csharp
+  - vb
+  name: Process(TagHelperContext, TagHelperOutput)
+  nameWithType: PagerTagHelper.Process(TagHelperContext, TagHelperOutput)
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext, Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  type: Method
+  source:
+    remote:
+      path: RPPP-WebApp/RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+      branch: dev
+      repo: https://github.com/FER-RPPP/webapp-05.git
+    id: Process
+    path: ../RPPP-WebApp/TagHelpers/PagerTagHelper.cs
+    startLine: 62
+  assemblies:
+  - RPPP-WebApp
+  namespace: RPPP_WebApp.TagHelpers
+  summary: >-
+    Synchronously executes the <xref href="Microsoft.AspNetCore.Razor.TagHelpers.TagHelper" data-throw-if-not-resolved="false"></xref> with the given <code class="paramref">context</code> and
+
+    <code class="paramref">output</code>.
+  example: []
+  syntax:
+    content: public override void Process(TagHelperContext context, TagHelperOutput output)
+    parameters:
+    - id: context
+      type: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+      description: Contains information associated with the current HTML tag.
+    - id: output
+      type: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+      description: A stateful HTML element used to generate an HTML tag.
+    content.vb: Public Overrides Sub Process(context As TagHelperContext, output As TagHelperOutput)
+  overridden: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  overload: RPPP_WebApp.TagHelpers.PagerTagHelper.Process*
+references:
+- uid: RPPP_WebApp.TagHelpers
+  commentId: N:RPPP_WebApp.TagHelpers
+  href: RPPP_WebApp.html
+  name: RPPP_WebApp.TagHelpers
+  nameWithType: RPPP_WebApp.TagHelpers
+  fullName: RPPP_WebApp.TagHelpers
+  spec.csharp:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.TagHelpers
+    name: TagHelpers
+    href: RPPP_WebApp.TagHelpers.html
+  spec.vb:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.TagHelpers
+    name: TagHelpers
+    href: RPPP_WebApp.TagHelpers.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  commentId: T:Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  parent: Microsoft.AspNetCore.Razor.TagHelpers
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper
+  name: TagHelper
+  nameWithType: TagHelper
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper
+  commentId: T:Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper
+  parent: Microsoft.AspNetCore.Razor.TagHelpers
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.itaghelper
+  name: ITagHelper
+  nameWithType: ITagHelper
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.ITagHelper
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.ITagHelperComponent
+  commentId: T:Microsoft.AspNetCore.Razor.TagHelpers.ITagHelperComponent
+  parent: Microsoft.AspNetCore.Razor.TagHelpers
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.itaghelpercomponent
+  name: ITagHelperComponent
+  nameWithType: ITagHelperComponent
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.ITagHelperComponent
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Init(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext)
+  commentId: M:Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Init(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext)
+  parent: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.init
+  name: Init(TagHelperContext)
+  nameWithType: TagHelper.Init(TagHelperContext)
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Init(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext)
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Init(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext)
+    name: Init
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.init
+  - name: (
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+    name: TagHelperContext
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  - name: )
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Init(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext)
+    name: Init
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.init
+  - name: (
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+    name: TagHelperContext
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  - name: )
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.ProcessAsync(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  commentId: M:Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.ProcessAsync(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  parent: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.processasync
+  name: ProcessAsync(TagHelperContext, TagHelperOutput)
+  nameWithType: TagHelper.ProcessAsync(TagHelperContext, TagHelperOutput)
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.ProcessAsync(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext, Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.ProcessAsync(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+    name: ProcessAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.processasync
+  - name: (
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+    name: TagHelperContext
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  - name: ','
+  - name: " "
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+    name: TagHelperOutput
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelperoutput
+  - name: )
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.ProcessAsync(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+    name: ProcessAsync
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.processasync
+  - name: (
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+    name: TagHelperContext
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  - name: ','
+  - name: " "
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+    name: TagHelperOutput
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelperoutput
+  - name: )
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Order
+  commentId: P:Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Order
+  parent: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.order
+  name: Order
+  nameWithType: TagHelper.Order
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Order
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Microsoft.AspNetCore.Razor.TagHelpers
+  commentId: N:Microsoft.AspNetCore.Razor.TagHelpers
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.AspNetCore.Razor.TagHelpers
+  nameWithType: Microsoft.AspNetCore.Razor.TagHelpers
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Razor
+    name: Razor
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor
+  - name: .
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers
+    name: TagHelpers
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Razor
+    name: Razor
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor
+  - name: .
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers
+    name: TagHelpers
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.#ctor*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.#ctor
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper__ctor_Microsoft_AspNetCore_Mvc_Routing_IUrlHelperFactory_
+  name: PagerTagHelper
+  nameWithType: PagerTagHelper.PagerTagHelper
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PagerTagHelper
+  nameWithType.vb: PagerTagHelper.New
+  fullName.vb: RPPP_WebApp.TagHelpers.PagerTagHelper.New
+  name.vb: New
+- uid: Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory
+  commentId: T:Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory
+  parent: Microsoft.AspNetCore.Mvc.Routing
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.routing.iurlhelperfactory
+  name: IUrlHelperFactory
+  nameWithType: IUrlHelperFactory
+  fullName: Microsoft.AspNetCore.Mvc.Routing.IUrlHelperFactory
+- uid: Microsoft.AspNetCore.Mvc.Routing
+  commentId: N:Microsoft.AspNetCore.Mvc.Routing
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.AspNetCore.Mvc.Routing
+  nameWithType: Microsoft.AspNetCore.Mvc.Routing
+  fullName: Microsoft.AspNetCore.Mvc.Routing
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc
+    name: Mvc
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc.Routing
+    name: Routing
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.routing
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc
+    name: Mvc
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc.Routing
+    name: Routing
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.routing
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper_ViewContext
+  name: ViewContext
+  nameWithType: PagerTagHelper.ViewContext
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.ViewContext
+- uid: Microsoft.AspNetCore.Mvc.Rendering.ViewContext
+  commentId: T:Microsoft.AspNetCore.Mvc.Rendering.ViewContext
+  parent: Microsoft.AspNetCore.Mvc.Rendering
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.rendering.viewcontext
+  name: ViewContext
+  nameWithType: ViewContext
+  fullName: Microsoft.AspNetCore.Mvc.Rendering.ViewContext
+- uid: Microsoft.AspNetCore.Mvc.Rendering
+  commentId: N:Microsoft.AspNetCore.Mvc.Rendering
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.AspNetCore.Mvc.Rendering
+  nameWithType: Microsoft.AspNetCore.Mvc.Rendering
+  fullName: Microsoft.AspNetCore.Mvc.Rendering
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc
+    name: Mvc
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc.Rendering
+    name: Rendering
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.rendering
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.AspNetCore
+    name: AspNetCore
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc
+    name: Mvc
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc
+  - name: .
+  - uid: Microsoft.AspNetCore.Mvc.Rendering
+    name: Rendering
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.mvc.rendering
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper_PageInfo
+  name: PageInfo
+  nameWithType: PagerTagHelper.PageInfo
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageInfo
+- uid: RPPP_WebApp.Controllers.PagingInfo
+  commentId: T:RPPP_WebApp.Controllers.PagingInfo
+  parent: RPPP_WebApp.Controllers
+  href: RPPP_WebApp.Controllers.PagingInfo.html
+  name: PagingInfo
+  nameWithType: PagingInfo
+  fullName: RPPP_WebApp.Controllers.PagingInfo
+- uid: RPPP_WebApp.Controllers
+  commentId: N:RPPP_WebApp.Controllers
+  href: RPPP_WebApp.html
+  name: RPPP_WebApp.Controllers
+  nameWithType: RPPP_WebApp.Controllers
+  fullName: RPPP_WebApp.Controllers
+  spec.csharp:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Controllers
+    name: Controllers
+    href: RPPP_WebApp.Controllers.html
+  spec.vb:
+  - uid: RPPP_WebApp
+    name: RPPP_WebApp
+    href: RPPP_WebApp.html
+  - name: .
+  - uid: RPPP_WebApp.Controllers
+    name: Controllers
+    href: RPPP_WebApp.Controllers.html
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper_PageFilter
+  name: PageFilter
+  nameWithType: PagerTagHelper.PageFilter
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageFilter
+- uid: RPPP_WebApp.Controllers.IPageFilter
+  commentId: T:RPPP_WebApp.Controllers.IPageFilter
+  parent: RPPP_WebApp.Controllers
+  href: RPPP_WebApp.Controllers.IPageFilter.html
+  name: IPageFilter
+  nameWithType: IPageFilter
+  fullName: RPPP_WebApp.Controllers.IPageFilter
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper_PageAction
+  name: PageAction
+  nameWithType: PagerTagHelper.PageAction
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageAction
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper_PageTitle
+  name: PageTitle
+  nameWithType: PagerTagHelper.PageTitle
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.PageTitle
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  commentId: M:Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  parent: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.process
+  name: Process(TagHelperContext, TagHelperOutput)
+  nameWithType: TagHelper.Process(TagHelperContext, TagHelperOutput)
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext, Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+  spec.csharp:
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+    name: Process
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.process
+  - name: (
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+    name: TagHelperContext
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  - name: ','
+  - name: " "
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+    name: TagHelperOutput
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelperoutput
+  - name: )
+  spec.vb:
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext,Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput)
+    name: Process
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelper.process
+  - name: (
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+    name: TagHelperContext
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  - name: ','
+  - name: " "
+  - uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+    name: TagHelperOutput
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelperoutput
+  - name: )
+- uid: RPPP_WebApp.TagHelpers.PagerTagHelper.Process*
+  commentId: Overload:RPPP_WebApp.TagHelpers.PagerTagHelper.Process
+  href: RPPP_WebApp.TagHelpers.PagerTagHelper.html#RPPP_WebApp_TagHelpers_PagerTagHelper_Process_Microsoft_AspNetCore_Razor_TagHelpers_TagHelperContext_Microsoft_AspNetCore_Razor_TagHelpers_TagHelperOutput_
+  name: Process
+  nameWithType: PagerTagHelper.Process
+  fullName: RPPP_WebApp.TagHelpers.PagerTagHelper.Process
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+  commentId: T:Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+  parent: Microsoft.AspNetCore.Razor.TagHelpers
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelpercontext
+  name: TagHelperContext
+  nameWithType: TagHelperContext
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext
+- uid: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+  commentId: T:Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
+  parent: Microsoft.AspNetCore.Razor.TagHelpers
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.razor.taghelpers.taghelperoutput
+  name: TagHelperOutput
+  nameWithType: TagHelperOutput
+  fullName: Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput
