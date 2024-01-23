@@ -10,13 +10,21 @@ using RPPP_WebApp.Extensions;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// kontroller za rad s dokumentima
+    /// </summary>
     public class DokumentController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<DokumentController> logger;
         private readonly AppSettings appSettings;
 
-
+        /// <summary>
+        /// instanca kontrollera
+        /// </summary>
+        /// <param name="ctx">kontekst za bazu</param>
+        /// <param name="options">opcije aplikacija</param>
+        /// <param name="logger">loger dogadaja</param>
         public DokumentController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<DokumentController> logger)
         {
             this.ctx = ctx;
@@ -24,6 +32,13 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
+        /// <summary>
+        /// Svi dokumenti
+        /// </summary>
+        /// <param name="page">stranca dokumenata</param>
+        /// <param name="sort">vrsta sortiranja</param>
+        /// <param name="ascending">smjer sortiranja</param>
+        /// <returns>stranicu s svim dokumentima</returns>
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
             int pagesize = appSettings.PageSize;
@@ -82,6 +97,10 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// funkcija za dohvat podataka za dropdown liste, vrste dokumenata i popis projekata
+        /// </summary>
+        /// <returns>postavlja podatke u viewbag</returns>
         private async Task PrepareDropdownListDokument()
         {
             var vrste = await ctx.VrstaDokumenta.Select(d => new { d.IdVrstaDok, d.NazivVrstaDok }).ToListAsync();
@@ -92,7 +111,10 @@ namespace RPPP_WebApp.Controllers
             ViewBag.projekti = new SelectList(projekti, nameof(Projekt.IdProjekt), nameof(Projekt.Naziv));
         }
 
-
+        /// <summary>
+        /// funkcija za vracanje stranice za dodavanje dokumenta
+        /// </summary>
+        /// <returns>stranica za dodavanje dokumenata</returns>
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -100,6 +122,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// funkcija za dodavanje dokumenta
+        /// </summary>
+        /// <param name="dokument">novi dokument</param>
+        /// <returns>vraca na stranicu ovisno o upjehu akcije</returns>
         [HttpPost]
         public async Task<IActionResult> Create(Dokument dokument)
         {
@@ -136,6 +163,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// funkcija za View stranice za izmjenu dokumenata
+        /// </summary>
+        /// <param name="id">ID dokumenta</param>
+        /// <param name="page">stranica dokumenta</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sortiranja</param>
+        /// <returns>stranicu za izmjenu dokumenata</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -156,6 +191,14 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+        /// <summary>
+        /// funkcija za azuriranje dokumenta
+        /// </summary>
+        /// <param name="id">ID dokumenta</param>
+        /// <param name="page">stranica dokumenta</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sorta</param>
+        /// <returns>preusmjerava s obzirom na uspjeh akcije</returns>
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
@@ -205,7 +248,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
-
+        /// <summary>
+        /// funkcij za brisanje dokumenta
+        /// </summary>
+        /// <param name="id">ID dokumenta za brisanje</param>
+        /// <param name="page">stranica</param>
+        /// <param name="sort">vrsta sorta</param>
+        /// <param name="ascending">smjer sortiranja</param>
+        /// <returns>poruku o uspjehu i rediret na stranicu</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)

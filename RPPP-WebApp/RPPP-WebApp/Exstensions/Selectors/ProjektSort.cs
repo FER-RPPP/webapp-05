@@ -4,8 +4,18 @@ using System.Linq.Expressions;
 
 namespace RPPP_WebApp.Extensions.Selectors
 {
+    /// <summary>
+    /// razred za sortiranje projekata
+    /// </summary>
     public static class ProjektSort
     {
+        /// <summary>
+        /// funkcija za sortiranje projekata
+        /// </summary>
+        /// <param name="query">upit za projekte</param>
+        /// <param name="sort">po kojem se elementu sortira</param>
+        /// <param name="ascending">u kojem smjeru se sortira</param>
+        /// <returns>sortiran upit</returns>
         public static IQueryable<Projekt> ApplySort(this IQueryable<Projekt> query, int sort, bool ascending)
         {
             Expression<Func<Projekt, object>> orderSelector = sort switch

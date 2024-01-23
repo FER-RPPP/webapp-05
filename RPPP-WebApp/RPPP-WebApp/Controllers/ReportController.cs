@@ -961,6 +961,10 @@ namespace RPPP_WebApp.Controllers
 
         #endregion
 
+        /// <summary>
+        /// funcija za kreira excel izvještaj za zahtjeve
+        /// </summary>
+        /// <returns>excel dokument svih zahtjeva</returns>
         public async Task<IActionResult> ZahtjevExcel()
         {
             var zahtjevi = await ctx.Zahtjev
@@ -1014,6 +1018,11 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Zahtjevi.xlsx");
         }
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za zadatke
+        /// </summary>
+        /// <returns>excel dokument svih zadataka</returns>
         public async Task<IActionResult> ZadatakExcel()
         {
             var zadatci = await ctx.Zadatak
@@ -1059,6 +1068,11 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Zadatci.xlsx");
         }
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za zahtjeve i zadatke povezane na njih
+        /// </summary>
+        /// <returns>excel dokument svih zahtjeva i zadataka povezanih na njih</returns>
         public async Task<IActionResult> ZahtjeviZadatciExcel()
         {
             var zahtjevi = await ctx.Zahtjev
@@ -1151,6 +1165,11 @@ namespace RPPP_WebApp.Controllers
                 return File(content, ExcelContentType, "master(Zahtjev)-detail(Zadatak).xlsx");
             }
         }
+
+        /// <summary>
+        /// funcija za kreira pdf izvještaj za zahtjeve
+        /// </summary>
+        /// <returns>pdf dokument svih zahtjeva</returns>
         public async Task<IActionResult> ZahtjevPDF()
         {
             string naslov = "Popis zahtjeva";
@@ -1293,6 +1312,11 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
+
+        /// <summary>
+        /// funcija za kreira pdf izvještaj za zadatke
+        /// </summary>
+        /// <returns>pdf dokument svih zadataka</returns>
         public async Task<IActionResult> ZadatakPDF()
         {
             string naslov = "Popis zadataka";
@@ -1429,6 +1453,10 @@ namespace RPPP_WebApp.Controllers
 
 
         //pocetakNiko
+        /// <summary>
+        /// funcija za kreira excel izvještaj za partnere
+        /// </summary>
+        /// <returns>excel dokument svih partnera</returns>
         public async Task<IActionResult> PartnerExcel()
         {
             var partneri = await ctx.Partner
@@ -1482,6 +1510,11 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Partneri.xlsx");
         }
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za suradnike
+        /// </summary>
+        /// <returns>excel dokument svih suradnika</returns>
         public async Task<IActionResult> SuradnikDetailExcel()
         {
             var suradnici = await ctx.Suradnik
@@ -1529,6 +1562,11 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Suradnici.xlsx");
         }
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za partnera i suradnika povezanih na njih
+        /// </summary>
+        /// <returns>excel dokument svih partnera i suradnika povezanih na njih</returns>
         public async Task<IActionResult> PartneriSuradniciExcel()
         {
             var partneri = await ctx.Partner
@@ -1624,6 +1662,10 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// funcija za kreira pdf izvještaj za partnere
+        /// </summary>
+        /// <returns>pdf dokument svih partnera</returns>
         public async Task<IActionResult> PartnerPDF()
         {
             string naslov = "Popis partnera";
@@ -1767,6 +1809,10 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// funcija za kreira pdf izvještaj za suradnike
+        /// </summary>
+        /// <returns>pdf dokument svih suradnika</returns>
         public async Task<IActionResult> SuradnikDetailPDF()
         {
             string naslov = "Popis suradnika";
@@ -1911,6 +1957,11 @@ namespace RPPP_WebApp.Controllers
             }
         }
         //Nina
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za suradnike
+        /// </summary>
+        /// <returns>excel dokument svih suradnika</returns>
         public async Task<IActionResult> SuradnikExcel()
         {
             var suradnici = await ctx.Suradnik
@@ -1964,6 +2015,11 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Suradnici.xlsx");
         }
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za poslove
+        /// </summary>
+        /// <returns>excel dokument svih poslova</returns>
         public async Task<IActionResult> PosaoExcel()
         {
             var poslovi = await ctx.Posao
@@ -2003,6 +2059,11 @@ namespace RPPP_WebApp.Controllers
             }
             return File(content, ExcelContentType, "Poslovi.xlsx");
         }
+
+        /// <summary>
+        /// funcija za kreira excel izvještaj za suradnike i poslove povezanih na njih
+        /// </summary>
+        /// <returns>excel dokument svih suradnika i poslova povezanih na njih</returns>
         public async Task<IActionResult> SuradniciPosloviExcel()
         {
 
@@ -2086,6 +2147,11 @@ namespace RPPP_WebApp.Controllers
                 return File(content, ExcelContentType, "master(Suradnik)-detail(Posao).xlsx");
             }
         }
+
+        /// <summary>
+        /// funcija za kreira pdf izvještaj za suradnike
+        /// </summary>
+        /// <returns>pdf dokument svih suradnika</returns>
         public async Task<IActionResult> SuradnikPDF()
         {
             string naslov = "Popis suradnika";
@@ -2232,6 +2298,11 @@ namespace RPPP_WebApp.Controllers
                 return NotFound();
             }
         }
+
+        /// <summary>
+        /// funcija za kreira pdf izvještaj za poslove
+        /// </summary>
+        /// <returns>pdf dokument svih poslova</returns>
         public async Task<IActionResult> PosaoPDF()
         {
             string naslov = "Popis poslova";
