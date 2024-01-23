@@ -5,16 +5,32 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models
 {
+    /// <summary>
+    /// predstavlja tip projekta iz baze
+    /// </summary>
     public partial class TipProjekta
     {
+        /// <summary>
+        /// inicijalizacija nove instance razreda
+        /// </summary>
         public TipProjekta()
         {
             Projekt = new HashSet<Projekt>();
         }
 
+        /// <summary>
+        /// Dohvaca ili postavlja id tipa projekta
+        /// </summary>
         public int IdTip { get; set; }
+
+        /// <summary>
+        /// Dohvaca ili postavlja naziv tipa projekta
+        /// </summary>
         public string NazivTip { get; set; }
 
+        /// <summary>
+        /// Dohvaca ili postavlja kolekciju projekata povezanih s ovim tipom projekta
+        /// </summary>
         public virtual ICollection<Projekt> Projekt { get; set; }
     }
 }
