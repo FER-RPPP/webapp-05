@@ -19,12 +19,21 @@ using RPPP_WebApp.Extensions;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za partnere
+    /// </summary>
     public class PartnerController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<PartnerController> logger;
         private readonly AppSettings appSettings;
 
+        /// <summary>
+        /// Nova instanca klase PartnerController
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public PartnerController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<PartnerController> logger)
         {
             this.ctx = ctx;
@@ -32,6 +41,13 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
+        /// <summary>
+        /// Prikazuje popis partnera i njihovih atributa
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>View za popis partnera</returns>
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
             int pagesize = appSettings.PageSize;
@@ -83,6 +99,10 @@ namespace RPPP_WebApp.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Padajuce liste potrebne za partnera
+        /// </summary>
+        /// <returns>Task(asinkrono izvodenje)</returns>
         private async Task PrepareDropDownLists()
         {
             var hr = await ctx.TipPartnera
@@ -117,6 +137,10 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+        /// <summary>
+        /// Forma za novog partnera
+        /// </summary>
+        /// <returns>View za stvaranje novog partnera</returns>
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -124,6 +148,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Dodaje novog partnera u bazu podataka
+        /// </summary>
+        /// <param name="partner">Novi partner</param>
+        /// <returns>View za popis partnera s dodanim partnerom</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Partner partner)
@@ -157,6 +186,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Forma za uredivanje partnera
+        /// </summary>
+        /// <param name="id">Id partnera</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>View za uredivanje partnera</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -177,6 +214,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Spremanje uredenog partnera u bazu podataka
+        /// </summary>
+        /// <param name="id">Id partnera</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <param name="opis">Opis</param>
+        /// <returns>View s popisom partnera</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
@@ -229,6 +275,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Brise partnera na stranici i u bazi podataka
+        /// </summary>
+        /// <param name="id">Id partnera</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>Vraća na popis partnera</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, int page = 1, int sort = 1, bool ascending = true)
@@ -266,6 +320,15 @@ namespace RPPP_WebApp.Controllers
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
 
+        /// <summary>
+        /// Prikazuje MD partnera i suradnika(detail)
+        /// </summary>
+        /// <param name="id">Id partnera</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <param name="viewName">Ime View-a</param>
+        /// <returns>View za MD formu</returns>
         public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
             if (id == 0)
@@ -374,6 +437,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Forma za uredivanje kroz MD formu
+        /// </summary>
+        /// <param name="id">Id partnera</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>View za uredivanje kroz MD</returns>
         [HttpGet]
         public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -383,6 +454,14 @@ namespace RPPP_WebApp.Controllers
             return await Show(id, page, sort, ascending, nameof(Update));
         }
 
+        /// <summary>
+        /// Sprema uredeni MD u bazu podataka
+        /// </summary>
+        /// <param name="model">ViewModel</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>View MD forme</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(PartnerSuradnikViewModel model, int page = 1, int sort = 1, bool ascending = true)
