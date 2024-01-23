@@ -3,8 +3,18 @@ using System.Linq.Expressions;
 
 namespace RPPP_WebApp.Extensions.Selectors
 {
+    /// <summary>
+    /// razred za sortiranje dokumenata
+    /// </summary>
     public static class DokumentSort
     {
+        /// <summary>
+        /// funkcija za sortiranje dokumenata
+        /// </summary>
+        /// <param name="query">upit za dokument</param>
+        /// <param name="sort">element po kojem se sortira</param>
+        /// <param name="ascending">smjer sortiranja</param>
+        /// <returns>vraca sortiran upit</returns>
         public static IQueryable<Dokument> ApplySort(this IQueryable<Dokument> query, int sort, bool ascending)
         {
             Expression<Func<Dokument, object>> orderSelector = sort switch

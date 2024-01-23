@@ -6,35 +6,73 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models
 {
+    /// <summary>
+    /// predstavlja dokument iz baze
+    /// </summary>
     public partial class Dokument
     {
+        /// <summary>
+        /// Dohvaca ili postavlja id dokumenta
+        /// </summary>
         public int IdDokument { get; set; }
 
+
+        /// <summary>
+        /// Dohvaca ili postavlja ekstenziju dokumenta
+        /// </summary>
         [Display(Name = "Ekstenzija dokumenta")]
         [Required(ErrorMessage = "Potrebno je izabrati ekstenziju dokumenta")]
         public string TipDokument { get; set; }
 
+        /// <summary>
+        /// Dohvaca ili postavlja velicinu dokumenta
+        /// </summary>
         [Display(Name = "Veličina dokumenta")]
         [Required(ErrorMessage = "Potrebno je odrediti veličinu dokumenta")]
         public string VelicinaDokument { get; set; }
 
+
+        /// <summary>
+        /// Dohvaca ili postavlja kojem projektu pripada dokument
+        /// </summary>
         [Display(Name = "Pripadni projekt")]
         [Required(ErrorMessage = "Potrebno je izabrati kojem projektu pripada dokument")]
         public int IdProjekt { get; set; }
 
+
+        /// <summary>
+        /// Dohvaca ili postavlja vrstu dokumenta
+        /// </summary>
         [Display(Name = "Vrsta dokumenta")]
         [Required(ErrorMessage = "Potrebno je izabrati vrstu dokumenta")]
         public int IdVrstaDok { get; set; }
 
+
+        /// <summary>
+        /// Dohvaca ili postavlja naziv dokumenta
+        /// </summary>
         [Display(Name = "Naziv Dokumenta")]
         [Required(ErrorMessage = "Potrebno je napisati naziv dokumenta")]
         public string NazivDatoteka { get; set; }
 
+
+        /// <summary>
+        /// Dohvaca ili postavlja lokaciju dokumenta, tj. URL (npr. C://Users/...)
+        /// </summary>
         [Display(Name = "Lokacija dokumenta")]
         [Required(ErrorMessage = "Potrebno je napisati lokaciju dokumenta")]
         public string URLdokument { get; set; }
 
+
+        /// <summary>
+        /// Za pristup pripadnom projektu
+        /// </summary>
         public virtual Projekt IdProjektNavigation { get; set; }
+
+
+        /// <summary>
+        /// Za pristup pripadnoj vrsti dokumenta
+        /// </summary>
         public virtual VrstaDokumenta IdVrstaDokNavigation { get; set; }
     }
 }

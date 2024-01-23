@@ -5,16 +5,31 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models
 {
+    /// <summary>
+    /// predstavlja vrstu dokumenta iz baze
+    /// </summary>
     public partial class VrstaDokumenta
     {
+        /// <summary>
+        /// inicijalizacija nove instance razreda
+        /// </summary>
         public VrstaDokumenta()
         {
             Dokument = new HashSet<Dokument>();
         }
-
+        /// <summary>
+        /// Doahvaca ili postavlja id vrste dokumenta
+        /// </summary>
         public int IdVrstaDok { get; set; }
+
+        /// <summary>
+        /// Doahvaca ili postavlja naziv vrste dokumenta
+        /// </summary>
         public string NazivVrstaDok { get; set; }
 
+        /// <summary>
+        /// Doahvaca ili postavlja kolekciju dokumenata povezanih s ovom vrstom dokumenta
+        /// </summary>
         public virtual ICollection<Dokument> Dokument { get; set; }
     }
 }
