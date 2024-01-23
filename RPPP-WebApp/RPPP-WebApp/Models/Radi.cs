@@ -5,15 +5,33 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models;
 
+/// <summary>
+/// Predstavlja vezu Suradnik Radi Posao
+/// </summary>
 public partial class Radi
 {
+    /// <summary>
+    /// Predstavlja OIB suradnika koji radi posao
+    /// </summary>
     public string Oib { get; set; }
 
+    /// <summary>
+    /// Predstavlja identifikacijski broj posla kojeg suradnik radi
+    /// </summary>
     public int IdPosao { get; set; }
-
+    
+    /// <summary>
+    /// Predstavlja identifikacijski broj suradnika koji radi posao
+    /// </summary>
     public int? IdSuradnik { get; set; }
 
+    /// <summary>
+    /// Predstavlja navigacijski objekt prema objektu Posao, služi za dohvaćanje atributa posla
+    /// </summary>
     public virtual Posao IdPosaoNavigation { get; set; }
 
+    /// <summary>
+    /// Predstavlja navigacijski objekt prema objektu Suradnik, služi za dohvaćanje atributa suradnika
+    /// </summary>
     public virtual Suradnik OibNavigation { get; set; }
 }

@@ -14,12 +14,21 @@ using Org.BouncyCastle.Security;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za suradnike
+    /// </summary>
     public class SuradnikController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<SuradnikController> logger;
         private readonly AppSettings appSettings;
 
+        /// <summary>
+        /// Inicijalizacija nove instance klase SuradnikController
+        /// </summary>
+        /// <param name="ctx">Kontekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public SuradnikController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<SuradnikController> logger)
         {
             this.ctx = ctx;
@@ -27,6 +36,13 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
+        /// <summary>
+        /// Prikazuje popis suradnika i njihovih atributa
+        /// </summary>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>View za popis suradnika</returns>
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
             int pagesize = appSettings.PageSize;
@@ -76,7 +92,10 @@ namespace RPPP_WebApp.Controllers
 
             return View(model);
         }
-
+    /// <summary>
+    /// Priprema padajuce liste za suradnika (popis kvalifikacija i partnera)
+    /// </summary>
+    /// <returns>Padajuce liste spremne za koristenje</returns>
         private async Task PrepareDropDownLists()
         {
             var hr = await ctx.Kvalifikacija
@@ -112,14 +131,22 @@ namespace RPPP_WebApp.Controllers
             ViewBag.PartneriPopis = new SelectList(partneri, nameof(hrv.IdPartner), nameof(hrv.NazivPartner));
         }
 
+        /// <summary>
+        /// Dohvat padajucih lista i prikaz sucelja za dodavanje suradnika
+        /// </summary>
+        /// <returns>View za dodavanje suradnika</returns>
         [HttpGet]
-
         public async Task<IActionResult> Create()
         { 
             await PrepareDropDownLists();
             return View();
         }
 
+        /// <summary>
+        /// Spremanje novog suradnika u bazu podataka
+        /// </summary>
+        /// <param name="suradnik">Suradnik koji se dodaje u bazu</param>
+        /// <returns>Povrat na popis svih suradnika, podatak o uspjesnosti dodavanja</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
 
@@ -154,6 +181,14 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        ///  Priprema padajucih lista za uredivanje suradnika i prikaz sucelja za uredivanje ukoliko suradnik postoji
+        /// </summary>
+        /// <param name="id">Id suradnika koji se ureduje</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Prikaz sucelja za uredivanje</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -177,6 +212,15 @@ namespace RPPP_WebApp.Controllers
             }    
         }
 
+        /// <summary>
+        /// Spremanje uredenog suradnika u bazu
+        /// </summary>
+        /// <param name="id">Id suradnika koji se ureduje</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="opis">Opis</param>
+        /// <returns>Prikaz svih suradnika, podatak o uspjesnosti uredivanja</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string opis = "opis")
@@ -230,7 +274,14 @@ namespace RPPP_WebApp.Controllers
                 return RedirectToAction(nameof(Edit), id);
             }
         }
-
+        /// <summary>
+        /// Brisanje suradnika iz baze podataka
+        /// </summary>
+        /// <param name="oib">Oib suradnika koji se brise</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Prikaz svih suradnika, podatak o uspjesnosti brisanja</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
 
@@ -265,7 +316,15 @@ namespace RPPP_WebApp.Controllers
             return RedirectToAction(nameof(Index), new { page = page, sort = sort, ascending = ascending });
         }
 
-
+        /// <summary>
+        /// Prikaz sucelja za master - detail
+        /// </summary>
+        /// <param name="id">Id suradnika za prikaz</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <param name="viewName">Ime viewa koji se prikazuje</param>
+        /// <returns>Master-detail prikaz</returns>
         public async Task<IActionResult> Show(int id, int page = 1, int sort = 1, bool ascending = true, string viewName = nameof(Show))
         {
 
@@ -363,6 +422,14 @@ namespace RPPP_WebApp.Controllers
 
             }
         }
+        /// <summary>
+        /// Priprema padajucih listi za uredivanje suradnika i njegovih poslova
+        /// </summary>
+        /// <param name="id">Id suradnika koji se ureduje</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">Smjer sortiranja</param>
+        /// <returns>Prikaz sucelja za uredivanje</returns>
 		[HttpGet]
 		public async Task<IActionResult> Update(int id, int page = 1, int sort = 1, bool ascending = true)
 		{
@@ -374,6 +441,14 @@ namespace RPPP_WebApp.Controllers
 			return await Show(id, page, sort, ascending, nameof(Update));
 		}
 
+        /// <summary>
+        /// Spremanje uredenog suradnika i njegovih poslova u bazu podataka
+        /// </summary>
+        /// <param name="model">Model za prikaz</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sortiranja</param>
+        /// <param name="ascending">SMjer sortiranja</param>
+        /// <returns>Master-detail prikaz uredenog suradnika, podatak o uspjesnosti uredivanja</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Update(MDSuradniciViewModel model, int page = 1, int sort = 1, bool ascending = true)

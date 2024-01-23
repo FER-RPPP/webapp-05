@@ -5,16 +5,32 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models
 {
+    /// <summary>
+    /// Predstavlja vrstu posla
+    /// </summary>
     public partial class VrstaPosla
     {
+        /// <summary>
+        /// Inicijalizacija nove instance klase VrstaPosla
+        /// </summary>
         public VrstaPosla()
         {
             Posao = new HashSet<Posao>();
         }
 
+        /// <summary>
+        /// Predstavlja identifikacijski broj vrste posla
+        /// </summary>
         public int IdVrstaPosao { get; set; }
+
+        /// <summary>
+        /// Predstavlja naziv posla
+        /// </summary>
         public string NazivPosao { get; set; }
 
+        /// <summary>
+        /// Predstavlja popis poslova te vrste
+        /// </summary>
         public virtual ICollection<Posao> Posao { get; set; }
     }
 }
