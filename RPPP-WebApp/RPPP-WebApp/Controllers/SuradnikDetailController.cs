@@ -10,12 +10,21 @@ using Microsoft.Extensions.Options;
 
 namespace RPPP_WebApp.Controllers
 {
+    /// <summary>
+    /// Kontroler za suradnike (kad su detail)
+    /// </summary>
     public class SuradnikDetailController : Controller
     {
         private readonly RPPP05Context ctx;
         private readonly ILogger<SuradnikDetailController> logger;
         private readonly AppSettings appSettings;
 
+        /// <summary>
+        /// Nova instanca klase SuradnikDetailController
+        /// </summary>
+        /// <param name="ctx">Konetekst baze podataka</param>
+        /// <param name="options">Postavke aplikacije</param>
+        /// <param name="logger">Logger za biljezenje dogadaja</param>
         public SuradnikDetailController(RPPP05Context ctx, IOptionsSnapshot<AppSettings> options, ILogger<SuradnikDetailController> logger)
         {
             this.ctx = ctx;
@@ -23,6 +32,14 @@ namespace RPPP_WebApp.Controllers
             appSettings = options.Value;
         }
 
+        /// <summary>
+        /// Prikaz popisa suradnika (kad su detail)
+        /// Omoguceno stranicenje i sortiranje
+        /// </summary>
+        /// <param name="page">Borj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>View za popis suradnika</returns>
         public IActionResult Index(int page = 1, int sort = 1, bool ascending = true)
         {
 
@@ -69,6 +86,11 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+        /// <summary>
+        /// Padajuca lista za suradnike (detail)
+        /// Potrebno za Create i Edit metode
+        /// </summary>
+        /// <returns>Task</returns>
         private async Task PrepareDropDownLists()
         {
             var hr = await ctx.Kvalifikacija
@@ -103,6 +125,10 @@ namespace RPPP_WebApp.Controllers
 
         }
 
+        /// <summary>
+        /// Prikazuje formu za novog suradnika
+        /// </summary>
+        /// <returns>Vuew za dodavanje novog suradnika</returns>
         [HttpGet]
         public async Task<IActionResult> CreateAsync()
         {
@@ -110,6 +136,11 @@ namespace RPPP_WebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Sprema novog suradnika u bazu podataka
+        /// </summary>
+        /// <param name="suradnik">Novi suradnik</param>
+        /// <returns>View za popis suradnika</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Suradnik suradnik)
@@ -144,6 +175,15 @@ namespace RPPP_WebApp.Controllers
                 return View(suradnik);
             }
         }
+
+        /// <summary>
+        /// Forma za uredivanje suradnika
+        /// </summary>
+        /// <param name="id">Id suradnika</param>
+        /// <param name="page">Borj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>View za uredivanje suradnika</returns>
         [HttpGet]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true)
         {
@@ -163,6 +203,15 @@ namespace RPPP_WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Azurira suradnika u bazi podataka
+        /// </summary>
+        /// <param name="id">Id suradnika</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <param name="email">Email suradnika</param>
+        /// <returns>View s popisom suradnika</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, int page = 1, int sort = 1, bool ascending = true, string email = "email")
@@ -216,6 +265,15 @@ namespace RPPP_WebApp.Controllers
 
 
         }
+
+        /// <summary>
+        /// Brise suradnika iz baze podataka
+        /// </summary>
+        /// <param name="oib">OIB suradnika</param>
+        /// <param name="page">Broj stranice</param>
+        /// <param name="sort">Vrsta sorta</param>
+        /// <param name="ascending">Smjer sorta</param>
+        /// <returns>Vuew s popisom suradnika</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string oib, int page = 1, int sort = 1, bool ascending = true)
