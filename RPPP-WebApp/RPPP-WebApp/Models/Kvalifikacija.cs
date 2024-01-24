@@ -5,16 +5,33 @@ using System.Collections.Generic;
 
 namespace RPPP_WebApp.Models
 {
+
+    /// <summary>
+    /// Predstavlja kvalifikaciju suradnika
+    /// </summary>
     public partial class Kvalifikacija
     {
+        /// <summary>
+        /// Inicijalizacija nove instance klase Kvalifikacija
+        /// </summary>
         public Kvalifikacija()
         {
             Suradnik = new HashSet<Suradnik>();
         }
 
+        /// <summary>
+        /// Predstavlja identifikacijski broj kvalifikacije
+        /// </summary>
         public int IdKvalifikacija { get; set; }
+
+        /// <summary>
+        /// Predstavlja naziv kvalifikacije
+        /// </summary>
         public string NazivKvalifikacija { get; set; }
 
+        /// <summary>
+        /// Predstavlja popis suradnika koji imaju tu kvalifikaciju
+        /// </summary>
         public virtual ICollection<Suradnik> Suradnik { get; set; }
     }
 }

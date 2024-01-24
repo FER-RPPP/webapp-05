@@ -7,8 +7,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RPPP_WebApp.Models
 {
+    /// <summary>
+    /// predstavlja projekt iz baze
+    /// </summary>
     public partial class Projekt
     {
+        /// <summary>
+        /// inicijalizira novi projekt
+        /// </summary>
         public Projekt()
         {
             Dokument = new HashSet<Dokument>();
@@ -18,39 +24,76 @@ namespace RPPP_WebApp.Models
             IdPartner = new HashSet<Partner>();
         }
         
+        /// <summary>
+        /// Dohvaca ili postavlja id projekta
+        /// </summary>
         public int IdProjekt { get; set; }
 
-
+        /// <summary>
+        /// Dohvaca ili postavlja datum pocetka projekta
+        /// </summary>
         [Display(Name = "Datum početka projekta")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Potrebno je napisati ili izabrati datum")]
         public DateTime VrPocetak { get; set; }
 
-
+        /// <summary>
+        /// Dohvaca ili postavlja datum kraja projekta
+        /// </summary>
         [Display(Name = "Datum kraja projekta")]
         [DataType(DataType.Date)]
         [DateGreaterThan(nameof(VrPocetak), ErrorMessage = "Vrijeme kraja mora biti nakon vremena početka")]
         public DateTime? VrKraj { get; set; }
 
+        /// <summary>
+        /// Dohvaca ili postavlja opis projekta
+        /// </summary>
         [Display(Name = "Opis projekta")]
         [Required(ErrorMessage = "Potrebno je napisati opis projekta")]
         public string Opis { get; set; }
 
+        /// <summary>
+        /// Dohvaca ili postavlja naziv projekta
+        /// </summary>
         [Display(Name = "Naziv projekta")]
         [Required(ErrorMessage = "Potrebno je napisati naziv projekta")]
         public string Naziv { get; set; }
 
-
+        /// <summary>
+        /// Dohvaca ili postavlja vrstu projekta
+        /// </summary>
         [Display(Name = "Vrsta projekta")]
         [Required(ErrorMessage = "Potrebno je odabrati vrstu projekta")]
         public int IdTip { get; set; }
 
+        /// <summary>
+        /// Zanavigaciju na tip projekta
+        /// </summary>
         public virtual TipProjekta IdTipNavigation { get; set; }
+
+        /// <summary>
+        /// Povezivanje na dokumente
+        /// </summary>
         public virtual ICollection<Dokument> Dokument { get; set; }
+
+        /// <summary>
+        /// Povezivanje na projektnu karticu
+        /// </summary>
         public virtual ICollection<ProjektnaKartica> ProjektnaKartica { get; set; }
+
+        /// <summary>
+        /// Povezivanje na uloge na projektu
+        /// </summary>
         public virtual ICollection<Uloga> Uloga { get; set; }
+
+        /// <summary>
+        /// Povezivanje na zahtjeve
+        /// </summary>
         public virtual ICollection<Zahtjev> Zahtjev { get; set; }
 
+        /// <summary>
+        /// Povezivanje na partnere
+        /// </summary>
         public virtual ICollection<Partner> IdPartner { get; set; }
     }
 }
